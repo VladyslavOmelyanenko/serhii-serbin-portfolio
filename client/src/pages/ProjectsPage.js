@@ -1,5 +1,6 @@
 import React from "react";
-import Masonry from 'react-masonry-css';
+
+import Grid from '../components/Grid'
 
 
 const ProjectsPage = () => {
@@ -19,15 +20,7 @@ const ProjectsPage = () => {
   return (
     <div>
       <nav><h1>Serhii Serbin</h1></nav>
-      <Masonry
-         breakpointCols={breakpointColumnsObj}
-         className="my-masonry-grid"
-         columnClassName="my-masonry-grid_column"
-       >
-         {items.map(item => (
-           <div key={item.id}>{item.content}</div>
-         ))}
-       </Masonry>
+      <Grid />
     </div>
   );
 }

@@ -19,7 +19,7 @@ const Grid = () => {
 
   return (
     <div>
-      
+      <video src="http://localhost:5000/media/01_vending_machines_VP9.webm"></video>
     </div>
   );
 }

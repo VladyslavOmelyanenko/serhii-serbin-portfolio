@@ -1,8 +1,9 @@
-import express from "express";
+import express, { json } from "express";
 import cors from "cors";
 import "./loadEnvironment.mjs"
 import panel from "./routes/panel.mjs"
 import mongoose from "mongoose";
+import jsontest from './routes/jsontest.mjs'
 
 
 const connectionString = process.env.ATLAS_URI || "";
@@ -21,8 +22,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 app.use('/api/panel', panel);
 app.use('/media', express.static('media'))
+app.use('/api/jsontest', jsontest);
+
+
+
 
 
 app.listen(port, () => {
