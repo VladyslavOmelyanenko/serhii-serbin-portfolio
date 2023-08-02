@@ -2,6 +2,7 @@ import React from "react";
 import Masonry from 'react-masonry-css';
 
 
+
 const Grid = () => {
 
   const items = [
@@ -17,15 +18,9 @@ const Grid = () => {
   };
 
   return (
-    <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column"
-    >
-      {items.map(item => (
-        <div key={item.id}>{item.content}</div>
-      ))}
-    </Masonry>
+    <div>
+      
+    </div>
   );
 }
 

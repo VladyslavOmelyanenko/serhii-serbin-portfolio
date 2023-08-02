@@ -22,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/panel', panel);
+app.use('/media', express.static('media'))
 
 
 app.listen(port, () => {

@@ -1,6 +1,7 @@
 import React from "react";
 
 const Video = (props) => {
+
   
   const mediaSize = props.mediaSize;
   const mediaType = props.mediaType;
@@ -16,3 +17,4 @@ const Video = (props) => {
 };
 
 export default Video;
+
