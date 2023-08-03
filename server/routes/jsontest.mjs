@@ -1,31 +1,24 @@
 import fs from 'fs';
+import express from "express";
+const router = express.Router();
 
 
-const jsontest = () => {
-
-  const projects = [];
-
-  // fs.writeFile('data/media.json', JSON.stringify(data), (err) => {
-  //   if (err) throw err;
-  //   console.log('Data written to the file');
-  // })
-
-
-  const directoryPath = './media'; // replace with your directory path
-
-  fs.readdir(directoryPath, (err, files) => {
+router.get('/', async (req, res) => {
+  try {
+    fs.readFile('./data/media.json', 'utf8', (err, data) => {
     if (err) {
-      return console.log('Unable to scan directory: ' + err);
+      console.error('Error reading data file:', err);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    // listing all files using forEach
-    files.forEach((file) => {
-      projects.push({"mediaPath": file});
-    });
-    console.log(JSON.stringify(projects));
+    const jsonData = JSON.parse(data);
+    res.json(jsonData);
   });
-}
+  } catch (error){
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-export default jsontest;
 
+export default router;
 

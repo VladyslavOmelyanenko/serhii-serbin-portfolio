@@ -1,25 +1,39 @@
 import React from "react";
 import Masonry from 'react-masonry-css';
+import { useEffect, useState } from "react";
 
 
 
 const Grid = () => {
+  const [projects, setProjects] = useState(null);
 
-  const items = [
-     { id: 1, content: 'Item 1' },
-     { id: 2, content: 'Item 2' },
-     { id: 3, content: 'Item 3' },
-     // Add more items as needed
-   ];
-  const breakpointColumnsObj = {
-     default: 4,
-     1100: 2,
-     700: 1
-  };
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      fetch('http://127.0.0.1:5000/api/projects')
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to fetch projects:', response.status, response.statusText);
+          }
+        })
+        .then((data) => {
+          setProjects(data);
+        })
+        .catch((error) => {
+          console.error('Error while fetching projects:', error);
+        });
+      }
+    fetchProjects();
+  }, []);
+
 
   return (
-    <div>
-      <video src="http://localhost:5000/media/01_vending_machines_VP9.webm"></video>
+    <div> 
+      {projects && projects.map((project) => (
+        <video key={project.id} src={'http://localhost:5000/media/' + project.mediaPath}></video>
+      ))}
     </div>
   );
 }

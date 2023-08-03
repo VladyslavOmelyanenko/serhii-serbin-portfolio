@@ -26,7 +26,7 @@ app.use(express.json());
 
 app.use('/api/panel', panel);
 app.use('/media', express.static('media'))
-app.use('/api/jsontest', jsontest);
+app.use('/api/projects', jsontest);
 
 
 

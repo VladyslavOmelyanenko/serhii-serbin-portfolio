@@ -1,5 +1,6 @@
 [
   {
+    "id":"0",
     "mediaPath":"01_vending_machines_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -7,6 +8,7 @@
   },
   
   {
+    "id":"1",
     "mediaPath":"03_vending_machines_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -14,6 +16,7 @@
   },
   
   {
+    "id":"2",
     "mediaPath":"Nike-Sport-is-Never-Done-DOOH_VP9.webm",
     "mediaType":"video",
     "mediaSize":"large",
@@ -21,6 +24,7 @@
   },
   
   {
+    "id":"3",
     "mediaPath":"Shakhtar_Puma_packshot_v10_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -28,6 +32,7 @@
   },
   
   {
+    "id":"4",
     "mediaPath":"Skeleton_9_constant_waving_VP9.webm",
     "mediaType":"video",
     "mediaSize":"large",
@@ -35,6 +40,7 @@
   },
   
   {
+    "id":"5",
     "mediaPath":"amsterdam-spring-01_VP9.webm",
     "mediaType":"video",
     "mediaSize":"",
@@ -43,6 +49,7 @@
   },
   
   {
+    "id":"6",
     "mediaPath":"amsterdam-spring-02_VP9.webm",
     "mediaType":"video",
     "mediaSize":"",
@@ -51,6 +58,7 @@
   },
   
   {
+    "id":"7",
     "mediaPath":"blue-hawaii_VP9.webm",
     "mediaType":"video",
     "mediaSize":"",
@@ -59,6 +67,7 @@
   },
   
   {
+    "id":"8",
     "mediaPath":"cube_VP9.webm",
     "mediaType":"video",
     "mediaSize":"",
@@ -67,6 +76,7 @@
   },
   
   {
+    "id":"9",
     "mediaPath":"fever_detection_VP9.webm",
     "mediaType":"video",
     "mediaSize":"large",
@@ -74,6 +84,7 @@
   },
   
   {
+    "id":"10",
     "mediaPath":"glitched me screen_VP9.webm",
     "mediaType":"video",
     "mediaSize":"large",
@@ -81,6 +92,7 @@
   },
   
   {
+    "id":"11",
     "mediaPath":"japan-tickets_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -88,6 +100,7 @@
   },
   
   {
+    "id":"12",
     "mediaPath":"me-beach.png",
     "mediaType":"image",
     "mediaSize":"small",
@@ -95,6 +108,7 @@
   },
   
   {
+    "id":"13",
     "mediaPath":"me-boat.png",
     "mediaType":"image",
     "mediaSize":"small",
@@ -102,6 +116,7 @@
   },
   
   {
+    "id":"14",
     "mediaPath":"me-metro.png",
     "mediaType":"image",
     "mediaSize":"small",
@@ -109,6 +124,7 @@
   },
   
   {
+    "id":"15",
     "mediaPath":"nike-femini_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -116,6 +132,7 @@
   },
   
   {
+    "id":"16",
     "mediaPath":"nike-kids-lockup_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -123,6 +140,7 @@
   },
   
   {
+    "id":"17",
     "mediaPath":"oplich_cool_drop_VP9.webm",
     "mediaType":"video",
     "mediaSize":"large",
@@ -130,6 +148,7 @@
   },
   
   {
+    "id":"18",
     "mediaPath":"organ_01_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -137,6 +156,7 @@
   },
   
   {
+    "id":"19",
     "mediaPath":"organ_05_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -144,6 +164,7 @@
   },
   
   {
+    "id":"20",
     "mediaPath":"plane_portfoklio_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -151,6 +172,7 @@
   },
   
   {
+    "id":"21",
     "mediaPath":"samsung-flip_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -158,6 +180,7 @@
   },
   
   {
+    "id":"22",
     "mediaPath":"sound-reactive-object_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -165,6 +188,7 @@
   },
   
   {
+    "id":"23",
     "mediaPath":"squeeze-the-trash_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -172,6 +196,7 @@
   },
   
   {
+    "id":"24",
     "mediaPath":"t-shirt.png",
     "mediaType":"image",
     "mediaSize":"small",
@@ -179,6 +204,7 @@
   },
   
   {
+    "id":"25",
     "mediaPath":"temp-system_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -186,6 +212,7 @@
   },
   
   {
+    "id":"26",
     "mediaPath":"tv_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
@@ -193,6 +220,7 @@
   },
   
   {
+    "id":"27",
     "mediaPath":"ukr-say-thank-you.jpg",
     "mediaType":"image",
     "mediaSize":"small",
@@ -200,6 +228,7 @@
   },
   
   {
+    "id":"28",
     "mediaPath":"watch-face-zero_VP9.webm",
     "mediaType":"video",
     "mediaSize":"small",
