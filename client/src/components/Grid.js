@@ -112,7 +112,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'https://servertest264895.onrender.com/' + project.mediaPath}
+              mediaPath={'https://servertest264895.onrender.com/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
@@ -128,7 +128,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'https://servertest264895.onrender.com/' + project.mediaPath}
+              mediaPath={'https://servertest264895.onrender.com/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
