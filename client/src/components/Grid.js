@@ -32,7 +32,7 @@ const Grid = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      fetch('http://127.0.0.1:5000/api/projects')
+      fetch('https://servertest264895.onrender.com/api/projects')
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -112,7 +112,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'http://localhost:5000/media/' + project.mediaPath}
+              mediaPath={'https://servertest264895.onrender.com/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
@@ -128,7 +128,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'http://localhost:5000/media/' + project.mediaPath}
+              mediaPath={'https://servertest264895.onrender.com/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
