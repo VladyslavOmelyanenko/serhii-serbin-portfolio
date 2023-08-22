@@ -8,8 +8,8 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       <h1>Serhii serbin</h1>  
       <div className={styles.links}>
-        <a>motion designer</a>
-        <a>about</a>
+        <a href="google.com">motion designer</a>
+        <a href="google.com">about</a>
       </div>
     </nav>
   )
