@@ -1,0 +1,96 @@
+  .grid {
+    display: flex;
+    width: 1060px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+    font-size: 10px;
+
+  }
+
+  .p50 {
+    align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    width: 530px;
+    margin-left: -32.5px;
+  }
+
+.p50:first-child {
+  margin-left: 0;
+}
+
+
+.posFixed {
+  position: fixed;
+}
+
+
+.blurredBackground {
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255,255,255, 0.4);
+  top: 0;
+  position: fixed;
+  z-index: 1;
+}
+
+.closeButton {
+  all: unset;
+  color: #000;
+  font-size: 70px;
+  position: fixed;
+  z-index: 11;
+  right: 30px;
+  top: 0;
+}
+
+.projectTitle {
+  z-index: 10;
+  font-size: 26px;
+  text-transform: uppercase;
+  top: 30px;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  height: 10%;
+}
+
+.detailedProject {
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  overflow-y: scroll;
+}
+
+.copiedMedia {
+  width: 50%;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.horizontalCopy {
+  width: 70%;
+  margin: auto auto;
+  transform: translate(0, 30px);
+}
+
+.verticalCopy {
+  height: 70%;
+  margin: auto auto;
+  transform: translate(0, 30px);
+}
+
+.projectDescription {
+  width: 50%;
+  margin: auto auto;
+  padding-right: 50px;
+  font-size: 19px;
+}
