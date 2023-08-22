@@ -10,7 +10,7 @@ const Panel = () => {
     const loginData = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch('https://servertest264895.onrender.com/api/panel', {
+      await fetch('https://servertest264895.onrender.com/api/panel', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
