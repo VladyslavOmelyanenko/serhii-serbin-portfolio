@@ -15,7 +15,20 @@ const Project = (props) => {
 
   return (
     <div className={"grid-item " + styles.project + ' ' + styles[mediaSize]} onClick={clickFunction}>
-      { (mediaType === "image") ? <img id={id} src={mediaPath} alt={projectTitle} className={(mediaOrientation === "horizontal") ? styles.horizontalMedia : styles.verticalMedia}/> : <video id={id} src={mediaPath} muted autoPlay loop className={(mediaOrientation === "horizontal") ? styles.horizontalMedia : styles.verticalMedia}></video> }
+      { (mediaType === "image") ? 
+      <img 
+        id={id} 
+        src={mediaPath} 
+        alt={projectTitle} 
+        className={(mediaOrientation === "horizontal") ? styles.horizontalMedia : styles.verticalMedia}
+      />
+      : <video 
+          id={id} 
+          src={mediaPath} muted autoPlay loop 
+          className={(mediaOrientation === "horizontal") ? styles.horizontalMedia : styles.verticalMedia} 
+          onMouseEnter={() => {document.getElementById(id).muted = false;}} 
+          onMouseLeave={() => document.getElementById(id).muted = true}>
+        </video> }
       <span className="project__title">{projectTitle.slice(0, projectTitle.indexOf('\n'))}<br />{projectTitle.slice(projectTitle.indexOf('\n'), -1)}</span>
     </div>
   );

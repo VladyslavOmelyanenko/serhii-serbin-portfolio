@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 
 import styles from './Navbar.module.css';
 
@@ -9,7 +11,9 @@ const Navbar = () => {
       <h1>Serhii serbin</h1>  
       <div className={styles.links}>
         <a href="google.com">motion designer</a>
-        <a href="google.com">about</a>
+        <Link to="/about">
+         about
+        </Link>
       </div>
     </nav>
   )

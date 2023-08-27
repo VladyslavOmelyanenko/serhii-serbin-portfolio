@@ -88,9 +88,14 @@
   transform: translate(0, 30px);
 }
 
-.projectDescription {
+.projectDescription{
   width: 50%;
   margin: auto auto;
   padding-right: 50px;
   font-size: 19px;
+  white-space: pre-wrap;
+}
+
+.projectDescription a{
+  color: black;
 }

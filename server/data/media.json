@@ -1,5 +1,6 @@
 [
   {
+    "link":"",
     "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. The sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic. ",
     "orientation":"vertical",
     "mediaPath":"01_vending_machines_VP9.webm",
@@ -7,9 +8,11 @@
     "mediaSize":"small",
     "projectTitle":"VENDING MACHINES\nTRAVEL-INSPIRED ARTWORK",
     "order":"29"
+
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"03_vending_machines_VP9.webm",
@@ -20,6 +23,7 @@
   },
   
   {
+    "link":"https://wkams.com/work/sport-is-never-done/ ",
     "description":"As part of our ‘Sport is Never Done’ campaign for Nike, we designed an immersive DOOH on one of the world's largest places at Dubai Mall and Riyadh Time Square, Saudi Arabia. ‘Sport is Never Done’, is a campaign challenging parental misconceptions around sports and societal expectations on children, helping families in the Middle East to move more and to move better. ",
     "orientation":"horizontal",
     "mediaPath":"Nike-Sport-is-Never-Done-DOOH_VP9.webm",
@@ -39,6 +43,7 @@
   },
   
   {
+    "link":"",
     "description":"Meet Creature – a creative concept for WeTransfer brought to life by your file transfers. The more you send, the bigger and faster your unique CREATURE grows. Each one is as distinct as the files you feed it, making your transfers an exciting and personalised experience. Team: Shen Hou, Chris Taylor, Serhii Serbi ",
     "orientation":"horizontal",
     "mediaPath":"Skeleton_9_constant_waving_1_VP9.webm",
@@ -49,6 +54,7 @@
   },
   
   {
+    "link":"",
     "description":"Exploring Amsterdam Spring from a human perspective and AI perspective. I captured tulips around Amsterdam streets and proceed them through Stable diffusion. From a human standpoint, the streets adorned with tulips create a picturesque scene, embodying the essence of Amsterdam during the vibrant spring season. However, when the AI-generated comes into play, an unexpected twist occurs. The AI's creativity takes over, and the tulips transform into a quirky mix of pots with tourists, marijuana, ice creams, Dutch bitterballens, bicycles, and rubbish. This surreal blend captures the bustling and diverse ambience of Amsterdam during the tourist-packed spring season. ",
     "orientation":"horizontal",
     "mediaPath":"amsterdam-spring-01_VP9.webm",
@@ -59,6 +65,7 @@
   },
   
   {
+    "link":"",
     "description":"My favourite pair of Crocs were stolen on a beach in France, right next to a bag of phones and watches. I always knew that my Crocs attractive thing.",
     "orientation":"horizontal",
     "mediaPath":"amsterdam-spring-02_VP9.webm",
@@ -69,6 +76,7 @@
   },
   
   {
+    "link":"",
     "description":"Relaxing virtual journey through Hawaii. This digital wonderland captures the essence of nature's beauty, leaving you with lasting memories of this enchanting escape. Song: Where are the keys??? by Blue Hawaii ",
     "orientation":"vertical",
     "mediaPath":"blue-hawaii_VP9.webm",
@@ -79,6 +87,7 @@
   },
   
   {
+    "link":"",
     "description":"Audio reactive motion “Fragile world” As a Ukrainian living in the Netherlands, my world feels like two contrasting parts. Here is calm and stable, while Ukraine, where my family and friends are, is facing danger and suffering due to the Russian invasion. I've created a pattern using audio-reactive noises in TouchDesigner, to express these emotions. Let's raise awareness and stand in solidarity with Ukraine. Music by LYKHO ",
     "orientation":"horizontal",
     "mediaPath":"cube_VP9.webm",
@@ -89,6 +98,7 @@
   },
   
   {
+    "link":"",
     "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. Fever detection systems have multiplied in the past 3 years in Japan in all public spaces, they also became my digital souvenir from Japan. ",
     "orientation":"vertical",
     "mediaPath":"fever_detection_VP9.webm",
@@ -99,6 +109,7 @@
   },
   
   {
+    "link":"",
     "description":"Through motion manipulations, I bring my emotions to life in a digital way. Electrophoresis-like movements surge with electric energy, while work notifications buzz. Tears flow, expressing my inner vulnerability, and a storm of emotions swirls within.",
     "orientation":"horizontal",
     "mediaPath":"glitched me screen_VP9.webm",
@@ -109,7 +120,8 @@
   },
   
   {
-    "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. This collection is basically what was in my pockets after the trip turns into the most important souvenirs. It shows through the hypnotic experience with bold visual effects and sound recorded from Japanese trains.",
+    "link":"/japan",
+    "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named \"What I brought from Japan instead of a fridge magnet\".\nThe sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic.",
     "orientation":"horizontal",
     "mediaPath":"japan-tickets_VP9.webm",
     "mediaType":"video",
@@ -119,7 +131,8 @@
   },
   
   {
-    "description":"Erling Haaland broke the Premier League goalscoring record on May 3rd 2023. A record that has stood for almost 30 years and the Norwegian did it with 7 games to spare, at 22 years of age, in his debut season. A truly phenomenal achievement. To celebrate his Premier League goalscoring record, we brought the Aurora Borealis phenomenon to the skies of Manchester. A phenomenal goalscorer, breaking a phenomenal record deserves a phenomenal moment in footballing history. Agency: Wieden+Kennedy Amsterdam ",
+    "link":"https://www.instagram.com/p/Cry2d21Mxig/",
+    "description": "Erling Haaland broke the Premier League goalscoring record on May 3rd 2023. A record that has stood for almost 30 years and the Norwegian did it with 7 games to spare, at 22 years of age, in his debut season. A truly phenomenal achievement. \n\nTo celebrate his Premier League goalscoring record, we brought the Aurora Borealis phenomenon to the skies of Manchester.\n\nA phenomenal goalscorer, breaking a phenomenal record deserves a phenomenal moment in footballing history.\n\nAgency: Wieden+Kennedy Amsterdam",
     "orientation":"horizontal",
     "mediaPath":"japan-tickets_VP9.webm",
     "mediaType":"video",
@@ -129,6 +142,7 @@
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"me-beach.png",
@@ -139,6 +153,7 @@
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"me-boat.png",
@@ -149,6 +164,7 @@
   },
   
   {
+    "link":"",
     "description":"I was recording tiktok",
     "orientation":"horizontal",
     "mediaPath":"me-metro.png",
@@ -159,6 +175,7 @@
   },
   
   {
+    "link":"",
     "description":"Made motion design for THE BEST football TEAM IN THE WORLD It’s not an opinion. It’s a fact. FC Barcelona Femeni #NikeFootball Agency: Wieden+Kennedy Amsterdam ",
     "orientation":"vertical",
     "mediaPath":"nike-femini_VP9.webm",
@@ -169,6 +186,7 @@
   },
   
   {
+    "link":"",
     "description":"For Nike Middle East, we created ‘Sport is Never Done’, a campaign challenging parental misconceptions around sports and societal expectations on children, helping families in the Middle East to move more and to move better. Agency: Wieden+Kennedy Amsterdam ",
     "orientation":"horizontal",
     "mediaPath":"nike-kids-lockup_VP9.webm",
@@ -179,6 +197,7 @@
   },
   
   {
+    "link":"",
     "description":"Motion video for the creative community O–PLICH– with the aim to help Ukraine, along with giving the world a unique product, which represents Ukrainian culture, customs, and way of living. We worked with multiple layers of photographs and vector graphics, textures and various motion patterns, also we developed the sound part, highlighting the dynamics. Community: O–PLICH–® Designer: Vlad Boyko ",
     "orientation":"horizontal",
     "mediaPath":"oplich_cool_drop_VP9.webm",
@@ -189,6 +208,7 @@
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"organ_01_VP9.webm",
@@ -199,6 +219,7 @@
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"organ_05_VP9.webm",
@@ -209,6 +230,7 @@
   },
   
   {
+    "link":"",
     "description":"Welcome to Adnight event! Motion design greets you in the languages of Wieden+Kennedy Amsterdam colleagues. Abstract shapes represent the vibrant ideas that fill our office. Agency: Wieden+Kennedy Amsterdam ",
     "orientation":"horizontal",
     "mediaPath":"plane_portfoklio_VP9.webm",
@@ -219,6 +241,7 @@
   },
 
   {
+    "link":"https://www.instagram.com/p/Cck2DnZMhwo/",
     "description":"Collab with Jerry-Lee Bosmans",
     "orientation":"horizontal",
     "mediaPath":"plane_portfoklio_VP9.webm",
@@ -229,6 +252,7 @@
   },
   
   {
+    "link":"",
     "description":"Samsung's latest Galaxy spot does two things; it has a lot of fun with the folding mechanism of the Galaxy Z Flip 4, and it gently pokes fun at iPhone users. Agency: Wieden+Kennedy Amsterdam ",
     "orientation":"horizontal",
     "mediaPath":"samsung-flip_VP9.webm",
@@ -239,6 +263,7 @@
   },
   
   {
+    "link":"",
     "description":"Sound-reactive pattern wrapped around the glitchy ball, blending art and technology. Generated in Touch Designer, edited in Cinema 4D, and After Effects. Sound by @matthewtavares ",
     "orientation":"horizontal",
     "mediaPath":"sound-reactive-object_VP9.webm",
@@ -249,6 +274,7 @@
   },
   
   {
+    "link":"",
     "description":"Squeeze your trash! Cпочатку зчави сміття! 先壓垃圾! 為什麼垃圾桶的空間總是不夠用？ 除了減少製造垃圾我們可以在丟垃圾之前 Why is a trash can always not big enough? In addition to reducing waste, we can squeeze our trash before throwing it into a trash can. Чому смітник завжди недостатньо великий? Щоб зменшити кількість відходів, ми можемо зчавити сміття перед тим як викинути його у смітник. Collab with the designer: Shen Hou ",
     "orientation":"vertical",
     "mediaPath":"squeeze-the-trash_VP9.webm",
@@ -259,6 +285,7 @@
   },
   
   {
+    "link":"",
     "description":"",
     "orientation":"horizontal",
     "mediaPath":"t-shirt.png",
@@ -269,6 +296,7 @@
   },
   
   {
+    "link":"",
     "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. The experimental work was shoot at the Shibuya crossing in Tokyo, I was imagining how a big amount of temperature measured people look together. ",
     "orientation":"vertical",
     "mediaPath":"temp-system_VP9.webm",
@@ -279,6 +307,7 @@
   },
   
   {
+    "link":"",
     "description":"Mysterious motion graphics on old CRT TVs. Glitchy visuals and cryptic messages create an enigmatic atmosphere. The vintage-style text adds to the intrigue, leaving you curious about the secrets hidden within. Client: Sony Music London ",
     "orientation":"horizontal",
     "mediaPath":"tv_VP9.webm",
@@ -289,7 +318,8 @@
   },
   
   {
-    "description":"Charity project Ukrainians say thank you To express gratitude towards people who are standing with Ukraine by showing up at protests, making donations and sharing their homes with refugees, we create a set of downloadable posters and social assets to say: “Дякую” (Thank You) for all the help Ukrainians have been receiving since Russia started the war on 24.02.22. Available in 21 languages, the idea is for people to spread messages of appreciation across different cities, in turn reproducing the Ukrainian flag to show solidarity and support. People in 32 countries around the world are already joining in pasting posters around different cities, outside and in shops, companies etc. Website: https://ukrainianssay-thankyou.com/ Instagram: @ukrainianssay.thankyou TEAM Olla Kuzovkina, Dasha Ovechkina, Serhii Serbin ",
+    "link":"https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/2407481",
+    "description":"Charity project Ukrainians say thank you\n\nTo express gratitude towards people who are standing with Ukraine by showing up at protests, making donations and sharing their homes with refugees, we create a set of downloadable posters and social assets to say: “Дякую” (Thank You) for all the help Ukrainians have been receiving since Russia started the war on 24.02.22. \n\nAvailable in 21 languages, the idea is for people to spread messages of appreciation across different cities, in turn reproducing the Ukrainian flag to show solidarity and support. People in 32 countries around the world are already joining in pasting posters around different cities, outside and in shops, companies etc. \n\nWebsite: https://ukrainianssay-thankyou.com/ \nInstagram: @ukrainianssay.thankyou\n\nTEAM\nOlla Kuzovkina, Dasha Ovechkina, Serhii Serbin",
     "orientation":"horizontal",
     "mediaPath":"ukr-say-thank-you.jpg",
     "mediaType":"image",
@@ -299,6 +329,7 @@
   },
   
   {
+    "link":"",
     "description":"Zero Time - a watch face that defies conventional notions of timekeeping and transports you to a realm of the present. Zero Time features a deep black background adorned with the bold numeral 0. This unique layout challenges your perception of time, leaving you with a sense of timelessness and focus on the present moment. ",
     "orientation":"horizontal",
     "mediaPath":"watch-face-zero_VP9.webm",

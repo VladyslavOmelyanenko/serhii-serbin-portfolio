@@ -1,38 +1,61 @@
+// dependencies
+
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
+
+
+//imports
 
 import styles from './Grid.module.css';
-
 import Project from "./Project";
 
 
 
 const Grid = () => {
+
+  //variables
+
   const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
-  const [mediaCopy, setMediaCopy] = useState(null);
+
+  const location = useLocation();
+  const isAboutActive = location.pathname === "/about";
+  const serverUrl = 'http://127.0.0.1:5000';
 
   const videoRef = useRef(null);
 
   const navigate = useNavigate();
   const { projectId } = useParams();  
 
+  const aboutText = `I'm Serhii, a 23-year-old motion design artist with a passion for visual experiments and technology. Currently, I call Amsterdam home, working with the talented Wieden+Kennedy team.
+While working on small experimental projects, I’m busy with big campaigns for Nike, Lexus, Puma, YSL, Evian, and Samsung. This dynamic balance keeps me on my toes and constantly inspired.
+During my downtime, I enjoy travelling, exploring vintage markets and meeting funny people. And of course, I can't resist staying up-to-date with the latest gadgets and innovations.
 
+Cool links:
+My IG <a href="https://www.instagram.com/nibressergo/">(https://www.instagram.com/nibressergo/)</a>
+Fav refs on Are.na  <a href="https://www.are.na/serhii-serbin/">(https://www.are.na/serhii-serbin)</a>
+CV (boring) (link will be added later)
+I like things…  (link will be added later)
+OFFF Barcelona <a href="https://www.instagram.com/p/CdMdzCVlAdM/">(https://www.instagram.com/p/CdMdzCVlAdM)</a>
+Adweek article <a href="https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/">(https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/)</a>
+Adage article <a href="https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748/">(https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748)</a>
+
+Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
+
+
+  // Functions
 
   const handleClick = (project) => {
     navigate(`${project.projectTitle}`);
-    const media = document.getElementById(project.order);
-    setMediaCopy(media);
-      if (videoRef.current) {
-      videoRef.current.currentTime = mediaCopy.currentTime; // Set the desired time in seconds
-    }
   }
 
 
+  // Fetch the data and if there is an active project set it
+
   useEffect(() => {
     const fetchProjects = async () => {
-      fetch('https://servertest264895.onrender.com/api/projects')
+      fetch(serverUrl + '/api/projects')
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -51,6 +74,8 @@ const Grid = () => {
     projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
   }, [projectId, projects]);
 
+
+  // Distribute left column and right
 
   const leftProjects = [];
   const rightProjects = [];
@@ -81,27 +106,34 @@ const Grid = () => {
   projects && distributeProjects(projects);
 
 
+  // DOM structure 
+
   return (
+
+
+    // if about is active 
+
     <div>
-      {activeProject && (
+      {isAboutActive && (
         <div className={styles.posFixed}>
           <div className={styles.blurredBackground}></div>
-          <h1 className={styles.projectTitle}>{activeProject.projectTitle}</h1>
+          <h1 className={styles.projectTitle}>About</h1>
           <Link to="/">
             <button className={styles.closeButton}>x</button>
           </Link>
           <div className={styles.detailedProject}>
-             <div className={styles.copiedMedia}>
-              {mediaCopy && (activeProject.mediaType==='image') ? 
-              (<img src={mediaCopy.src} className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy} alt="active project"/>) :
-              (<video ref={videoRef} src={mediaCopy.src} autoPlay loop className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy}></video>)}
+            <div className={styles.copiedMedia}>
+            <video src={serverUrl + "/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
             </div>
-            <p className={styles.projectDescription}>
-                {activeProject.description}
+            <p className={styles.projectDescription} dangerouslySetInnerHTML={{ __html: aboutText }} >
             </p>
           </div>  
         </div>
       )}
+
+
+      {/* Grid */}
+
       <div className={styles.grid}>
         <div className={styles.p50}>
           {leftProjects.map((project, index) => (
@@ -112,7 +144,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'https://servertest264895.onrender.com/media/' + project.mediaPath}
+              mediaPath={serverUrl + '/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
@@ -128,7 +160,7 @@ const Grid = () => {
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'https://servertest264895.onrender.com/media/' + project.mediaPath}
+              mediaPath={serverUrl + '/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
@@ -136,6 +168,47 @@ const Grid = () => {
           ))}
         </div>
       </div>
+
+
+      {/* If there is an active project */}
+
+      {activeProject && (
+        <div className={styles.posFixed}>
+
+          <div className={styles.blurredBackground}></div>
+          <h1 className={styles.projectTitle}>{activeProject.projectTitle}</h1>
+          <Link to="/">
+            <button className={styles.closeButton}>x</button>
+          </Link>
+
+          <div className={styles.detailedProject}>
+
+            <div className={styles.copiedMedia}>
+              {(activeProject.mediaType==='image') ? 
+                (<img 
+                  src={serverUrl + '/media/' + activeProject.mediaPath} 
+                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy} 
+                  alt="active project"/>)
+                : (<video 
+                  ref={videoRef} 
+                  src={serverUrl + '/media/' + activeProject.mediaPath} 
+                  autoPlay controls loop 
+                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy}>
+                  </video>)}
+            </div>
+
+            <div className={styles.projectDescription}>
+              <p>
+                  {activeProject.description}
+              </p>
+              {(activeProject.link !== '') && (
+                <a href={activeProject.link} target="blank">See full project</a>
+              )}
+            </div>
+
+          </div>  
+        </div>
+      )}
     </div>
     );
 }
