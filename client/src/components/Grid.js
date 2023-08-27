@@ -21,7 +21,7 @@ const Grid = () => {
 
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
-  const serverUrl = 'http://127.0.0.1:5000';
+  const serverUrl = 'https://servertest264895.onrender.com';
 
   const videoRef = useRef(null);
 
