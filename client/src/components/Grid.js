@@ -1,6 +1,6 @@
 // dependencies
 
-import React from "react";
+import React, { createElement } from "react";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const Grid = () => {
 
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
-  const serverUrl = 'https://servertest264895.onrender.com';
+  const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
 
   const videoRef = useRef(null);
 
@@ -46,10 +46,51 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
   // Functions
 
-  const handleClick = (project) => {
-    navigate(`${project.projectTitle}`);
+  const jump = (project, image, order) => {
+    image.style.visibility = 'hidden';
+    const areaNumber = 5;
+    const rangeNumber = Math.floor((Math.random() * (+order + areaNumber)) + (order - areaNumber));
+    console.log(order)
+
+    let element = document.getElementById(rangeNumber);
+    element = element.parentElement;
+
+    const img = document.createElement('img');
+    img.classList += 'jumpingImage';
+    img.src = serverUrl + '/media/' + project.mediaPath;
+    img.style.height = '130px';
+    img.style.width = 'auto';
+    img.style.position = 'absolute';
+    img.addEventListener('click', () => jump(project, img, element.firstElementChild.id));
+
+    element.appendChild(img)
+  }
+  
+  const handleClick = (project, event) => {
+    if (Array.from(event.target.classList).includes('jumpingImage')) {
+      return;
+    }
+    // console.log(Array.from(event.target.classList).includes('jumpingImage'));
+    // console.log(event.target);
+    if (project.jumping === true) {
+      const image = document.getElementById(project.order);
+      jump(project, image, project.order);
+    } else {
+      navigate(`${project.projectTitle}`);
+    }
   }
 
+   const closePage = (event) => {
+    const videoContainer = document.getElementById('copiedMedia');
+    const textContainer = document.getElementById('projectDescription');
+
+    if (videoContainer.isEqualNode(event.target) || textContainer.isEqualNode(event.target)) {
+      navigate('/');
+    }
+  }
+
+
+ 
 
   // Fetch the data and if there is an active project set it
 
@@ -72,6 +113,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       }
     fetchProjects();
     projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
+    
   }, [projectId, projects]);
 
 
@@ -123,7 +165,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           </Link>
           <div className={styles.detailedProject}>
             <div className={styles.copiedMedia}>
-            <video src={serverUrl + "/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
+              <video src={serverUrl + "/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
             </div>
             <p className={styles.projectDescription} dangerouslySetInnerHTML={{ __html: aboutText }} >
             </p>
@@ -139,7 +181,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           {leftProjects.map((project, index) => (
             <Project 
               clickFunction={(e) => {
-                handleClick(project);
+                handleClick(project, e);
               } }
               key={index}
               mediaSize={project.mediaSize} 
@@ -153,10 +195,10 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
         </div>
         <div className={styles.p50}>
           {rightProjects.map((project, index) => (
-            <Project 
+            <Project
               clickFunction={(e) => {
-                handleClick(project);
-                }}
+                handleClick(project, e);
+              }}
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
@@ -173,33 +215,33 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       {/* If there is an active project */}
 
       {activeProject && (
-        <div className={styles.posFixed}>
+        <div className={styles.posFixed} onClick={(event) => closePage(event)} id="activePage">
 
           <div className={styles.blurredBackground}></div>
-          <h1 className={styles.projectTitle}>{activeProject.projectTitle}</h1>
           <Link to="/">
             <button className={styles.closeButton}>x</button>
           </Link>
 
-          <div className={styles.detailedProject}>
+          <div className={styles.detailedProject} id="projectDescription" >
 
-            <div className={styles.copiedMedia}>
+            <div className={styles.copiedMedia} id="copiedMedia">
               {(activeProject.mediaType==='image') ? 
                 (<img 
                   src={serverUrl + '/media/' + activeProject.mediaPath} 
                   className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy} 
-                  alt="active project"/>)
+                  alt="active project"
+                />)
                 : (<video 
-                  ref={videoRef} 
+                  id="video"
+                  ref={ videoRef } 
                   src={serverUrl + '/media/' + activeProject.mediaPath} 
-                  autoPlay controls loop 
+                  autoPlay loop  
                   className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy}>
-                  </video>)}
+                </video>)}
             </div>
-
             <div className={styles.projectDescription}>
-              <p>
-                  {activeProject.description}
+              <h2 className={styles.projectTitle}>{activeProject.projectTitle}</h2>
+              <p  dangerouslySetInnerHTML={{ __html: activeProject.description }}>
               </p>
               {(activeProject.link !== '') && (
                 <a href={activeProject.link} target="blank">See full project</a>

@@ -26,10 +26,11 @@ const Project = (props) => {
           id={id} 
           src={mediaPath} muted autoPlay loop 
           className={(mediaOrientation === "horizontal") ? styles.horizontalMedia : styles.verticalMedia} 
-          onMouseEnter={() => {document.getElementById(id).muted = false;}} 
-          onMouseLeave={() => document.getElementById(id).muted = true}>
+          // onMouseEnter={() => {document.getElementById(id).muted = false;}} 
+          // onMouseLeave={() => document.getElementById(id).muted = true}
+          >
         </video> }
-      <span className="project__title">{projectTitle.slice(0, projectTitle.indexOf('\n'))}<br />{projectTitle.slice(projectTitle.indexOf('\n'), -1)}</span>
+      <pre className="project__title">{projectTitle}</pre>
     </div>
   );
 };

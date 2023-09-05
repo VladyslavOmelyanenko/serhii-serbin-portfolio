@@ -8,6 +8,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminPage from "./pages/AdminPage"
 import ProjectsPage from './pages/ProjectsPage';
 
+import CasePage from './pages/CasePage';
+
 import 'normalize.css';
 import './App.css';
 
@@ -23,6 +25,7 @@ const App = () => {
         <Route path='/about' element={ <ProjectsPage /> } />
         <Route path='/panel' element={ <Panel /> } />
         <Route path="/admin" element={ <ProtectedRoute element={ AdminPage }/> } />
+        <Route path="/oplich" element={ <CasePage />}  />
       </Routes>
     </div>
   );

@@ -3,17 +3,17 @@
   display: flex;
   font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
   text-transform: uppercase;
-  height: 100px;
+  height: 60px;
+  position: fixed;
+  width: 100%;
 }
 
 .navbar h1{
-  font-size: 26px;
+  font-size: 30px;
   margin: auto auto;
   left: 0;
   right: 0;
-  top: 10px;
   font-weight: normal;
-  position: absolute;
 }
 
 
@@ -23,7 +23,7 @@
   display: flex;
   position: absolute;
   right: 30px;
-  top: 19px;
+  top: 20px;
 }
 
 .links a {
@@ -31,7 +31,4 @@
   color: black;
 }
 
-.links a:first-child {
-  margin-right: 40px;
-}
 

@@ -4,18 +4,25 @@
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  margin-bottom: 50px;
-  margin-left: 65px;
+  margin-bottom: 75px;
+  margin-left: 75px;
+}
+
+.project pre {
+    font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+    text-transform: uppercase;
 }
 
 .project.small {
-  width: 180px;
-  height: 225px;
+  /* width: 180px; */
+  /* height: 225px; */
+  width: 236px;
+  height: 295px;
 }
 
 .project.large {
-  width: 500px;
-  height: 400px;
+  width: 547px;
+  height: 437px;
 }
 
 .project video, .project img {
