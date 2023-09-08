@@ -26,7 +26,7 @@ const Grid = () => {
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
   // const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
-  const serverUrl = 'http://localhost:5000';
+  // const serverUrl = 'http://localhost:5000';
 
   const videoRef = useRef(null);
 
