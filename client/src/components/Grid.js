@@ -9,6 +9,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import styles from './Grid.module.css';
 import Project from "./Project";
+import projectsData from "../projects";
 
 
 
@@ -17,7 +18,7 @@ const Grid = () => {
 
   //variables
 
-  const [projects, setProjects] = useState(null);
+  // const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
   const [clickedOnce] = useState([]);
   const [addShovel, setAddShovel] = useState(true);
@@ -31,6 +32,7 @@ const Grid = () => {
 
   const navigate = useNavigate();
   const { projectId } = useParams();  
+  const projects = projectsData.sort((proj1, proj2) => proj1.order - proj2.order);
 
 
   const aboutText = `I'm Serhii, a 23-year-old motion design artist with a passion for visual experiments and technology. Currently, I call Amsterdam home, working with the talented Wieden+Kennedy team.
@@ -166,25 +168,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   // Fetch the data and if there is an active project set it
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      fetch(serverUrl + '/api/projects')
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Failed to fetch projects:', response.status, response.statusText);
-          }
-        })
-        .then((data) => {
-          setProjects(data.sort((project1, project2) => +project1.order - +project2.order));
-        })
-        .catch((error) => {
-          console.error('Error while fetching projects:', error);
-        });
-      }
-    fetchProjects();
     projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
-    
   }, [projectId, projects]);
 
 
@@ -199,6 +183,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     let rightHeight = 0;
 
     projectsArray.forEach((project) => {
+      console.log(leftProjects);
       if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
         leftProjects.push(project);
         if (project.mediaSize === 'small') {
