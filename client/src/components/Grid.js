@@ -12,21 +12,26 @@ import Project from "./Project";
 
 
 
+
 const Grid = () => {
 
   //variables
 
   const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
+  const [clickedOnce, setClickedOnce] = useState([]);
+  const [addShovel, setAddShovel] = useState(true);
 
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
-  const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
+  // const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
+  const serverUrl = 'http://localhost:5000';
 
   const videoRef = useRef(null);
 
   const navigate = useNavigate();
   const { projectId } = useParams();  
+
 
   const aboutText = `I'm Serhii, a 23-year-old motion design artist with a passion for visual experiments and technology. Currently, I call Amsterdam home, working with the talented Wieden+Kennedy team.
 While working on small experimental projects, I’m busy with big campaigns for Nike, Lexus, Puma, YSL, Evian, and Samsung. This dynamic balance keeps me on my toes and constantly inspired.
@@ -46,35 +51,99 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
   // Functions
 
-  const jump = (project, image, order) => {
-    image.style.visibility = 'hidden';
+  const JumpingImage = () => {
+    let img;
+    if (!addShovel) return false;
+    if (addShovel) {
+      let element = document.getElementById('10');
+      element = element.parentElement;
+      img = document.createElement('img');
+      img.classList += 'jumpingImage';
+      img.src = '/media/funny.png';
+      img.style.height = '130px';
+      img.style.width = 'auto';
+      img.style.position = 'absolute';
+      img.style.marginLeft = element.clientWidth/2 + 'px';
+      img.style.marginTop = '60px';
+      img.style.zIndex = '200'
+      img.addEventListener('click', () => jump(img, element.firstElementChild.id));
+      element.appendChild(img);
+      setAddShovel(false);
+    }
+    
+  }
+
+  const jump = (image, order, stylesId='') => {
     const areaNumber = 5;
-    const rangeNumber = Math.floor((Math.random() * (+order + areaNumber)) + (order - areaNumber));
-    console.log(order)
+    let min = +order - areaNumber;
+    let max = +order + areaNumber;
+    min = (min < 1) ? 1 : min; 
+    max = (max >= projects.length) ? projects.length : max; 
+    let rangeNumber = Math.floor(Math.random() * (max - min) + min);
+    while (rangeNumber === order) {
+      rangeNumber = Math.floor((Math.random() * max) + (min));
+    }
 
     let element = document.getElementById(rangeNumber);
     element = element.parentElement;
 
     const img = document.createElement('img');
     img.classList += 'jumpingImage';
-    img.src = serverUrl + '/media/' + project.mediaPath;
-    img.style.height = '130px';
-    img.style.width = 'auto';
-    img.style.position = 'absolute';
-    img.addEventListener('click', () => jump(project, img, element.firstElementChild.id));
+    img.src = image.src;
 
-    element.appendChild(img)
+    // if (stylesId == 'cycling') console.log('cycling');
+    console.log(element.clientHeight);
+
+    if (image.style.height === '') {
+      img.style.height = '130px';
+      img.style.width = 'auto';
+      img.style.position = 'absolute';
+      img.style.zIndex = '200';
+      if (stylesId === 'cycling') {
+        img.style.marginTop = element.clientHeight/2 + 'px';
+      } if (stylesId === 'overheated') {
+        img.style.marginTop = -element.clientHeight/1.2 + 'px';
+        img.style.marginLeft = element.clientWidth/3 + 'px';
+        
+      }
+    } else {
+      img.style.height = image.style.height;
+      img.style.width = image.style.width;
+      img.style.position = image.style.position;
+      img.style.zIndex = image.style.zIndex;
+      img.style.marginTop = image.style.marginTop;
+      img.style.marginLeft = image.style.marginLeft;
+    }
+
+    img.addEventListener('click', () => jump(img, element.firstElementChild.id));
+    element.appendChild(img);
+    image.remove();
+
   }
   
   const handleClick = (project, event) => {
     if (Array.from(event.target.classList).includes('jumpingImage')) {
       return;
     }
-    // console.log(Array.from(event.target.classList).includes('jumpingImage'));
-    // console.log(event.target);
+
     if (project.jumping === true) {
       const image = document.getElementById(project.order);
-      jump(project, image, project.order);
+      const projectBlock = image.parentElement;
+      projectBlock.lastElementChild.innerHTML = 'Contact hours \n 08:00—17:00';
+      const mailLink = document.createElement('div');
+      mailLink.innerHTML = '<a style="color:black;" href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>'
+      mailLink.style.height = '80%';
+      mailLink.style.margin = 'auto auto';
+      mailLink.style.display = 'flex';
+      mailLink.style.alignItems = 'center';
+      mailLink.style.textTransform = 'uppercase';
+
+      projectBlock.prepend(mailLink);
+      if (!clickedOnce.includes(project.order)) {
+        jump(image, project.order, project.projectTitle.split(' ')[0].toLowerCase());
+        clickedOnce.push(project.order);
+      };
+      
     } else {
       navigate(`${project.projectTitle}`);
     }
@@ -83,6 +152,8 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
    const closePage = (event) => {
     const videoContainer = document.getElementById('copiedMedia');
     const textContainer = document.getElementById('projectDescription');
+
+    console.log(videoContainer, textContainer)
 
     if (videoContainer.isEqualNode(event.target) || textContainer.isEqualNode(event.target)) {
       navigate('/');
@@ -156,22 +227,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     // if about is active 
 
     <div>
-      {isAboutActive && (
-        <div className={styles.posFixed}>
-          <div className={styles.blurredBackground}></div>
-          <h1 className={styles.projectTitle}>About</h1>
-          <Link to="/">
-            <button className={styles.closeButton}>x</button>
-          </Link>
-          <div className={styles.detailedProject}>
-            <div className={styles.copiedMedia}>
-              <video src={serverUrl + "/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
-            </div>
-            <p className={styles.projectDescription} dangerouslySetInnerHTML={{ __html: aboutText }} >
-            </p>
-          </div>  
-        </div>
-      )}
+      
 
 
       {/* Grid */}
@@ -186,10 +242,11 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={serverUrl + '/media/' + project.mediaPath}
+              mediaPath={'/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
+              jumping={(project.jumping) ? true : false}
             />
           ))}
         </div>
@@ -202,14 +259,31 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={serverUrl + '/media/' + project.mediaPath}
+              mediaPath={'/media/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
+              jumping={(project.jumping) ? true : false}
             />
           ))}
         </div>
       </div>
+
+      {(document.getElementById('10')) && (addShovel) && JumpingImage()}
+
+      {isAboutActive && (
+        <div className={styles.posFixed} onClick={(event) => closePage(event)} >
+          <div className={styles.blurredBackground}></div>
+          <h1 className={styles.projectTitle}>About</h1>
+          <div className={styles.detailedProject} id="projectDescription">
+            <div className={styles.copiedMedia} id="copiedMedia">
+              <video src={"/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
+            </div>
+            <p className={styles.projectDescription} dangerouslySetInnerHTML={{ __html: aboutText }} >
+            </p>
+          </div>  
+        </div>
+      )}
 
 
       {/* If there is an active project */}
@@ -218,24 +292,22 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
         <div className={styles.posFixed} onClick={(event) => closePage(event)} id="activePage">
 
           <div className={styles.blurredBackground}></div>
-          <Link to="/">
-            <button className={styles.closeButton}>x</button>
-          </Link>
 
           <div className={styles.detailedProject} id="projectDescription" >
 
             <div className={styles.copiedMedia} id="copiedMedia">
-              {(activeProject.mediaType==='image') ? 
+              <iframe src="https://olafwempe.com/mp3/silence/silence.mp3" type="audio/mp3" allow="autoplay" id="audio" style={{display:'none'}}></iframe>
+              {(activeProject.mediaType==='image') ?
                 (<img 
-                  src={serverUrl + '/media/' + activeProject.mediaPath} 
-                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy} 
+                  src={'/media/' + activeProject.mediaPath} 
+                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy }
                   alt="active project"
                 />)
                 : (<video 
                   id="video"
                   ref={ videoRef } 
-                  src={serverUrl + '/media/' + activeProject.mediaPath} 
-                  autoPlay loop  
+                  src={'/media/' + activeProject.mediaPath} 
+                  autoPlay loop playsInline 
                   className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy}>
                 </video>)}
             </div>
@@ -248,9 +320,10 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               )}
             </div>
 
-          </div>  
+          </div>
         </div>
       )}
+
     </div>
     );
 }
