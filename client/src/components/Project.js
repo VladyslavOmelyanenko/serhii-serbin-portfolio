@@ -25,7 +25,7 @@ const Project = (props) => {
         className={(mediaOrientation === "horizontal") ? 
           (jumping) ? `${styles.horizontalMedia} ${styles.jumping}` : `${styles.horizontalMedia}` 
           : (jumping) ? `${styles.verticalMedia} ${styles.jumping}` : `${styles.verticalMedia}` }
-        preload="none"
+        preload="auto"
       />
       : <video 
           id={id} 
@@ -33,7 +33,7 @@ const Project = (props) => {
           className={(mediaOrientation === "horizontal") ? 
             (jumping) ? `${styles.horizontalMedia} ${styles.jumping}` : `${styles.horizontalMedia}` 
             : (jumping) ? `${styles.verticalMedia} ${styles.jumping}` : `${styles.verticalMedia}` }
-          preload="none"
+          preload="auto"
           // onMouseEnter={() => {document.getElementById(id).muted = false;}} 
           // onMouseLeave={() => document.getElementById(id).muted = true}
           >
