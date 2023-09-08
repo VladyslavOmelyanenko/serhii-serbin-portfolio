@@ -68,7 +68,7 @@ const projects = [
     "link":"",
     "description":"My favourite pair of Crocs were stolen on a beach in France, right next to a bag of phones and watches. I always knew that my Crocs attractive thing. But let me know if you found them!.",
     "orientation":"horizontal",
-    "mediaPath":"crocs.png",
+    "mediaPath":"crocs.webp",
     "mediaType":"image",
     "mediaSize":"small",
     "projectTitle":"my\nstolen crocs",
@@ -141,13 +141,11 @@ const projects = [
     "order":"2"
   },
   
-
-  
   {
     "link":"",
     "description":"",
     "orientation":"horizontal",
-    "mediaPath":"me-boat.png",
+    "mediaPath":"me-boat.webp",
     "mediaType":"image",
     "mediaSize":"small",
     "projectTitle":"OVERHEATED ME\nBOAT TRIP",
@@ -159,7 +157,7 @@ const projects = [
     "link":"",
     "description":"I was recording tiktok",
     "orientation":"horizontal",
-    "mediaPath":"me-metro.png",
+    "mediaPath":"me-metro.webp",
     "mediaType":"image",
     "mediaSize":"small",
     "projectTitle":"CYCLING TUNNEL\nROTTERDAM",
@@ -281,7 +279,7 @@ const projects = [
     "link":"",
     "description":"Motion video for the creative community O–PLICH– with the aim to help Ukraine, along with giving the world a unique product, which represents Ukrainian culture, customs, and way of living. \n\nWe worked with multiple layers of photographs and vector graphics, textures and various motion patterns, also we developed the sound part, highlighting the dynamics.\n\nCommunity: O–PLICH–®\nDesigner: Vlad Boyko",
     "orientation":"horizontal",
-    "mediaPath":"tshirt.png",
+    "mediaPath":"tshirt.webp",
     "mediaType":"image",
     "mediaSize":"small",
     "projectTitle":"custom t-shirts drop\ncharity collab",
@@ -315,7 +313,7 @@ const projects = [
     "link":"https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/2407481",
     "description":"Charity project Ukrainians say thank you\n\nTo express gratitude towards people who are standing with Ukraine by showing up at protests, making donations and sharing their homes with refugees, we create a set of downloadable posters and social assets to say: “Дякую” (Thank You) for all the help Ukrainians have been receiving since Russia started the war on 24.02.22. \n\nAvailable in 21 languages, the idea is for people to spread messages of appreciation across different cities, in turn reproducing the Ukrainian flag to show solidarity and support. People in 32 countries around the world are already joining in pasting posters around different cities, outside and in shops, companies etc. \n\nWebsite: <a href=\"https://ukrainianssay-thankyou.com/\">https://ukrainianssay-thankyou.com/</a> \nInstagram: @ukrainianssay.thankyou\n\nTEAM\nOlla Kuzovkina, Dasha Ovechkina, Serhii Serbin",
     "orientation":"horizontal",
-    "mediaPath":"ust.png",
+    "mediaPath":"ust.webp",
     "mediaType":"image",
     "mediaSize":"small",
     "projectTitle":"Ukrainians say: дякую*\n*[Dyakuyu] thank you in ukrainian",
