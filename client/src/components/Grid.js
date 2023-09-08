@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 
 //imports
@@ -19,7 +19,7 @@ const Grid = () => {
 
   const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
-  const [clickedOnce, setClickedOnce] = useState([]);
+  const [clickedOnce] = useState([]);
   const [addShovel, setAddShovel] = useState(true);
 
   const location = useLocation();
@@ -296,7 +296,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           <div className={styles.detailedProject} id="projectDescription" >
 
             <div className={styles.copiedMedia} id="copiedMedia">
-              <iframe src="https://olafwempe.com/mp3/silence/silence.mp3" type="audio/mp3" allow="autoplay" id="audio" style={{display:'none'}}></iframe>
               {(activeProject.mediaType==='image') ?
                 (<img 
                   src={'/media/' + activeProject.mediaPath} 
