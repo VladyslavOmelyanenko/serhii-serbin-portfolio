@@ -88,13 +88,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
     let element = document.getElementById(rangeNumber);
     element = element.parentElement;
+    console.log(element);
 
     const img = document.createElement('img');
     img.classList += 'jumpingImage';
     img.src = image.src;
 
     // if (stylesId == 'cycling') console.log('cycling');
-    console.log(element.clientHeight);
 
     if (image.style.height === '') {
       img.style.height = '130px';
@@ -120,7 +120,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     img.addEventListener('click', () => jump(img, element.firstElementChild.id));
     element.appendChild(img);
     image.remove();
-
   }
   
   const handleClick = (project, event) => {
@@ -130,10 +129,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
     if (project.jumping === true) {
       const image = document.getElementById(project.order);
+      if (image == null) {
+        return;
+      }
       const projectBlock = image.parentElement;
-      projectBlock.lastElementChild.innerHTML = 'Contact hours \n 08:00—17:00';
+      projectBlock.lastElementChild.innerHTML = 'email';
       const mailLink = document.createElement('div');
-      mailLink.innerHTML = '<a style="color:black;" href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>'
+      mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
       mailLink.style.height = '80%';
       mailLink.style.margin = 'auto auto';
       mailLink.style.display = 'flex';
@@ -183,7 +185,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     let rightHeight = 0;
 
     projectsArray.forEach((project) => {
-      console.log(leftProjects);
       if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
         leftProjects.push(project);
         if (project.mediaSize === 'small') {
@@ -227,7 +228,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'/media/' + project.mediaPath}
+              mediaPath={'/trailers/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
@@ -244,7 +245,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               key={index}
               mediaSize={project.mediaSize} 
               mediaType={project.mediaType}
-              mediaPath={'/media/' + project.mediaPath}
+              mediaPath={'/trailers/' + project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
