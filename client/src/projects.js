@@ -1,7 +1,7 @@
 const projects = [
   {
     "link":"/japan",
-    "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. \nThe sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic. ",
+    "description":"Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. \nThe sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic.",
     "orientation":"vertical",
     "mediaPath":"vending1.webm",
     "mediaType":"video",
@@ -44,7 +44,7 @@ const projects = [
   
   {
     "link":"",
-    "description":"Meet Creature – a creative concept for WeTransfer brought to life by your file transfers. The more you send, the bigger and faster your unique CREATURE grows. Each one is as distinct as the files you feed it, making your transfers an exciting and personalised experience. \n\nTeam: Shen Hou, Chris Taylor, Serhii Serbi ",
+    "description":"Meet Creature – a creative concept for WeTransfer brought to life by your file transfers. The more you send, the bigger and faster your unique CREATURE grows. Each one is as distinct as the files you feed it, making your transfers an exciting and personalised experience. \n\nTeam: Shen Hou, Chris Taylor, Serhii Serbin ",
     "orientation":"horizontal",
     "mediaPath":"skeleton.webm",
     "mediaType":"video",

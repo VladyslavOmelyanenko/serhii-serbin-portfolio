@@ -1,0 +1,48 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.casePage {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 70px;
+  display: flex;
+}
+
+.projectDescription {
+  width: 48%;
+  margin-right: 2%;
+}
+
+.projectDescription h1{
+  text-transform: capitalize;
+  font-size: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+.projectDescription p {
+  margin-top: 30px;
+  padding-bottom: 50px;
+  white-space: pre-wrap;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  display: block;
+  height: calc(100vh - 70px - 145px);
+  overflow-y: scroll;
+}
+
+.images {
+  width: 48%;
+  height: calc(100vh - 110px);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.images img, video {
+  width: 100%;
+  margin-bottom: 10px;
+}

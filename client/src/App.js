@@ -1,4 +1,5 @@
 import React from 'react';
+import cases from "./cases";
 import { Routes, Route } from "react-router-dom";
 
 
@@ -25,7 +26,9 @@ const App = () => {
         <Route path='/about' element={ <ProjectsPage /> } />
         <Route path='/panel' element={ <Panel /> } />
         <Route path="/admin" element={ <ProtectedRoute element={ AdminPage }/> } />
-        <Route path="/oplich" element={ <CasePage />}  />
+        {cases.map((caseItem) => (
+          <Route path={caseItem.route} element={ <CasePage caseObject={caseItem}/> }  />
+        ))}
       </Routes>
     </div>
   );
