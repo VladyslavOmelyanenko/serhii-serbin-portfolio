@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 
 import Navbar from '../components/Navbar'
 
 import styles from './CasePage.module.css';
 
 const CasePage = (props) => {
-  const [closestVideo, setClosestVideo] = useState(null);
   const containerRef = useRef(null);
   const caseObject = props.caseObject;
 
@@ -35,8 +34,6 @@ const CasePage = (props) => {
         }
       });
     }
-
-    setClosestVideo(closestVideo);
   }
 
 
