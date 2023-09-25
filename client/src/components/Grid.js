@@ -111,11 +111,11 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     } else if (stylesId === 'cycling') {
       img.style.left = coordinates.x - window.innerWidth * 0.05 * 0.7 + "px";
       img.style.top = coordinates.y + "px";
+    } else {
+      img.style.left = coordinates.x - window.innerWidth * 0.17 * 0.7 + "px";
+      img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
     }
-    // img.style.left =
-    //   coordinates.x - window.innerWidth * 0.17 * 0.45 + "px";
-    // img.style.top =
-    //   coordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+      
     img.removeEventListener("click", jump);
     img.addEventListener('click', () => jump(img, element.firstElementChild.id, stylesId));
   }

@@ -218,23 +218,25 @@ const projects = [
 
   {
     link: "",
-    description: "",
+    description:
+      "Meet Creature – a creative concept for WeTransfer brought to life by your file transfers. The more you send, the bigger and faster your unique CREATURE grows. Each one is as distinct as the files you feed it, making your transfers an exciting and personalised experience. \n\nTeam: Shen Hou, Chris Taylor, Serhii Serbin ",
     orientation: "horizontal",
     mediaPath: "organ1",
     mediaType: "video",
     mediaSize: "small",
-    projectTitle: "3D ORGAN\nPROTOTYPE",
+    projectTitle: "DIGITAL CREATURE\nAN INTERACTIVE CONCEPT FOR WETRANSFER",
     order: "13",
   },
 
   {
     link: "",
-    description: "",
+    description:
+      "Meet Creature – a creative concept for WeTransfer brought to life by your file transfers. The more you send, the bigger and faster your unique CREATURE grows. Each one is as distinct as the files you feed it, making your transfers an exciting and personalised experience. \n\nTeam: Shen Hou, Chris Taylor, Serhii Serbin ",
     orientation: "horizontal",
     mediaPath: "organ2",
     mediaType: "video",
     mediaSize: "small",
-    projectTitle: "3D ORGAN \nPROTOTYPE",
+    projectTitle: "DIGITAL CREATURE\nAN INTERACTIVE CONCEPT FOR WETRANSFER",
     order: "24",
   },
 
