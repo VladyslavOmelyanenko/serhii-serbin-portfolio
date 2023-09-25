@@ -165,8 +165,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   }
 
 
- 
-
   // Fetch the data and if there is an active project set it
 
   useEffect(() => {
@@ -262,7 +260,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           <div className={styles.detailedProject} id="projectDescription">
             <div className={styles.copiedMedia} id="copiedMedia">
               <video
-                src={"/media/about.webm"}
+                src={"/mediawebm/about.webm"}
                 autoPlay
                 loop
                 className={styles.verticalCopy}
@@ -305,7 +303,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   autoPlay
                   loop
                   playsInline
-                  muted
                   className={
                     activeProject.orientation === "horizontal"
                       ? styles.horizontalCopy
@@ -323,6 +320,8 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   </source>
                 </video>
               )}
+              <div>mute</div>
+
             </div>
             <div className={styles.projectDescription}>
               <h2 className={styles.projectTitle}>
