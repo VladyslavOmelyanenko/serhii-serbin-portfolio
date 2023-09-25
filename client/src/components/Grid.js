@@ -21,14 +21,16 @@ const Grid = () => {
   // const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
   const [clickedOnce] = useState([]);
+  const videoRef = useRef(null);
+  const gridRef = useRef(null);
   const [addShovel, setAddShovel] = useState(true);
+  const [isPaused, setIsPaused] = useState();
 
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
   // const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
   // const serverUrl = 'http://localhost:5000';
 
-  const videoRef = useRef(null);
 
   const navigate = useNavigate();
   const { projectId } = useParams();  
@@ -75,51 +77,47 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     
   }
 
-  const jump = (image, order, stylesId='') => {
+
+  const getMiddleCoordinates = (containerElement) => {
+    const rect = containerElement.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+    const middleX = rect.left + scrollX + rect.width / 2;
+    const middleY = rect.top + scrollY + rect.height / 2;
+    return { x: middleX, y: middleY };
+  }
+
+  const jump = (img, order, stylesId='') => {
     const areaNumber = 5;
     let min = +order - areaNumber;
     let max = +order + areaNumber;
     min = (min < 1) ? 1 : min; 
     max = (max >= projects.length) ? projects.length : max; 
     let rangeNumber = Math.floor(Math.random() * (max - min) + min);
+
     while (rangeNumber === order) {
       rangeNumber = Math.floor((Math.random() * max) + (min));
-    }
-
+    } 
+    
     let element = document.getElementById(rangeNumber);
     element = element.parentElement;
-    console.log(element);
+    
+    const coordinates = getMiddleCoordinates(element);
+    console.log(stylesId);
 
-    const img = document.createElement('img');
-    img.classList += 'jumpingImage';
-    img.src = image.src;
-
-    // if (stylesId == 'cycling') console.log('cycling');
-
-    if (image.style.height === '') {
-      img.style.height = '130px';
-      img.style.width = 'auto';
-      img.style.position = 'absolute';
-      img.style.zIndex = '200';
-      if (stylesId === 'cycling') {
-        img.style.marginTop = element.clientHeight/2 + 'px';
-      } if (stylesId === 'overheated') {
-        img.style.marginTop = -element.clientHeight/1.2 + 'px';
-        img.style.marginLeft = element.clientWidth/3 + 'px';
-        
-      }
-    } else {
-      img.style.height = image.style.height;
-      img.style.width = image.style.width;
-      img.style.position = image.style.position;
-      img.style.zIndex = image.style.zIndex;
-      img.style.marginTop = image.style.marginTop;
-      img.style.marginLeft = image.style.marginLeft;
+    if (stylesId === 'overheated') {
+       img.style.left = coordinates.x + "px";
+       img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.70 + "px";
+    } else if (stylesId === 'cycling') {
+      img.style.left = coordinates.x - window.innerWidth * 0.05 * 0.7 + "px";
+      img.style.top = coordinates.y + "px";
     }
-
-    img.addEventListener('click', () => jump(img, element.firstElementChild.id));
-    element.appendChild(img);
-    image.remove();
+    // img.style.left =
+    //   coordinates.x - window.innerWidth * 0.17 * 0.45 + "px";
+    // img.style.top =
+    //   coordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+    img.removeEventListener("click", jump);
+    img.addEventListener('click', () => jump(img, element.firstElementChild.id, stylesId));
   }
   
   const handleClick = (project, event) => {
@@ -144,7 +142,26 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
       projectBlock.prepend(mailLink);
       if (!clickedOnce.includes(project.order)) {
-        jump(image, project.order, project.projectTitle.split(' ')[0].toLowerCase());
+        image.remove();
+        console.log(document.getElementById(project.order));
+        const img = document.createElement("img");
+        img.classList += "jumpingImage";
+        img.src = image.src;
+        const startingBlock = document.getElementById(project.order).parentElement;
+        const startingCoordinates = getMiddleCoordinates(startingBlock);
+        gridRef.current.appendChild(img);
+        img.style.left = startingCoordinates.x - window.innerWidth * 0.17 * 0.45  + "px";
+        img.style.top = startingCoordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+
+        console.log(img.style.left);
+
+        setTimeout(
+          () =>{
+            img.style.height = 'calc(10vw * 0.9)';
+            jump(img, project.order, project.projectTitle.split(" ")[0].toLowerCase())},
+          100
+        );
+
         clickedOnce.push(project.order);
       };
       
@@ -208,7 +225,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   return (
     // if about is active
 
-    <div>
+    <div ref={gridRef}>
       {/* Grid */}
 
       <div className={styles.grid}>
@@ -302,6 +319,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   ref={videoRef}
                   autoPlay
                   loop
+                  onCanPlay={() => setIsPaused(videoRef.current.paused)}
                   playsInline
                   className={
                     activeProject.orientation === "horizontal"
@@ -316,12 +334,17 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   <source
                     src={"/mediawebm/" + activeProject.mediaPath + ".webm"}
                     type="video/webm"
-                    >
-                  </source>
+                  ></source>
                 </video>
               )}
-              <div>mute</div>
-
+              {isPaused && (
+                <div 
+                onClick={() => {
+                  videoRef.current.play();
+                  setIsPaused(false);
+                }}
+                className={styles.play}>PLAY</div>
+              )}
             </div>
             <div className={styles.projectDescription}>
               <h2 className={styles.projectTitle}>

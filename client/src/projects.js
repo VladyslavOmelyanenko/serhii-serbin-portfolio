@@ -84,7 +84,7 @@ const projects = [
   },
 
   {
-    link: "",
+    link: "/blue-hawaii",
     description:
       "Relaxing virtual journey through Hawaii. This digital wonderland captures the essence of nature's beauty, leaving you with lasting memories of this enchanting escape. \n\nSong: Where are the keys??? by Blue Hawaii ",
     orientation: "vertical",
@@ -135,7 +135,7 @@ const projects = [
     link: "/japan",
     description:
       "Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”.\nThis collection is basically what was in my pockets after the trip turns into the most important souvenirs. It shows through the hypnotic experience with bold visual effects and sound recorded from Japanese trains.",
-    orientation: "horizontal",
+    orientation: "vertical",
     mediaPath: "tickets",
     mediaType: "video",
     mediaSize: "small",
@@ -352,7 +352,7 @@ const projects = [
     link: "https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/2407481",
     description:
       'Charity project Ukrainians say thank you\n\nTo express gratitude towards people who are standing with Ukraine by showing up at protests, making donations and sharing their homes with refugees, we create a set of downloadable posters and social assets to say: “Дякую” (Thank You) for all the help Ukrainians have been receiving since Russia started the war on 24.02.22. \n\nAvailable in 21 languages, the idea is for people to spread messages of appreciation across different cities, in turn reproducing the Ukrainian flag to show solidarity and support. People in 32 countries around the world are already joining in pasting posters around different cities, outside and in shops, companies etc. \n\nWebsite: <a href="https://ukrainianssay-thankyou.com/">https://ukrainianssay-thankyou.com/</a> \nInstagram: @ukrainianssay.thankyou\n\nTEAM\nOlla Kuzovkina, Dasha Ovechkina, Serhii Serbin',
-    orientation: "horizontal",
+    orientation: "vetical",
     mediaPath: "ust.webp",
     mediaType: "image",
     mediaSize: "small",

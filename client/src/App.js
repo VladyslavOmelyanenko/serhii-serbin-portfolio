@@ -26,8 +26,8 @@ const App = () => {
         <Route path='/about' element={ <ProjectsPage /> } />
         <Route path='/panel' element={ <Panel /> } />
         <Route path="/admin" element={ <ProtectedRoute element={ AdminPage }/> } />
-        {cases.map((caseItem) => (
-          <Route path={caseItem.route} element={ <CasePage caseObject={caseItem}/> }  />
+        {cases.map((caseItem, i) => (
+          <Route key={i} path={caseItem.route} element={ <CasePage caseObject={caseItem}/> }  />
         ))}
       </Routes>
     </div>

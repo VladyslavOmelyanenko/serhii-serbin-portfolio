@@ -3,3 +3,16 @@ body {
   font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
   
 }
+
+a {
+  color: black;
+}
+
+.jumpingImage {
+  position: absolute;
+  height: calc(17vw * 0.9);
+  top: 0;
+  left: 0;
+  transition: left 1s, top 1s, height 1s;
+  z-index: 20000;
+}

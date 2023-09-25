@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import Navbar from '../components/Navbar'
 
@@ -6,6 +6,7 @@ import styles from './CasePage.module.css';
 
 const CasePage = (props) => {
   const containerRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
   const caseObject = props.caseObject;
 
   const handleScroll = () => {
@@ -36,6 +37,10 @@ const CasePage = (props) => {
     }
   }
 
+  const handleMute = () => {
+    setIsMuted(!isMuted);
+  }
+
 
   return (
     <>
@@ -47,15 +52,16 @@ const CasePage = (props) => {
             ref={containerRef}
             onScroll={handleScroll}
           >
+          <div className={styles.mute} onClick={() => handleMute()}>{(isMuted) ? "unmute" : "mute"}</div>
             {caseObject.images.map((image, i) =>
-              image.includes(".mp4") ? (
+              image.includes(".webm") ? (
                 <video
-                  src={"media/" + caseObject.folder + "/" + image}
-                  muted
+                  src={ caseObject.folder + "/" + image}
+                  muted={isMuted}
                 ></video>
               ) : (
                 <img
-                  src={"media/" + caseObject.folder + "/" + image}
+                  src={caseObject.folder + "/" + image}
                   alt="i"
                 ></img>
               )
