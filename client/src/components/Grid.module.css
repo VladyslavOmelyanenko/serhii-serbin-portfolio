@@ -1,12 +1,13 @@
 .grid {
   display: flex;
-  width: 1364px;
-  margin: 0 auto;
+  position: absolute;
+  width: 89.6vw;
   flex-wrap: wrap;
   font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
   font-size: 10px;
   padding-top: 100px;
-  padding-left: 37.5px;
+  left: 2.7vw;
+
 
 }
 
@@ -14,13 +15,17 @@
   align-content: flex-start;
   display: flex;
   flex-wrap: wrap;
-  width: 622px;
+  width: 44.8vw;
 }
 
-/* .p50:first-child {
-  margin-left: 0;
-} */
-
+.footer {
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
 
 .posFixed {
   position: fixed;

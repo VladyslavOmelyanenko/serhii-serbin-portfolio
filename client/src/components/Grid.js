@@ -40,13 +40,13 @@ While working on small experimental projects, I’m busy with big campaigns for 
 During my downtime, I enjoy travelling, exploring vintage markets and meeting funny people. And of course, I can't resist staying up-to-date with the latest gadgets and innovations.
 
 Cool links:
-My IG <a href="https://www.instagram.com/nibressergo/">(https://www.instagram.com/nibressergo/)</a>
-Fav refs on Are.na  <a href="https://www.are.na/serhii-serbin/">(https://www.are.na/serhii-serbin)</a>
-CV (boring) (link will be added later)
+My IG <a href="https://www.instagram.com/nibressergo/" target="blank">(https://www.instagram.com/nibressergo/)</a>
+Fav refs on Are.na  <a href="https://www.are.na/serhii-serbin/" target="blank">(https://www.are.na/serhii-serbin)</a>
+<a href="https://www.dropbox.com/scl/fi/wi1kmiv52btf2oy7r31l4/Serhii-Serbin-CV.pdf?rlkey=chqmud3mjkain0y9vet57d14m&dl=0" target="blank">CV (boring) </a>
 I like things…  (link will be added later)
-OFFF Barcelona <a href="https://www.instagram.com/p/CdMdzCVlAdM/">(https://www.instagram.com/p/CdMdzCVlAdM)</a>
-Adweek article <a href="https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/">(https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/)</a>
-Adage article <a href="https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748/">(https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748)</a>
+OFFF Barcelona <a href="https://www.instagram.com/p/CdMdzCVlAdM/" target="blank">(https://www.instagram.com/p/CdMdzCVlAdM)</a>
+Adweek article <a href="https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/" target="blank">(https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/)</a>
+Adage article <a href="https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748/" target="blank">(https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748)</a>
 
 Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
@@ -61,7 +61,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       element = element.parentElement;
       img = document.createElement('img');
       img.classList += 'jumpingImage';
-      img.src = '/media/funny.webp';
+      img.src = '/images/funny.webp';
       img.style.height = '130px';
       img.style.width = 'auto';
       img.style.position = 'absolute';
@@ -133,7 +133,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
         return;
       }
       const projectBlock = image.parentElement;
-      projectBlock.lastElementChild.innerHTML = 'email';
+      projectBlock.lastElementChild.innerHTML = 'text me when\nyou get here';
       const mailLink = document.createElement('div');
       mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
       mailLink.style.height = '80%';
@@ -208,31 +208,26 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   // DOM structure 
 
   return (
-
-
-    // if about is active 
+    // if about is active
 
     <div>
-      
-
-
       {/* Grid */}
 
       <div className={styles.grid}>
         <div className={styles.p50}>
           {leftProjects.map((project, index) => (
-            <Project 
+            <Project
               clickFunction={(e) => {
                 handleClick(project, e);
-              } }
+              }}
               key={index}
-              mediaSize={project.mediaSize} 
+              mediaSize={project.mediaSize}
               mediaType={project.mediaType}
-              mediaPath={'/trailers/' + project.mediaPath}
+              mediaPath={project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
-              jumping={(project.jumping) ? true : false}
+              jumping={project.jumping ? true : false}
             />
           ))}
         </div>
@@ -243,74 +238,113 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 handleClick(project, e);
               }}
               key={index}
-              mediaSize={project.mediaSize} 
+              mediaSize={project.mediaSize}
               mediaType={project.mediaType}
-              mediaPath={'/trailers/' + project.mediaPath}
+              mediaPath={project.mediaPath}
               projectTitle={project.projectTitle}
               mediaOrientation={project.orientation}
               id={project.order}
-              jumping={(project.jumping) ? true : false}
+              jumping={project.jumping ? true : false}
             />
           ))}
         </div>
+        <div className={styles.footer}>
+          &copy; 2023 Serhii Serbin, All rights reserved
+        </div>
       </div>
 
-      {(document.getElementById('10')) && (addShovel) && JumpingImage()}
+      {document.getElementById("10") && addShovel && JumpingImage()}
 
       {isAboutActive && (
-        <div className={styles.posFixed} onClick={(event) => closePage(event)} >
+        <div className={styles.posFixed} onClick={(event) => closePage(event)}>
           <div className={styles.blurredBackground}></div>
           <h1 className={styles.projectTitle}>About</h1>
           <div className={styles.detailedProject} id="projectDescription">
             <div className={styles.copiedMedia} id="copiedMedia">
-              <video src={"/media/about.webm"} autoPlay loop className={styles.verticalCopy}></video>
+              <video
+                src={"/media/about.webm"}
+                autoPlay
+                loop
+                className={styles.verticalCopy}
+              ></video>
             </div>
-            <p className={styles.projectDescription} dangerouslySetInnerHTML={{ __html: aboutText }} >
-            </p>
-          </div>  
-        </div>
-      )}
-
-
-      {/* If there is an active project */}
-
-      {activeProject && (
-        <div className={styles.posFixed} onClick={(event) => closePage(event)} id="activePage">
-
-          <div className={styles.blurredBackground}></div>
-
-          <div className={styles.detailedProject} id="projectDescription" >
-
-            <div className={styles.copiedMedia} id="copiedMedia">
-              {(activeProject.mediaType==='image') ?
-                (<img 
-                  src={'/media/' + activeProject.mediaPath} 
-                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy }
-                  alt="active project"
-                />)
-                : (<video 
-                  id="video"
-                  ref={ videoRef } 
-                  src={'/media/' + activeProject.mediaPath} 
-                  autoPlay loop playsInline 
-                  className={(activeProject.orientation === 'horizontal') ? styles.horizontalCopy : styles.verticalCopy}>
-                </video>)}
-            </div>
-            <div className={styles.projectDescription}>
-              <h2 className={styles.projectTitle}>{activeProject.projectTitle}</h2>
-              <p  dangerouslySetInnerHTML={{ __html: activeProject.description }}>
-              </p>
-              {(activeProject.link !== '') && (
-                <a href={activeProject.link} target="blank">See full project</a>
-              )}
-            </div>
-
+            <p
+              className={styles.projectDescription}
+              dangerouslySetInnerHTML={{ __html: aboutText }}
+            ></p>
           </div>
         </div>
       )}
 
+      {/* If there is an active project */}
+
+      {activeProject && (
+        <div
+          className={styles.posFixed}
+          onClick={(event) => closePage(event)}
+          id="activePage"
+        >
+          <div className={styles.blurredBackground}></div>
+
+          <div className={styles.detailedProject} id="projectDescription">
+            <div className={styles.copiedMedia} id="copiedMedia">
+              {activeProject.mediaType === "image" ? (
+                <img
+                  src={"/images/" + activeProject.mediaPath}
+                  className={
+                    activeProject.orientation === "horizontal"
+                      ? styles.horizontalCopy
+                      : styles.verticalCopy
+                  }
+                  alt="active project"
+                />
+              ) : (
+                <video
+                  id="video"
+                  ref={videoRef}
+                  autoPlay
+                  loop
+                  playsInline
+                  muted
+                  className={
+                    activeProject.orientation === "horizontal"
+                      ? styles.horizontalCopy
+                      : styles.verticalCopy
+                  }
+                >
+                  <source
+                    src={"/mediamov/" + activeProject.mediaPath + ".mov"}
+                    type='video/mp4; codecs="hvc1"'
+                  ></source>
+                  <source
+                    src={"/mediawebm/" + activeProject.mediaPath + ".webm"}
+                    type="video/webm"
+                    >
+                  </source>
+                </video>
+              )}
+            </div>
+            <div className={styles.projectDescription}>
+              <h2 className={styles.projectTitle}>
+                {activeProject.projectTitle}
+              </h2>
+              <p
+                dangerouslySetInnerHTML={{ __html: activeProject.description }}
+              ></p>
+              {activeProject.link !== "" && (
+                <a
+                  href={activeProject.link}
+                  target={activeProject.link[0] === "/" ? "_self" : "blank"}
+                >
+                  See full project
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-    );
+  );
 }
 
 export default Grid;

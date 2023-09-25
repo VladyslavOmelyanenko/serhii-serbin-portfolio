@@ -39,25 +39,36 @@ const CasePage = (props) => {
 
   return (
     <>
-    <Navbar />
-    <section>
-      <div className={styles.casePage}>
-        <div className={styles.projectDescription}>
-          <h1>{caseObject.title}</h1>
-          <p>{caseObject.description}</p>
+      <Navbar />
+      <section>
+        <div className={styles.casePage}>
+          <div
+            className={styles.images}
+            ref={containerRef}
+            onScroll={handleScroll}
+          >
+            {caseObject.images.map((image, i) =>
+              image.includes(".mp4") ? (
+                <video
+                  src={"media/" + caseObject.folder + "/" + image}
+                  muted
+                ></video>
+              ) : (
+                <img
+                  src={"media/" + caseObject.folder + "/" + image}
+                  alt="i"
+                ></img>
+              )
+            )}
+          </div>
+          <div className={styles.projectDescription}>
+            <h1>{caseObject.title}</h1>
+            <p>{caseObject.description}</p>
+          </div>
         </div>
-        <div className={styles.images} ref={containerRef} onScroll={handleScroll}>
-          {caseObject.images.map((image, i) => 
-            (image.includes('.mp4')) ? 
-            (<video src={'media/' + caseObject.folder + '/' + image} muted></video>)
-            : 
-            (<img src={'media/' + caseObject.folder + '/' + image} alt="i"></img>)
-          )}
-        </div>
-      </div>
-    </section>
+      </section>
     </>
-  )
+  );
 }
 
 export default CasePage;

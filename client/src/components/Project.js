@@ -16,28 +16,47 @@ const Project = (props) => {
 
 
   return (
-    <div className={"grid-item " + styles.project + ' ' + styles[mediaSize]} onClick={clickFunction}>
-      { (mediaType === "image") ? 
-      <img 
-        id={id} 
-        src={mediaPath} 
-        alt={projectTitle} 
-        className={(mediaOrientation === "horizontal") ? 
-          (jumping) ? `${styles.horizontalMedia} ${styles.jumping}` : `${styles.horizontalMedia}` 
-          : (jumping) ? `${styles.verticalMedia} ${styles.jumping}` : `${styles.verticalMedia}` }
-        preload="auto"
-      />
-      : <video 
-          id={id} 
-          src={mediaPath} muted autoPlay loop 
-          className={(mediaOrientation === "horizontal") ? 
-            (jumping) ? `${styles.horizontalMedia} ${styles.jumping}` : `${styles.horizontalMedia}` 
-            : (jumping) ? `${styles.verticalMedia} ${styles.jumping}` : `${styles.verticalMedia}` }
+    <div
+      className={"grid-item " + styles.project + " " + styles[mediaSize]}
+      onClick={clickFunction}
+    >
+      {mediaType === "image" ? (
+        <img
+          id={id}
+          src={"/images/" + mediaPath}
+          alt={projectTitle}
+          className={
+            mediaOrientation === "horizontal"
+              ? jumping
+                ? `${styles.horizontalMedia} ${styles.jumping}`
+                : `${styles.horizontalMedia}`
+              : jumping
+              ? `${styles.verticalMedia} ${styles.jumping}`
+              : `${styles.verticalMedia}`
+          }
           preload="auto"
-          // onMouseEnter={() => {document.getElementById(id).muted = false;}} 
-          // onMouseLeave={() => document.getElementById(id).muted = true}
-          >
-        </video> }
+        />
+      ) : (
+        <video
+          id={id}
+          muted
+          autoPlay
+          loop
+          className={
+            mediaOrientation === "horizontal"
+              ? jumping
+                ? `${styles.horizontalMedia} ${styles.jumping}`
+                : `${styles.horizontalMedia}`
+              : jumping
+              ? `${styles.verticalMedia} ${styles.jumping}`
+              : `${styles.verticalMedia}`
+          }
+          preload="auto"
+        >
+          <source src={'/trailersmov/' + mediaPath + '.mov'}></source>
+          <source src={'/trailerswebm/' + mediaPath + '.webm'}></source>
+        </video>
+      )}
       <pre className="project__title">{projectTitle}</pre>
     </div>
   );

@@ -4,8 +4,8 @@
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  margin-bottom: 75px;
-  margin-left: 75px;
+  margin-bottom: 5.4vw;
+  margin-left: 5.4vw;
   position: relative;
 }
 
@@ -15,15 +15,13 @@
 }
 
 .project.small {
-  /* width: 180px; */
-  /* height: 225px; */
-  width: 236px;
-  height: 295px;
+  width: 17vw;
+  height: 21.4vw;
 }
 
 .project.large {
-  width: 547px;
-  height: 437px;
+  width: 39.4vw;
+  height: 31.52vw;
 }
 
 .project video, .project img {
@@ -36,7 +34,7 @@
 }
 
 .horizontalMedia {
-  max-width: 80%;
+  max-width: 90%;
   height: auto;
   object-fit: contain;
 }
