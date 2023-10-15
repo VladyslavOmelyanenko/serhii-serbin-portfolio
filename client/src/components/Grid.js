@@ -10,7 +10,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import styles from './Grid.module.css';
 import Project from "./Project";
 import projectsData from "../projects";
-
+import Carousel from "./Carousel/Carousel";
 
 
 
@@ -21,10 +21,11 @@ const Grid = () => {
   // const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
   const [clickedOnce] = useState([]);
+  const [emailActive, setEmailActive] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
   const gridRef = useRef(null);
-  const [addShovel, setAddShovel] = useState(true);
-  const [isPaused, setIsPaused] = useState();
+  const activeProjectRef = useRef(null);  
 
   const location = useLocation();
   const isAboutActive = location.pathname === "/about";
@@ -37,9 +38,12 @@ const Grid = () => {
   const projects = projectsData.sort((proj1, proj2) => proj1.order - proj2.order);
 
 
-  const aboutText = `I'm Serhii, a 23-year-old motion design artist with a passion for visual experiments and technology. Currently, I call Amsterdam home, working with the talented Wieden+Kennedy team.
-While working on small experimental projects, I’m busy with big campaigns for Nike, Lexus, Puma, YSL, Evian, and Samsung. This dynamic balance keeps me on my toes and constantly inspired.
-During my downtime, I enjoy travelling, exploring vintage markets and meeting funny people. And of course, I can't resist staying up-to-date with the latest gadgets and innovations.
+  const aboutText = `Serhii Serbin
+2000, UA - NL
+
+Motion design artist with a passion for visual experiments and technology. I grew up in a small Ukrainian town, currently, I live in Amsterdam, working with the inspiring Wieden+Kennedy team.
+I enjoy small experimental design projects, while busy with big campaigns for Nike, Puma, YSL, Evian, and Samsung.
+I like crocs, backed eggplant, home plants, solo trips, and my mother’s borscht. And of course, I can't resist staying up-to-date with the latest gadgets.
 
 Cool links:
 My IG <a href="https://www.instagram.com/nibressergo/" target="blank">(https://www.instagram.com/nibressergo/)</a>
@@ -53,30 +57,6 @@ Adage article <a href="https://adage.com/creativity/work/ukrainian-creatives-hav
 Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
 
-  // Functions
-
-  const JumpingImage = () => {
-    let img;
-    if (!addShovel) return false;
-    if (addShovel) {
-      let element = document.getElementById('10');
-      element = element.parentElement;
-      img = document.createElement('img');
-      img.classList += 'jumpingImage';
-      img.src = '/images/funny.webp';
-      img.style.height = '130px';
-      img.style.width = 'auto';
-      img.style.position = 'absolute';
-      img.style.marginLeft = element.clientWidth/2 + 'px';
-      img.style.marginTop = '60px';
-      img.style.zIndex = '200'
-      img.addEventListener('click', () => jump(img, element.firstElementChild.id));
-      element.appendChild(img);
-      setAddShovel(false);
-    }
-    
-  }
-
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
@@ -87,7 +67,11 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     return { x: middleX, y: middleY };
   }
 
+
+  let jumpHandler;
+
   const jump = (img, order, stylesId='') => {
+    console.log('jumpiiiing');
     const areaNumber = 5;
     let min = +order - areaNumber;
     let max = +order + areaNumber;
@@ -103,7 +87,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     element = element.parentElement;
     
     const coordinates = getMiddleCoordinates(element);
-    console.log(stylesId);
 
     if (stylesId === 'overheated') {
        img.style.left = coordinates.x + "px";
@@ -115,10 +98,16 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       img.style.left = coordinates.x - window.innerWidth * 0.17 * 0.7 + "px";
       img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
     }
+
+    img.removeEventListener("click", jumpHandler);
+
       
-    img.removeEventListener("click", jump);
-    img.addEventListener('click', () => jump(img, element.firstElementChild.id, stylesId));
+    jumpHandler = () => jump(img, element.firstElementChild.id, stylesId);
+    
+    img.addEventListener('click', jumpHandler);
   }
+
+
   
   const handleClick = (project, event) => {
     if (Array.from(event.target.classList).includes('jumpingImage')) {
@@ -130,17 +119,20 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       if (image == null) {
         return;
       }
-      const projectBlock = image.parentElement;
-      projectBlock.lastElementChild.innerHTML = 'text me when\nyou get here';
-      const mailLink = document.createElement('div');
-      mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
-      mailLink.style.height = '80%';
-      mailLink.style.margin = 'auto auto';
-      mailLink.style.display = 'flex';
-      mailLink.style.alignItems = 'center';
-      mailLink.style.textTransform = 'uppercase';
+      if (!emailActive) {
+        const projectBlock = image.parentElement;
+        projectBlock.lastElementChild.innerHTML = 'text me when\nyou get here';
+        const mailLink = document.createElement('div');
+        mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
+        mailLink.style.height = '80%';
+        mailLink.style.margin = 'auto auto';
+        mailLink.style.display = 'flex';
+        mailLink.style.alignItems = 'center';
+        mailLink.style.textTransform = 'uppercase';
 
-      projectBlock.prepend(mailLink);
+        projectBlock.prepend(mailLink);
+        setEmailActive(true);
+      } 
       if (!clickedOnce.includes(project.order)) {
         image.remove();
         console.log(document.getElementById(project.order));
@@ -165,18 +157,15 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
         clickedOnce.push(project.order);
       };
       
-    } else {
+    } else if (project.toAbout === true) {
+      navigate('about');
+    }  else {
       navigate(`${project.projectTitle}`);
-    }
+    } 
   }
 
    const closePage = (event) => {
-    const videoContainer = document.getElementById('copiedMedia');
-    const textContainer = document.getElementById('projectDescription');
-
-    console.log(videoContainer, textContainer)
-
-    if (videoContainer.isEqualNode(event.target) || textContainer.isEqualNode(event.target)) {
+    if (!event.target.className.includes('dontClose')) {
       navigate('/');
     }
   }
@@ -185,8 +174,23 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   // Fetch the data and if there is an active project set it
 
   useEffect(() => {
+     const handleKeyDown = (e) => {
+       if (e.key === "Escape") {
+         navigate("/");
+       }
+     };
+
     projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
-  }, [projectId, projects]);
+
+    document.addEventListener("keydown", handleKeyDown);
+
+  
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+
+  }, [projectId, projects, navigate]);
 
 
   // Distribute left column and right
@@ -223,8 +227,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
   // DOM structure 
 
   return (
-    // if about is active
-
     <div ref={gridRef}>
       {/* Grid */}
 
@@ -263,28 +265,28 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
             />
           ))}
         </div>
-        <div className={styles.footer}>
-          &copy; 2023 Serhii Serbin, All rights reserved
-        </div>
+        <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
       </div>
-
-      {document.getElementById("10") && addShovel && JumpingImage()}
 
       {isAboutActive && (
         <div className={styles.posFixed} onClick={(event) => closePage(event)}>
           <div className={styles.blurredBackground}></div>
           <h1 className={styles.projectTitle}>About</h1>
           <div className={styles.detailedProject} id="projectDescription">
-            <div className={styles.copiedMedia} id="copiedMedia">
+            <div
+              className={`${styles.copiedMedia} ${styles.aboutMedia}`}
+              id="copiedMedia"
+            >
               <video
                 src={"/mediawebm/about.webm"}
                 autoPlay
                 loop
-                className={styles.verticalCopy}
+                muted
+                className={`${styles.verticalCopy} dontClose`}
               ></video>
             </div>
             <p
-              className={styles.projectDescription}
+              className={`${styles.projectDescription} dontClose`}
               dangerouslySetInnerHTML={{ __html: aboutText }}
             ></p>
           </div>
@@ -298,18 +300,27 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           className={styles.posFixed}
           onClick={(event) => closePage(event)}
           id="activePage"
+          ref={activeProjectRef}
         >
           <div className={styles.blurredBackground}></div>
 
           <div className={styles.detailedProject} id="projectDescription">
             <div className={styles.copiedMedia} id="copiedMedia">
-              {activeProject.mediaType === "image" ? (
+              {activeProject.sliderFolder ? (
+                <div className={styles.carousel}>
+                  <Carousel
+                    images={activeProject.sliderImages}
+                    folder={"/mediawebm/" + activeProject.sliderFolder + "/"}
+                    firstImage={"/mediamov/" + activeProject.mediaPath + ".mov"}
+                  />
+                </div>
+              ) : activeProject.mediaType === "image" ? (
                 <img
                   src={"/images/" + activeProject.mediaPath}
                   className={
                     activeProject.orientation === "horizontal"
-                      ? styles.horizontalCopy
-                      : styles.verticalCopy
+                      ? `${styles.horizontalCopy} dontClose`
+                      : `${styles.verticalCopy} dontClose`
                   }
                   alt="active project"
                 />
@@ -319,12 +330,12 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   ref={videoRef}
                   autoPlay
                   loop
-                  onCanPlay={() => setIsPaused(videoRef.current.paused)}
                   playsInline
+                  muted={isMuted}
                   className={
                     activeProject.orientation === "horizontal"
-                      ? styles.horizontalCopy
-                      : styles.verticalCopy
+                      ? `${styles.horizontalCopy} dontClose`
+                      : `${styles.verticalCopy} dontClose`
                   }
                 >
                   <source
@@ -337,26 +348,32 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   ></source>
                 </video>
               )}
-              {isPaused && (
-                <div 
-                onClick={() => {
-                  videoRef.current.play();
-                  setIsPaused(false);
-                }}
-                className={styles.play}>PLAY</div>
-              )}
+              <span>{console.log(JSON.stringify(activeProject))}</span>
+              <span
+                className={`${styles.muteButton} dontClose`}
+                onClick={() => setIsMuted(!isMuted)}
+              >
+                {(JSON.stringify(activeProject).includes("webm") ||
+                  JSON.stringify(activeProject).includes("mov") ||
+                  activeProject.mediaType === "video") &&
+                isMuted
+                  ? "Unmute"
+                  : "Mute"}
+              </span>
             </div>
             <div className={styles.projectDescription}>
-              <h2 className={styles.projectTitle}>
+              <h2 className={`${styles.projectTitle} dontClose`}>
                 {activeProject.projectTitle}
               </h2>
               <p
+                className="dontClose"
                 dangerouslySetInnerHTML={{ __html: activeProject.description }}
               ></p>
               {activeProject.link !== "" && (
                 <a
                   href={activeProject.link}
                   target={activeProject.link[0] === "/" ? "_self" : "blank"}
+                  className="dontClose"
                 >
                   See full project
                 </a>

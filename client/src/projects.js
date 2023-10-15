@@ -1,6 +1,6 @@
 const projects = [
   {
-    link: "/japan",
+    link: "",
     description:
       "Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”. \nThe sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic.",
     orientation: "vertical",
@@ -9,10 +9,23 @@ const projects = [
     mediaSize: "small",
     projectTitle: "VENDING MACHINES\nTRAVEL-INSPIRED ARTWORK",
     order: "29",
+    sliderFolder: "japan",
+    sliderImages: [
+      "1.webp",
+      "2.webm",
+      "3.webm",
+      "4.webm",
+      "5.webm",
+      "6.webm",
+      "7.webm",
+      "8.webm",
+      "9.webm",
+      "10.webm",
+    ],
   },
 
   {
-    link: "/japan",
+    link: "",
     description:
       "Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”.\nThe sound of vending machines created an immersive experience pairing with the bold visual effects to show the incredible level of consumption. Sound and image blend in a hectic yet peaceful dynamic.",
     orientation: "horizontal",
@@ -21,6 +34,19 @@ const projects = [
     mediaSize: "small",
     projectTitle: "VENDING MACHINES \nTRAVEL-INSPIRED ARTWORK",
     order: "30",
+    sliderFolder: "japan",
+    sliderImages: [
+      "1.webp",
+      "2.webm",
+      "3.webm",
+      "4.webm",
+      "5.webm",
+      "6.webm",
+      "7.webm",
+      "8.webm",
+      "9.webm",
+      "10.webm",
+    ],
   },
 
   {
@@ -45,6 +71,17 @@ const projects = [
     mediaSize: "small",
     projectTitle: "PUMA PLAY IN STYLE\nSEEK STUDIO",
     order: "11",
+    sliderFolder: "puma",
+    sliderImages: [
+      "1.webm",
+      "2.jpg",
+      "3.jpg",
+      "4.jpg",
+      "5.jpg",
+      "6.webp",
+      "7.webp",
+      "8.webp",
+    ],
   },
 
   {
@@ -55,7 +92,7 @@ const projects = [
     mediaPath: "skeleton",
     mediaType: "video",
     mediaSize: "large",
-    projectTitle: "DIGITAL CREATURE\nAN INTERACTIVE CONCEPT FOR WETRANSFER",
+    projectTitle: "DIGITAL CREATURE \nAN INTERACTIVE CONCEPT FOR WETRANSFER",
     order: "15",
   },
 
@@ -84,7 +121,7 @@ const projects = [
   },
 
   {
-    link: "/blue-hawaii",
+    link: "",
     description:
       "Relaxing virtual journey through Hawaii. This digital wonderland captures the essence of nature's beauty, leaving you with lasting memories of this enchanting escape. \n\nSong: Where are the keys??? by Blue Hawaii ",
     orientation: "vertical",
@@ -93,6 +130,8 @@ const projects = [
     mediaSize: "small",
     projectTitle: "BLUE HAWAII\nIMMERSIVE VISUAL EXPERIENCE",
     order: "9",
+    sliderFolder: "blue-hawaii",
+    sliderImages: ["1.webm", "2.webm", "3.webm", "4.webm"],
   },
 
   {
@@ -117,6 +156,19 @@ const projects = [
     mediaSize: "large",
     projectTitle: "FEVER DETECTION SYSTEMS\nTRAVEL-INSPIRED ARTWORK",
     order: "18",
+    sliderFolder: "japan",
+    sliderImages: [
+      "1.webp",
+      "2.webm",
+      "3.webm",
+      "4.webm",
+      "5.webm",
+      "6.webm",
+      "7.webm",
+      "8.webm",
+      "9.webm",
+      "10.webm",
+    ],
   },
 
   {
@@ -132,7 +184,7 @@ const projects = [
   },
 
   {
-    link: "/japan",
+    link: "",
     description:
       "Last November I travelled around Japan, it was extremely inspirational for me, I made artwork named “What I brought from Japan instead of a fridge magnet”.\nThis collection is basically what was in my pockets after the trip turns into the most important souvenirs. It shows through the hypnotic experience with bold visual effects and sound recorded from Japanese trains.",
     orientation: "vertical",
@@ -142,6 +194,19 @@ const projects = [
     projectTitle:
       "冷蔵庫のマグネットの代わりに\n私が 日本から持ってきた物は？？",
     order: "1",
+    sliderFolder: "japan",
+    sliderImages: [
+      "1.webp",
+      "2.webm",
+      "3.webm",
+      "4.webm",
+      "5.webm",
+      "6.webm",
+      "7.webm",
+      "8.webm",
+      "9.webm",
+      "10.webm",
+    ],
   },
 
   {
@@ -158,14 +223,14 @@ const projects = [
 
   {
     link: "",
-    description: "",
     orientation: "horizontal",
+    description: "",
     mediaPath: "me-boat.webp",
     mediaType: "image",
     mediaSize: "small",
-    projectTitle: "OVERHEATED ME\nBOAT TRIP",
+    projectTitle: "About",
     order: "17",
-    jumping: true,
+    toAbout: true,
   },
 
   {
@@ -236,7 +301,7 @@ const projects = [
     mediaPath: "organ2",
     mediaType: "video",
     mediaSize: "small",
-    projectTitle: "DIGITAL CREATURE\nAN INTERACTIVE CONCEPT FOR WETRANSFER",
+    projectTitle: "DIGITAL CREATURE  \n AN INTERACTIVE CONCEPT FOR WETRANSFER",
     order: "24",
   },
 
@@ -336,6 +401,19 @@ const projects = [
     mediaSize: "small",
     projectTitle: "FEVER DETECTION SYSTEM\nTRAVEL-INSPIRED ARTWORK",
     order: "20",
+    sliderFolder: "japan",
+    sliderImages: [
+      "1.webp",
+      "2.webm",
+      "3.webm",
+      "4.webm",
+      "5.webm",
+      "6.webm",
+      "7.webm",
+      "8.webm",
+      "9.webm",
+      "10.webm",
+    ],
   },
 
   {
