@@ -279,6 +279,22 @@ const projects = [
     mediaSize: "large",
     projectTitle: "custom t-shirts drop\ncharity collab to support ukraine",
     order: "25",
+    sliderFolder: "oplich",
+    sliderImages: [
+      "1.jpeg",
+      "2.jpeg",
+      "3.jpeg",
+      "4.jpeg",
+      "5.jpeg",
+      "6.jpeg",
+      "7.jpeg",
+      "8.jpeg",
+      "9.jpeg",
+      "10.jpeg",
+      "11.jpeg",
+      "12.png",
+      "13.jpeg",
+    ],
   },
 
   {
@@ -374,7 +390,8 @@ const projects = [
     mediaSize: "small",
     projectTitle: "custom t-shirts drop\ncharity collab",
     order: "4",
-    caseImages: [
+    sliderFolder: "oplich",
+    sliderImages: [
       "1.jpeg",
       "2.jpeg",
       "3.jpeg",
@@ -386,7 +403,7 @@ const projects = [
       "9.jpeg",
       "10.jpeg",
       "11.jpeg",
-      "12.jpeg",
+      "12.png",
       "13.jpeg",
     ],
   },

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styles from "./Carousel.module.css";
 
-const Carousel = ({ images, folder, firstImage }) => {
+const Carousel = ({ images, folder, firstImage, isMuted }) => {
 
   const track = useRef(null);
 
@@ -92,7 +92,7 @@ const Carousel = ({ images, folder, firstImage }) => {
     const closestSlide = getClosestImageToCenter("");
     const closestVideo = closestSlide.querySelector("video");
     console.log(closestVideo);
-    
+
     if (closestVideo) {
       videos.forEach((video) => {
         if (video === closestVideo) {
@@ -122,9 +122,14 @@ const Carousel = ({ images, folder, firstImage }) => {
           onScroll={() => handleScroll()}
         >
           <li className={styles.carouselSlide}>
+          {
+            (firstImage.includes('webp')) ?
+              <img src={firstImage} alt={firstImage}/>
+            :
             <video autoPlay muted loop className="dontClose">
               <source src={firstImage}></source>
             </video>
+          }
           </li>
           {images.map((image, i) =>
             image.includes("webm") ? (
@@ -132,7 +137,7 @@ const Carousel = ({ images, folder, firstImage }) => {
                 <video
                   src={folder + image}
                   autoPlay
-                  muted
+                  muted={isMuted}
                   loop
                   className="dontClose"
                 ></video>

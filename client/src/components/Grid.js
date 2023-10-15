@@ -311,7 +311,8 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   <Carousel
                     images={activeProject.sliderImages}
                     folder={"/mediawebm/" + activeProject.sliderFolder + "/"}
-                    firstImage={"/mediamov/" + activeProject.mediaPath + ".mov"}
+                    firstImage={(activeProject.mediaType === "video") ? "/mediamov/" + activeProject.mediaPath + ".mov" : "/mediawebm/" + activeProject.mediaPath}
+                    isMuted={isMuted}
                   />
                 </div>
               ) : activeProject.mediaType === "image" ? (
