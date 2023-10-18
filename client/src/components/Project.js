@@ -58,7 +58,7 @@ const Project = (props) => {
           <source src={'/trailerswebm/' + mediaPath + '.webm'}></source>
         </video>
       )}
-      <pre className="project__title">{projectTitle}</pre>
+      <span className="project__title">{projectTitle}</span>
     </div>
   );
 };

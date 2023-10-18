@@ -23,9 +23,9 @@ const Grid = () => {
 
   const [clickedOnce] = useState([]);
   const [emailActive, setEmailActive] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-
   const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
+  
+  const [isMuted, setIsMuted] = useState(isMobile);
 
 
   const videoRef = useRef(null);
@@ -240,7 +240,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     })
   }
   projects && distributeProjects(projects);
-  mobileProjects && console.log(mobileProjects);
 
   // DOM structure 
 
@@ -266,6 +265,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 jumping={project.jumping ? true : false}
               />
             ))}
+          <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
         </div>
       ) : (
         <div className={styles.grid}>
@@ -376,7 +376,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   autoPlay
                   loop
                   playsInline
-                  muted={true}
+                  muted={isMuted}
                   className={
                     activeProject.orientation === "horizontal"
                       ? `${styles.horizontalCopy} dontClose`
@@ -399,10 +399,9 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               >
                 {(JSON.stringify(activeProject).includes("webm") ||
                   JSON.stringify(activeProject).includes("mov") ||
-                  activeProject.mediaType === "video") &&
-                isMuted
-                  ? "Unmute"
-                  : "Mute"}
+                  activeProject.mediaType === "video") ?
+                    (isMuted) ? "Unmute" : "Mute"
+                  : ""}
               </span>
             </div>
             <div className={styles.projectDescription}>

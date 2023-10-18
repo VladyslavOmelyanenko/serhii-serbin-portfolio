@@ -9,9 +9,10 @@
   position: relative;
 }
 
-.project pre {
+.project span {
     font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
     text-transform: uppercase;
+    white-space: pre-wrap;
 }
 
 .project.small {
@@ -68,8 +69,7 @@
     height: 72vw;
   }
 
-  .project pre {
-    text-wrap: wrap;
-    overflow-wrap: normal;
+  .project span {
+    white-space: pre-wrap;
   }
 }
