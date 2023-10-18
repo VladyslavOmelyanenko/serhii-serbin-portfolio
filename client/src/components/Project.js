@@ -42,6 +42,7 @@ const Project = (props) => {
           muted
           autoPlay
           loop
+          playsInline
           className={
             mediaOrientation === "horizontal"
               ? jumping

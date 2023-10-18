@@ -321,6 +321,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 autoPlay
                 loop
                 muted
+                playsInline
                 className={`${styles.verticalCopy} dontClose`}
               ></video>
             </div>
