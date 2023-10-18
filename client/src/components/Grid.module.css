@@ -1,3 +1,14 @@
+.mobileGrid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  left: 5%;
+  position: absolute;
+  font-size: 10px;
+  padding-top: 70px;
+  gap: 20px 20px;
+}
+
 .grid {
   display: flex;
   position: absolute;
@@ -68,6 +79,7 @@
   height: 100%;
   position: fixed;
   z-index: 10;
+  gap: 20px;
   overflow-y: scroll;
 }
 
@@ -101,70 +113,6 @@
   margin: 0 auto;
 }
 
-.videoControls {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-top: 30px;
-  justify-content: center;
-}
-
-.videoControls input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-  background: #000;
-  height: 0.1rem;
-}
-
-/******** Firefox ********/
-input[type="range"]::-moz-range-track {
-  background: #000;
-  height: 0.5rem;
-  width: 10rem;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  /* Override default look */
-  appearance: none;
-  margin-top: -0.5rem;
-  /* Centers thumb on the track */
-  background-color: #000;
-  border-radius: 10px;
-  height: 1rem;
-  width: 1rem;
-}
-
-input[type="range"]::-moz-range-thumb {
-  border: none;
-  /*Removes extra border that FF applies*/
-  border-radius: 50%;
-  /*Removes default border-radius that FF applies*/
-  background-color: #000;
-  height: 2rem;
-  width: 1rem;
-}
-
-.videoControls button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
-  text-transform: uppercase;
-}
-
-.videoControls input {
-  width: 30%;
-}
-
-
-
 .projectDescription{
   width: 30%;
   margin: auto 0;
@@ -193,4 +141,49 @@ input[type="range"]::-moz-range-thumb {
   left: 30px;
   text-transform: uppercase;
   font-size: 10px;
+}
+
+@media (max-width: 850px) {
+  .detailedProject {
+    flex-direction: column;
+  }
+
+  .copiedMedia {
+    width: 100%;
+  }
+
+  .aboutMedia .verticalCopy {
+    width: calc(100% - 30px);
+    height: auto;
+    padding: 0 15px;
+    margin-top: 75px;
+  }
+
+  .verticalCopy {
+    height: auto;
+    width: calc(100% - 30px);
+    padding: 0 15px;
+    margin-top: 75px;
+  }
+
+  .horizontalCopy {
+    width: calc(100% - 30px);
+    height: auto;
+    padding: 0 15px;
+    margin-top: 75px;
+  }
+
+  .projectDescription {
+    width: calc(100% - 30px);
+    padding: 0 15px;
+    margin-bottom: 20px;
+  }
+
+  .muteButton {
+    bottom: auto;
+    left: 15px;
+    top: 60px;
+  }
+
+
 }

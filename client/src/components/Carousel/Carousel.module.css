@@ -50,3 +50,11 @@
 .carouselButton:last-child {
   right: 0px
 }
+
+@media (max-width: 850px) {
+  .carousel {
+    width: calc(100%);
+    height: 70vh;
+    margin-top: 80px;
+  }
+}

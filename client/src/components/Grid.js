@@ -20,9 +20,14 @@ const Grid = () => {
 
   // const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
+
   const [clickedOnce] = useState([]);
   const [emailActive, setEmailActive] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
+
+
   const videoRef = useRef(null);
   const gridRef = useRef(null);
   const activeProjectRef = useRef(null);  
@@ -135,7 +140,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
       } 
       if (!clickedOnce.includes(project.order)) {
         image.remove();
-        console.log(document.getElementById(project.order));
         const img = document.createElement("img");
         img.classList += "jumpingImage";
         img.src = image.src;
@@ -145,7 +149,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
         img.style.left = startingCoordinates.x - window.innerWidth * 0.17 * 0.45  + "px";
         img.style.top = startingCoordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
 
-        console.log(img.style.left);
 
         setTimeout(
           () =>{
@@ -180,14 +183,23 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
        }
      };
 
+     const handleResize = () => {
+        setIsMobile(window.innerWidth < 850);
+     }
+
+     handleResize();
+
     projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
 
     document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", handleResize);
+
 
   
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", handleResize);
     };
 
   }, [projectId, projects, navigate]);
@@ -197,6 +209,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
   const leftProjects = [];
   const rightProjects = [];
+  const mobileProjects = [];
 
   const distributeProjects = (projectsArray) => {
 
@@ -204,25 +217,30 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     let rightHeight = 0;
 
     projectsArray.forEach((project) => {
-      if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
-        leftProjects.push(project);
-        if (project.mediaSize === 'small') {
-          leftHeight += 0.5;
+      if (!isMobile) {
+        if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
+          leftProjects.push(project);
+          if (project.mediaSize === 'small') {
+            leftHeight += 0.5;
+          } else {
+            leftHeight += 2;
+          }
         } else {
-          leftHeight += 2;
+          rightProjects.push(project);
+          if (project.mediaSize === 'small') {
+            rightHeight += 0.5;
+          } else {
+            rightHeight += 2;
+          }
         }
       } else {
-        rightProjects.push(project);
-        if (project.mediaSize === 'small') {
-          rightHeight += 0.5;
-        } else {
-          rightHeight += 2;
-        }
+        mobileProjects.push(project);
       }
+    
     })
   }
   projects && distributeProjects(projects);
-
+  mobileProjects && console.log(mobileProjects);
 
   // DOM structure 
 
@@ -230,43 +248,64 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     <div ref={gridRef}>
       {/* Grid */}
 
-      <div className={styles.grid}>
-        <div className={styles.p50}>
-          {leftProjects.map((project, index) => (
-            <Project
-              clickFunction={(e) => {
-                handleClick(project, e);
-              }}
-              key={index}
-              mediaSize={project.mediaSize}
-              mediaType={project.mediaType}
-              mediaPath={project.mediaPath}
-              projectTitle={project.projectTitle}
-              mediaOrientation={project.orientation}
-              id={project.order}
-              jumping={project.jumping ? true : false}
-            />
-          ))}
+      {isMobile ? (
+        <div className={styles.mobileGrid}>
+          {mobileProjects &&
+            mobileProjects.map((project, index) => (
+              <Project
+                clickFunction={(e) => {
+                  handleClick(project, e);
+                }}
+                key={index}
+                mediaSize={project.mediaSize}
+                mediaType={project.mediaType}
+                mediaPath={project.mediaPath}
+                projectTitle={project.projectTitle}
+                mediaOrientation={project.orientation}
+                id={project.order}
+                jumping={project.jumping ? true : false}
+              />
+            ))}
         </div>
-        <div className={styles.p50}>
-          {rightProjects.map((project, index) => (
-            <Project
-              clickFunction={(e) => {
-                handleClick(project, e);
-              }}
-              key={index}
-              mediaSize={project.mediaSize}
-              mediaType={project.mediaType}
-              mediaPath={project.mediaPath}
-              projectTitle={project.projectTitle}
-              mediaOrientation={project.orientation}
-              id={project.order}
-              jumping={project.jumping ? true : false}
-            />
-          ))}
+      ) : (
+        <div className={styles.grid}>
+          <div className={styles.p50}>
+            {leftProjects.map((project, index) => (
+              <Project
+                clickFunction={(e) => {
+                  handleClick(project, e);
+                }}
+                key={index}
+                mediaSize={project.mediaSize}
+                mediaType={project.mediaType}
+                mediaPath={project.mediaPath}
+                projectTitle={project.projectTitle}
+                mediaOrientation={project.orientation}
+                id={project.order}
+                jumping={project.jumping ? true : false}
+              />
+            ))}
+          </div>
+          <div className={styles.p50}>
+            {rightProjects.map((project, index) => (
+              <Project
+                clickFunction={(e) => {
+                  handleClick(project, e);
+                }}
+                key={index}
+                mediaSize={project.mediaSize}
+                mediaType={project.mediaType}
+                mediaPath={project.mediaPath}
+                projectTitle={project.projectTitle}
+                mediaOrientation={project.orientation}
+                id={project.order}
+                jumping={project.jumping ? true : false}
+              />
+            ))}
+          </div>
+          <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
         </div>
-        <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
-      </div>
+      )}
 
       {isAboutActive && (
         <div className={styles.posFixed} onClick={(event) => closePage(event)}>
@@ -311,7 +350,11 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   <Carousel
                     images={activeProject.sliderImages}
                     folder={"/mediawebm/" + activeProject.sliderFolder + "/"}
-                    firstImage={(activeProject.mediaType === "video") ? "/mediamov/" + activeProject.mediaPath + ".mov" : "/mediawebm/" + activeProject.mediaPath}
+                    firstImage={
+                      activeProject.mediaType === "video"
+                        ? "/mediamov/" + activeProject.mediaPath + ".mov"
+                        : "/mediawebm/" + activeProject.mediaPath
+                    }
                     isMuted={isMuted}
                   />
                 </div>
@@ -349,7 +392,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   ></source>
                 </video>
               )}
-              <span>{console.log(JSON.stringify(activeProject))}</span>
               <span
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
