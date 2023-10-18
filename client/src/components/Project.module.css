@@ -70,5 +70,6 @@
 
   .project pre {
     text-wrap: wrap;
+    overflow-wrap: normal;
   }
 }
