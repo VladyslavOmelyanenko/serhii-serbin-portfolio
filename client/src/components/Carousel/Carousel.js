@@ -139,6 +139,7 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
                 className="dontClose"
                 muted={isMuted}
                 controls={isMobile}
+                preload="auto"
                 onPlay={() => {
                   videoRef.current.controls = videoRef.current && false;
                 }}
@@ -156,6 +157,7 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
                   loop
                   playsInline
                   className="dontClose"
+                  preload="metadata"
                 >
                   <source
                     src={"/mediawebm/" + folder + image}
