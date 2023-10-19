@@ -97,8 +97,11 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
     if (closestVideo) {
       videos.forEach((video) => {
         if (video === closestVideo) {
+          video.controls = true;
+          video.addEventListener('play', () => {
+            video.controls = false;
+          });
           video.play();
-          videoRef.current = video;
         } else {
           video.pause();
         }
