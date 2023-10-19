@@ -106,15 +106,18 @@
 .horizontalCopy {
   width: 70%;
   margin: 0 auto;
+  transition: 1s all;
 }
 
 .verticalCopy {
   height: 70%;
   margin: 0 auto;
+  transition: 1s all;
 }
 
 .projectDescription{
   width: 30%;
+  transition: 1s all;
   margin: auto 0;
   padding-right: 50px;
   font-size: 19px;
