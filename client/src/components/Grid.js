@@ -379,6 +379,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   loop
                   playsInline
                   muted={isMuted}
+                  controls
                   className={
                     activeProject.orientation === "horizontal"
                       ? `${styles.horizontalCopy} dontClose`
