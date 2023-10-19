@@ -352,7 +352,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 <div className={styles.carousel}>
                   <Carousel
                     images={activeProject.sliderImages}
-                    folder={ activeProject.sliderFolder + "/"}
+                    folder={activeProject.sliderFolder + "/"}
                     firstImage={
                       activeProject.mediaType === "video"
                         ? "/mediamov/" + activeProject.mediaPath + ".mov"
@@ -380,6 +380,10 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   playsInline
                   muted={isMuted}
                   controls
+                  onPlay={() => {
+                    videoRef.current.controls = videoRef.current && false;
+                  }
+                  }
                   className={
                     activeProject.orientation === "horizontal"
                       ? `${styles.horizontalCopy} dontClose`
