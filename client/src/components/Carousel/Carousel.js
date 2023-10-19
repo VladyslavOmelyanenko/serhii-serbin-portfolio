@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import styles from "./Carousel.module.css";
 
-const Carousel = ({ images, folder, firstImage, isMuted }) => {
+const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
 
   const track = useRef(null);
+  const videoRef = useRef(null);
 
   const getClosestImageToCenter = (side) => {
     const slides = Array.from(track.current.children);
@@ -97,6 +98,7 @@ const Carousel = ({ images, folder, firstImage, isMuted }) => {
       videos.forEach((video) => {
         if (video === closestVideo) {
           video.play();
+          videoRef.current = video;
         } else {
           video.pause();
         }
@@ -127,10 +129,15 @@ const Carousel = ({ images, folder, firstImage, isMuted }) => {
             ) : (
               <video
                 autoPlay
+                ref={videoRef}
                 loop
                 playsInline
                 className="dontClose"
                 muted={isMuted}
+                controls={isMobile}
+                onPlay={() => {
+                  videoRef.current.controls = videoRef.current && false;
+                }}
               >
                 <source src={firstImage}></source>
               </video>

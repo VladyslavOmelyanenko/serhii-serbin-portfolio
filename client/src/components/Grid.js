@@ -351,6 +351,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               {activeProject.sliderFolder ? (
                 <div className={styles.carousel}>
                   <Carousel
+                    isMobile={isMobile}
                     images={activeProject.sliderImages}
                     folder={activeProject.sliderFolder + "/"}
                     firstImage={
@@ -379,7 +380,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   loop
                   playsInline
                   muted={isMuted}
-                  controls
+                  controls={isMobile}
                   onPlay={() => {
                     videoRef.current.controls = videoRef.current && false;
                   }
