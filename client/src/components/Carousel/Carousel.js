@@ -126,26 +126,29 @@ const Carousel = ({ images, folder, firstImage, isMuted }) => {
             (firstImage.includes('webp')) ?
               <img src={firstImage} alt={firstImage}/>
             :
-            <video autoPlay muted loop className="dontClose">
+            <video autoPlay muted loop playsInline className="dontClose">
               <source src={firstImage}></source>
             </video>
           }
           </li>
           {images.map((image, i) =>
-            image.includes("webm") ? (
+            image.includes("mp4") ? (
               <li key={i} className={styles.carouselSlide}>
                 <video
-                  src={folder + image}
                   autoPlay
                   muted={isMuted}
                   loop
+                  playsInline
                   className="dontClose"
-                ></video>
+                >
+                  <source src={"/mediawebm/" + folder + image}></source>
+                  <source src={"/mediamov/" + folder + image}></source>
+                </video>
               </li>
             ) : (
               <li key={i} className={styles.carouselSlide}>
                 <img
-                  src={folder + image}
+                  src={"/mediawebm/" + folder + image}
                   alt={image}
                   className="dontClose"
                 ></img>
