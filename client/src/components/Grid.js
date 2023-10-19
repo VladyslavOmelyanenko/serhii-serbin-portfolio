@@ -317,13 +317,15 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
               id="copiedMedia"
             >
               <video
-                src={"/mediawebm/about.webm"}
                 autoPlay
                 loop
                 muted
                 playsInline
                 className={`${styles.verticalCopy} dontClose`}
-              ></video>
+              >
+                <source src={"/mediawebm/about.webm"}></source>
+                <source src={"/mediamov/about.mov"}></source>
+              </video>
             </div>
             <p
               className={`${styles.projectDescription} dontClose`}
@@ -397,10 +399,12 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
               >
-                {(JSON.stringify(activeProject).includes("webm") ||
-                  JSON.stringify(activeProject).includes("mov") ||
-                  activeProject.mediaType === "video") ?
-                    (isMuted) ? "Unmute" : "Mute"
+                {JSON.stringify(activeProject).includes("webm") ||
+                JSON.stringify(activeProject).includes("mov") ||
+                activeProject.mediaType === "video"
+                  ? isMuted
+                    ? "Unmute"
+                    : "Mute"
                   : ""}
               </span>
             </div>

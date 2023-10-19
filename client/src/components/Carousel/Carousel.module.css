@@ -45,6 +45,7 @@
   height: 100%;
   font-size: 26px;
   width: 30px;
+  color: black;
 }
 
 .carouselButton:last-child {
