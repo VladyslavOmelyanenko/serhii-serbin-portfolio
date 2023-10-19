@@ -102,6 +102,7 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
             video.controls = false;
           });
           video.play();
+          video.controls = false;
         } else {
           video.pause();
         }
