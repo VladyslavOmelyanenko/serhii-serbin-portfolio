@@ -9,59 +9,61 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import styles from './Grid.module.css';
 import Project from "./Project";
-import projectsData from "../projects";
+// import projectsData from "../projects";
 import Carousel from "./Carousel/Carousel";
 
 
 
 const Grid = () => {
+  let PROJECT_ID = "sv2kd5ay";
+  let DATASET = "production";
+  let GROQ_QUERY = `*[_type == "gridPage"]{
+    aboutText,
+    "aboutVideoWebmUrl": aboutVideoWebm.asset->url,
+    "aboutVideoMovUrl": aboutVideoMov.asset->url,
+    projects[]->{
+      title,
+      link,
+      description,
+      orientation,
+      type,
+      size,
+      "imageFileUrl": imageFile.asset->url,
+      "trailerWebmUrl": trailerWebm.asset->url,
+      "trailerMovUrl": trailerMov.asset->url,
+      "fullVideoWebmUrl": fullVideoWebm.asset->url,
+      "fullVideoMovUrl": fullVideoMov.asset->url,
+    }
+  }`;
+
+  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(GROQ_QUERY)}`;
 
   //variables
-
-  // const [projects, setProjects] = useState(null);
-  const [activeProject, setActiveProject] = useState(null);
+  
+  let jumpHandler;
+  const leftProjects = [];
+  const rightProjects = [];
+  const mobileProjects = [];
 
   const [clickedOnce] = useState([]);
+  const [projects, setProjects] = useState(null);
+  const [activeProject, setActiveProject] = useState(null);
   const [emailActive, setEmailActive] = useState(false);
+  const [data, setData] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
-  
   const [isMuted, setIsMuted] = useState(isMobile);
-
-
+  
   const videoRef = useRef(null);
   const gridRef = useRef(null);
   const activeProjectRef = useRef(null);  
-
+  
   const location = useLocation();
-  const isAboutActive = location.pathname === "/about";
-  // const serverUrl = 'https://serhii-serbin-portfolio-x7ayj.kinsta.app';
-  // const serverUrl = 'http://localhost:5000';
-
-
   const navigate = useNavigate();
   const { projectId } = useParams();  
-  const projects = projectsData.sort((proj1, proj2) => proj1.order - proj2.order);
 
 
-  const aboutText = `Serhii Serbin
-2000, UA - NL
-
-Motion design artist with a passion for visual experiments and technology. I grew up in a small Ukrainian town, currently, I live in Amsterdam, working with the inspiring Wieden+Kennedy team.
-I enjoy small experimental design projects, while busy with big campaigns for Nike, Puma, YSL, Evian, and Samsung.
-I like crocs, backed eggplant, home plants, solo trips, and my mother’s borscht. And of course, I can't resist staying up-to-date with the latest gadgets.
-
-Cool links:
-My IG <a href="https://www.instagram.com/nibressergo/" target="blank">(https://www.instagram.com/nibressergo/)</a>
-Fav refs on Are.na  <a href="https://www.are.na/serhii-serbin/" target="blank">(https://www.are.na/serhii-serbin)</a>
-<a href="https://www.dropbox.com/scl/fi/wi1kmiv52btf2oy7r31l4/Serhii-Serbin-CV.pdf?rlkey=chqmud3mjkain0y9vet57d14m&dl=0" target="blank">CV (boring) </a>
-I like things…  (link will be added later)
-OFFF Barcelona <a href="https://www.instagram.com/p/CdMdzCVlAdM/" target="blank">(https://www.instagram.com/p/CdMdzCVlAdM)</a>
-Adweek article <a href="https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/" target="blank">(https://www.adweek.com/agencies/ukrainian-thank-you-posters-global-support/)</a>
-Adage article <a href="https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748/" target="blank">(https://adage.com/creativity/work/ukrainian-creatives-have-created-artwork-thank-those-helping-nation/240748)</a>
-
-Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
-
-
+  const isAboutActive = location.pathname === "/about";
+  // const projects = projectsData.sort((proj1, proj2) => proj1.order - proj2.order);
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
@@ -71,9 +73,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     const middleY = rect.top + scrollY + rect.height / 2;
     return { x: middleX, y: middleY };
   }
-
-
-  let jumpHandler;
 
   const jump = (img, order, stylesId='') => {
     console.log('jumpiiiing');
@@ -112,8 +111,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     img.addEventListener('click', jumpHandler);
   }
 
-
-  
   const handleClick = (project, event) => {
     if (Array.from(event.target.classList).includes('jumpingImage')) {
       return;
@@ -163,7 +160,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     } else if (project.toAbout === true) {
       navigate('about');
     }  else {
-      navigate(`${project.projectTitle}`);
+      navigate(`${project.title}`);
     } 
   }
 
@@ -173,28 +170,41 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     }
   }
 
-
   // Fetch the data and if there is an active project set it
 
   useEffect(() => {
-     const handleKeyDown = (e) => {
+    fetch(URL)
+      .then((res) => res.json())
+      .then(({ result }) => {
+        console.log(result[0]);
+        setData(result[0]);
+        setProjects(result[0].projects)
+      })
+      .catch((err) => console.error(err));
+  }, [URL])
+
+  useEffect(() => {
+
+    // CLOSE ON ESCAPE
+    const handleKeyDown = (e) => {
        if (e.key === "Escape") {
          navigate("/");
        }
-     };
+    };
 
-     const handleResize = () => {
-        setIsMobile(window.innerWidth < 850);
-     }
+    // CHECK IF MOBILE
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 850);
+    }
 
-     handleResize();
+    handleResize();
 
-    projects && setActiveProject(projects.find((project) => project.projectTitle.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
+    // GET ACTIVE PROJECT FROM URL
+
+    projects && setActiveProject(projects.find((project) => project.title.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
 
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
-
-
   
 
     return () => {
@@ -206,10 +216,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
 
 
   // Distribute left column and right
-
-  const leftProjects = [];
-  const rightProjects = [];
-  const mobileProjects = [];
 
   const distributeProjects = (projectsArray) => {
 
@@ -239,6 +245,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     
     })
   }
+
   projects && distributeProjects(projects);
 
   // DOM structure 
@@ -247,7 +254,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
     <div ref={gridRef}>
       {/* Grid */}
 
-      {isMobile ? (
+      {projects && isMobile ? (
         <div className={styles.mobileGrid}>
           {mobileProjects &&
             mobileProjects.map((project, index) => (
@@ -256,12 +263,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   handleClick(project, e);
                 }}
                 key={index}
-                mediaSize={project.mediaSize}
-                mediaType={project.mediaType}
-                mediaPath={project.mediaPath}
-                projectTitle={project.projectTitle}
+                mediaSize={project.size}
+                mediaType={project.type}
+                imageUrl={project.imageFileUrl}
+                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+                projectTitle={project.title}
                 mediaOrientation={project.orientation}
-                id={project.order}
+                id={projects.indexOf(project)}
                 jumping={project.jumping ? true : false}
               />
             ))}
@@ -276,12 +284,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   handleClick(project, e);
                 }}
                 key={index}
-                mediaSize={project.mediaSize}
-                mediaType={project.mediaType}
-                mediaPath={project.mediaPath}
-                projectTitle={project.projectTitle}
+                mediaSize={project.size}
+                mediaType={project.type}
+                imageUrl={project.imageFileUrl}
+                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+                projectTitle={project.title}
                 mediaOrientation={project.orientation}
-                id={project.order}
+                id={projects.indexOf(project)}
                 jumping={project.jumping ? true : false}
               />
             ))}
@@ -293,12 +302,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   handleClick(project, e);
                 }}
                 key={index}
-                mediaSize={project.mediaSize}
-                mediaType={project.mediaType}
-                mediaPath={project.mediaPath}
-                projectTitle={project.projectTitle}
+                mediaSize={project.size}
+                mediaType={project.type}
+                imageUrl={project.imageFileUrl}
+                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+                projectTitle={project.title}
                 mediaOrientation={project.orientation}
-                id={project.order}
+                id={projects.indexOf(project)}
                 jumping={project.jumping ? true : false}
               />
             ))}
@@ -323,13 +333,13 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                 playsInline
                 className={`${styles.verticalCopy} dontClose`}
               >
-                <source src={"/mediawebm/about.webm"}></source>
-                <source src={"/mediamov/about.mov"}></source>
+                <source src={data && data.aboutVideoWebmUrl}></source>
+                <source src={data && data.aboutVideoMovUrl}></source>
               </video>
             </div>
             <p
               className={`${styles.projectDescription} dontClose`}
-              dangerouslySetInnerHTML={{ __html: aboutText }}
+              dangerouslySetInnerHTML={{ __html: data && data.aboutText }}
             ></p>
           </div>
         </div>
@@ -345,7 +355,6 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
           ref={activeProjectRef}
         >
           <div className={styles.blurredBackground}></div>
-
           <div className={styles.detailedProject} id="projectDescription">
             <div className={styles.copiedMedia} id="copiedMedia">
               {activeProject.sliderFolder ? (
@@ -362,9 +371,9 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                     isMuted={isMuted}
                   />
                 </div>
-              ) : activeProject.mediaType === "image" ? (
+              ) : activeProject.type === "image" ? (
                 <img
-                  src={"/images/" + activeProject.mediaPath}
+                  src={activeProject.imageFileUrl}
                   className={
                     activeProject.orientation === "horizontal"
                       ? `${styles.horizontalCopy} dontClose`
@@ -383,8 +392,7 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   controls={isMobile}
                   onPlay={() => {
                     videoRef.current.controls = videoRef.current && false;
-                  }
-                  }
+                  }}
                   className={
                     activeProject.orientation === "horizontal"
                       ? `${styles.horizontalCopy} dontClose`
@@ -392,11 +400,11 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   }
                 >
                   <source
-                    src={"/mediamov/" + activeProject.mediaPath + ".mov"}
+                    src={activeProject.fullVideoMovUrl}
                     type='video/mp4; codecs="hvc1"'
                   ></source>
                   <source
-                    src={"/mediawebm/" + activeProject.mediaPath + ".webm"}
+                    src={activeProject.fullVideoWebmUrl}
                     type="video/webm"
                   ></source>
                 </video>
@@ -414,20 +422,17 @@ Email <a href="mailto:nibressergo@gmail.com">(nibressergo@gmail.com)</a>`;
                   : ""}
               </span>
             </div>
+
             <div className={styles.projectDescription}>
               <h2 className={`${styles.projectTitle} dontClose`}>
-                {activeProject.projectTitle}
+                {activeProject.title}
               </h2>
               <p
                 className="dontClose"
                 dangerouslySetInnerHTML={{ __html: activeProject.description }}
               ></p>
               {activeProject.link !== "" && (
-                <a
-                  href={activeProject.link}
-                  target={activeProject.link[0] === "/" ? "_self" : "blank"}
-                  className="dontClose"
-                >
+                <a href={activeProject.link} className="dontClose">
                   See full project
                 </a>
               )}

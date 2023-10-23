@@ -4,17 +4,19 @@ import styles from './Project.module.css';
 
 const Project = (props) => {
 
-  
-  const mediaSize = props.mediaSize;
-  const mediaType = props.mediaType;
-  const mediaPath = props.mediaPath;
-  const projectTitle = props.projectTitle;
-  const mediaOrientation = props.mediaOrientation;
-  const clickFunction = props.clickFunction;
-  const id = props.id;
-  const jumping = props.jumping;
+  const {
+    mediaSize,
+    mediaType,
+    imageUrl,
+    trailerUrls,
+    projectTitle,
+    mediaOrientation,
+    clickFunction,
+    id,
+    jumping,
+  } = props
 
-
+  console.log(props);
   return (
     <div
       className={"grid-item " + styles.project + " " + styles[mediaSize]}
@@ -23,7 +25,7 @@ const Project = (props) => {
       {mediaType === "image" ? (
         <img
           id={id}
-          src={"/images/" + mediaPath}
+          src={imageUrl}
           alt={projectTitle}
           className={
             mediaOrientation === "horizontal"
@@ -54,8 +56,7 @@ const Project = (props) => {
           }
           preload="auto"
         >
-          <source src={'/trailersmov/' + mediaPath + '.mov'}></source>
-          <source src={'/trailerswebm/' + mediaPath + '.webm'}></source>
+          {trailerUrls.map((trailerUrl, i) => <source src={trailerUrl} key={i}></source>)}
         </video>
       )}
       <span className="project__title">{projectTitle}</span>
