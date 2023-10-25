@@ -28,6 +28,13 @@ const Grid = () => {
       orientation,
       type,
       size,
+      jumping,
+      toAbout,
+      isCarousel,
+      slideFiles[]-> {
+        slides,
+        'slides': slides[].asset->.url
+      },
       "imageFileUrl": imageFile.asset->url,
       "trailerWebmUrl": trailerWebm.asset->url,
       "trailerMovUrl": trailerMov.asset->url,
@@ -115,8 +122,9 @@ const Grid = () => {
     if (Array.from(event.target.classList).includes('jumpingImage')) {
       return;
     }
-
+    
     if (project.jumping === true) {
+
       const image = document.getElementById(project.order);
       if (image == null) {
         return;
@@ -150,7 +158,7 @@ const Grid = () => {
         setTimeout(
           () =>{
             img.style.height = 'calc(10vw * 0.9)';
-            jump(img, project.order, project.projectTitle.split(" ")[0].toLowerCase())},
+            jump(img, project.order, project.title.split(" ")[0].toLowerCase())},
           100
         );
 
@@ -178,7 +186,7 @@ const Grid = () => {
       .then(({ result }) => {
         console.log(result[0]);
         setData(result[0]);
-        setProjects(result[0].projects)
+        setProjects(result[0].projects.map((project, i) => ({...project, order: i})))
       })
       .catch((err) => console.error(err));
   }, [URL])
@@ -219,6 +227,7 @@ const Grid = () => {
 
   const distributeProjects = (projectsArray) => {
 
+
     let leftHeight = 0;
     let rightHeight = 0;
 
@@ -226,14 +235,14 @@ const Grid = () => {
       if (!isMobile) {
         if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
           leftProjects.push(project);
-          if (project.mediaSize === 'small') {
+          if (project.size === 'small') {
             leftHeight += 0.5;
           } else {
             leftHeight += 2;
           }
         } else {
           rightProjects.push(project);
-          if (project.mediaSize === 'small') {
+          if (project.size === 'small') {
             rightHeight += 0.5;
           } else {
             rightHeight += 2;
@@ -357,16 +366,15 @@ const Grid = () => {
           <div className={styles.blurredBackground}></div>
           <div className={styles.detailedProject} id="projectDescription">
             <div className={styles.copiedMedia} id="copiedMedia">
-              {activeProject.sliderFolder ? (
+              {activeProject.isCarousel ? (
                 <div className={styles.carousel}>
                   <Carousel
                     isMobile={isMobile}
-                    images={activeProject.sliderImages}
-                    folder={activeProject.sliderFolder + "/"}
+                    images={activeProject.slideFiles[0].slides}
                     firstImage={
-                      activeProject.mediaType === "video"
-                        ? "/mediamov/" + activeProject.mediaPath + ".mov"
-                        : "/mediawebm/" + activeProject.mediaPath
+                      activeProject.type === "video"
+                        ? [activeProject.fullVideoMovUrl, activeProject.fullVideoWebmUrl]
+                        : activeProject.imageFileUrl
                     }
                     isMuted={isMuted}
                   />
@@ -431,7 +439,7 @@ const Grid = () => {
                 className="dontClose"
                 dangerouslySetInnerHTML={{ __html: activeProject.description }}
               ></p>
-              {activeProject.link !== "" && (
+              {activeProject.link && activeProject.link !== "" && (
                 <a href={activeProject.link} className="dontClose">
                   See full project
                 </a>

@@ -16,7 +16,6 @@ const Project = (props) => {
     jumping,
   } = props
 
-  console.log(props);
   return (
     <div
       className={"grid-item " + styles.project + " " + styles[mediaSize]}
@@ -56,7 +55,7 @@ const Project = (props) => {
           }
           preload="auto"
         >
-          {trailerUrls.map((trailerUrl, i) => <source src={trailerUrl} key={i}></source>)}
+          {trailerUrls.reverse().map((trailerUrl, i) => <source src={trailerUrl} key={i}></source>)}
         </video>
       )}
       <span className="project__title">{projectTitle}</span>

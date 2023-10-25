@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import styles from "./Carousel.module.css";
 
-const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
+const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
+  console.log(images)
 
   const track = useRef(null);
   const videoRef = useRef(null);
@@ -144,7 +145,9 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
                   videoRef.current.controls = videoRef.current && false;
                 }}
               >
-                <source src={firstImage}></source>
+                {firstImage.map((src) => (
+                  <source src={src}></source>
+                ))}
               </video>
             )}
           </li>
@@ -152,7 +155,6 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
             image.includes("mp4") ? (
               <li key={i} className={styles.carouselSlide}>
                 <video
-                  autoPlay
                   muted={isMuted}
                   loop
                   playsInline
@@ -160,7 +162,7 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
                   preload="metadata"
                 >
                   <source
-                    src={"/mediawebm/" + folder + image}
+                    src={image}
                     type="video/mp4"
                   ></source>
                 </video>
@@ -168,7 +170,7 @@ const Carousel = ({ images, folder, firstImage, isMuted, isMobile }) => {
             ) : (
               <li key={i} className={styles.carouselSlide}>
                 <img
-                  src={"/mediawebm/" + folder + image}
+                  src={image}
                   alt={image}
                   className="dontClose"
                 ></img>
