@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import styles from "./Carousel.module.css";
 
 const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
-  console.log(images)
 
   const track = useRef(null);
   const videoRef = useRef(null);
@@ -50,7 +49,7 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
 
   const moveImageToCenter = (side) => {
     const closestImage = getClosestImageToCenter(side);
-    console.log(closestImage);
+
     
 
     if (!closestImage) {
@@ -81,7 +80,6 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
         if (+scroll - startingScrollPos >= desiredScrollLeft){
           clearInterval(scrollInterval);
           track.current.scrollLeft = Math.round(startingScrollPos + desiredScrollLeft);
-          console.log(startingScrollPos + desiredScrollLeft, track.current.scrollLeft);
         } else track.current.scrollLeft = scroll;
       }
 
@@ -93,7 +91,7 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
 
     const closestSlide = getClosestImageToCenter("");
     const closestVideo = closestSlide.querySelector("video");
-    console.log(closestVideo);
+
 
     if (closestVideo) {
       videos.forEach((video) => {
@@ -106,6 +104,7 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
           video.controls = false;
         } else {
           video.pause();
+
         }
       });
     }
@@ -129,7 +128,10 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
           onScroll={() => handleScroll()}
         >
           <li className={styles.carouselSlide}>
-            {firstImage.includes("webp") ? (
+            {firstImage.includes("webp") ||
+            firstImage.includes("png") ||
+            firstImage.includes("jpg") ||
+            firstImage.includes("jpeg") ? (
               <img src={firstImage} alt={firstImage} />
             ) : (
               <video
@@ -152,28 +154,27 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
             )}
           </li>
           {images.map((image, i) =>
-            image.includes("mp4") ? (
+            image.includes("mp4") ||
+            image.includes("mov") ||
+            image.includes("webm") ? (
               <li key={i} className={styles.carouselSlide}>
                 <video
                   muted={isMuted}
                   loop
                   playsInline
+                  controls={true}
                   className="dontClose"
                   preload="metadata"
+                  onPlay={() => {
+                    videoRef.current.controls = videoRef.current && false;
+                  }}
                 >
-                  <source
-                    src={image}
-                    type="video/mp4"
-                  ></source>
+                  <source src={image}></source>
                 </video>
               </li>
             ) : (
               <li key={i} className={styles.carouselSlide}>
-                <img
-                  src={image}
-                  alt={image}
-                  className="dontClose"
-                ></img>
+                <img src={image} alt={image} className="dontClose"></img>
               </li>
             )
           )}

@@ -21,7 +21,7 @@ const Project = (props) => {
       className={"grid-item " + styles.project + " " + styles[mediaSize]}
       onClick={clickFunction}
     >
-      {mediaType === "image" ? (
+      {mediaType !== "video" ? (
         <img
           id={id}
           src={imageUrl}

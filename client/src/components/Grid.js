@@ -23,7 +23,7 @@ const Grid = () => {
     "aboutVideoMovUrl": aboutVideoMov.asset->url,
     projects[]->{
       title,
-      link,
+      links,
       description,
       orientation,
       type,
@@ -131,13 +131,16 @@ const Grid = () => {
       }
       if (!emailActive) {
         const projectBlock = image.parentElement;
-        projectBlock.lastElementChild.innerHTML = 'text me when\nyou get here';
         const mailLink = document.createElement('div');
         mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
         mailLink.style.height = '80%';
+        mailLink.style.width = '100%';
+        mailLink.style.textAlign = 'center';
         mailLink.style.margin = 'auto auto';
         mailLink.style.display = 'flex';
+        mailLink.style.border = "1px solid black";
         mailLink.style.alignItems = 'center';
+        mailLink.style.justifyContent = 'center';
         mailLink.style.textTransform = 'uppercase';
 
         projectBlock.prepend(mailLink);
@@ -372,7 +375,7 @@ const Grid = () => {
                     isMobile={isMobile}
                     images={activeProject.slideFiles[0].slides}
                     firstImage={
-                      activeProject.type === "video"
+                      activeProject.type !== "image"
                         ? [activeProject.fullVideoMovUrl, activeProject.fullVideoWebmUrl]
                         : activeProject.imageFileUrl
                     }
@@ -439,10 +442,8 @@ const Grid = () => {
                 className="dontClose"
                 dangerouslySetInnerHTML={{ __html: activeProject.description }}
               ></p>
-              {activeProject.link && activeProject.link !== "" && (
-                <a href={activeProject.link} className="dontClose">
-                  See full project
-                </a>
+              {activeProject.links && activeProject.links !== "" && (
+                <p className="dontClose" dangerouslySetInnerHTML={{ __html: activeProject.links}}></p>
               )}
             </div>
           </div>
