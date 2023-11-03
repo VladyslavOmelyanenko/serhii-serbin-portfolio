@@ -52,6 +52,7 @@ const Grid = () => {
   const rightProjects = [];
   const mobileProjects = [];
 
+  const [toScrollState, setToScroll] = useState(null);
   const [clickedOnce] = useState([]);
   const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
@@ -176,9 +177,10 @@ const Grid = () => {
   }
 
    const closePage = (event) => {
-    if (!event.target.className.includes('dontClose')) {
-      navigate('/');
-    }
+     if (!event.target.className.includes('dontClose')) {
+       setActiveProject(null)
+       navigate('/');
+      }
   }
 
   // Fetch the data and if there is an active project set it
@@ -212,18 +214,37 @@ const Grid = () => {
 
     // GET ACTIVE PROJECT FROM URL
 
-    projects && setActiveProject(projects.find((project) => project.title.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
+    const fetchedActiveProject = projects && (projects.find((project) => project.title.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
+    setActiveProject(fetchedActiveProject)
 
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
-  
+    let toScroll;
+    
+    if (isMobile) {
+      if (fetchedActiveProject) {
+        toScroll = window.scrollY; 
+        setToScroll(window.scrollY);
+        gridRef.current.style.position = 'fixed';
+        gridRef.current.style.top = `-${toScroll}px`;
+      } else {
+      const windowScroll = -gridRef.current.style.top.replaceAll("px", "" );
+      console.log(windowScroll);
+      gridRef.current.style.position = "";
+      gridRef.current.style.top = "";
+      window.scrollTo(0, windowScroll);
+        // gridRef.current.style.position = "";
+        // (toScrollState) ? window.scrollTo(0, toScrollState) :window.scrollTo(0,0);
+      }
+    } 
+    
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
 
-  }, [projectId, projects, navigate]);
+  }, [projectId, projects, navigate, isMobile]);
 
 
   // Distribute left column and right

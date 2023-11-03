@@ -102,8 +102,10 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
           });
           video.play();
           video.controls = false;
+          video.muted = isMuted;
         } else {
           video.pause();
+          video.muted = isMuted;
 
         }
       });
@@ -165,9 +167,6 @@ const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
                   controls={true}
                   className="dontClose"
                   preload="metadata"
-                  onPlay={() => {
-                    videoRef.current.controls = videoRef.current && false;
-                  }}
                 >
                   <source src={image}></source>
                 </video>
