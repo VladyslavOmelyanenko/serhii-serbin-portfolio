@@ -52,7 +52,6 @@ const Grid = () => {
   const rightProjects = [];
   const mobileProjects = [];
 
-  const [toScrollState, setToScroll] = useState(null);
   const [clickedOnce] = useState([]);
   const [projects, setProjects] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
@@ -224,7 +223,6 @@ const Grid = () => {
     if (isMobile) {
       if (fetchedActiveProject) {
         toScroll = window.scrollY; 
-        setToScroll(window.scrollY);
         gridRef.current.style.position = 'fixed';
         gridRef.current.style.top = `-${toScroll}px`;
       } else {
