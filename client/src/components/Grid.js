@@ -304,7 +304,9 @@ const Grid = () => {
                 jumping={project.jumping ? true : false}
               />
             ))}
-          <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
+          <div className={styles.footer}>
+            &copy; 2023 Serhii Serbin nibressergo@gmail.com
+          </div>
         </div>
       ) : (
         <div className={styles.grid}>
@@ -344,7 +346,9 @@ const Grid = () => {
               />
             ))}
           </div>
-          <div className={styles.footer}>&copy; 2023 Serhii Serbin</div>
+          <div className={styles.footer}>
+            &copy; 2023 Serhii Serbin nibressergo@gmail.com
+          </div>
         </div>
       )}
 
@@ -395,7 +399,10 @@ const Grid = () => {
                     images={activeProject.slideFiles[0].slides}
                     firstImage={
                       activeProject.type !== "image"
-                        ? [activeProject.fullVideoMovUrl, activeProject.fullVideoWebmUrl]
+                        ? [
+                            activeProject.fullVideoMovUrl,
+                            activeProject.fullVideoWebmUrl,
+                          ]
                         : activeProject.imageFileUrl
                     }
                     isMuted={isMuted}
@@ -462,7 +469,10 @@ const Grid = () => {
                 dangerouslySetInnerHTML={{ __html: activeProject.description }}
               ></p>
               {activeProject.links && activeProject.links !== "" && (
-                <p className="dontClose" dangerouslySetInnerHTML={{ __html: activeProject.links}}></p>
+                <p
+                  className="dontClose"
+                  dangerouslySetInnerHTML={{ __html: activeProject.links }}
+                ></p>
               )}
             </div>
           </div>
