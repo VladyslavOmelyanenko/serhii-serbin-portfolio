@@ -305,7 +305,8 @@ const Grid = () => {
               />
             ))}
           <div className={styles.footer}>
-            &copy; 2023 Serhii Serbin nibressergo@gmail.com
+            &copy; 2023 Serhii Serbin <br></br>
+            <a href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>
           </div>
         </div>
       ) : (
@@ -347,7 +348,8 @@ const Grid = () => {
             ))}
           </div>
           <div className={styles.footer}>
-            &copy; 2023 Serhii Serbin nibressergo@gmail.com
+            &copy; 2023 Serhii Serbin <br></br>
+            <a href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>
           </div>
         </div>
       )}

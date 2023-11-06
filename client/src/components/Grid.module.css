@@ -17,8 +17,10 @@
   font-size: 13px;
   padding-top: 100px;
   left: 2.7vw;
+}
 
-
+.grid .footer {
+  font-size: 13px;
 }
 
 .p50 {
@@ -30,12 +32,15 @@
 
 .footer {
   width: 100%;
-  font-size: 13px;
   text-align: center;
   text-transform: uppercase;
   margin-top: 50px;
   margin-bottom: 20px;
   margin-left: 2.7vw;
+}
+
+.footer a {
+  text-decoration: none;
 }
 
 .posFixed {
