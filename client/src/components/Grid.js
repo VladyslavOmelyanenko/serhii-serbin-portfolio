@@ -1,26 +1,26 @@
 // dependencies
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { PortableText } from "@portabletext/react";
 
-import React from "react";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-
-
-//imports
-
-import styles from './Grid.module.css';
+// imports
+import styles from "./Grid.module.css";
 import Project from "./Project";
-// import projectsData from "../projects";
 import Carousel from "./Carousel/Carousel";
-
-
 
 const Grid = () => {
   let PROJECT_ID = "sv2kd5ay";
   let DATASET = "production";
   let GROQ_QUERY = `*[_type == "gridPage"]{
+    welcomeTitle,
+    welcomeText,
+    welcomeButtonText,
+    "welcomeVideoUrl": welcomeVideo.asset->url,
     aboutText,
-    "aboutVideoWebmUrl": aboutVideoWebm.asset->url,
-    "aboutVideoMovUrl": aboutVideoMov.asset->url,
+    aboutMedia[0]{
+      _type,
+      "url": asset->url
+    },
     projects[]->{
       title,
       links,
@@ -31,22 +31,25 @@ const Grid = () => {
       jumping,
       toAbout,
       isCarousel,
-      slideFiles[]-> {
+      slideFiles[]->{
         slides,
-        'slides': slides[].asset->.url
+        "slides": slides[].asset->.url
       },
       "imageFileUrl": imageFile.asset->url,
       "trailerWebmUrl": trailerWebm.asset->url,
       "trailerMovUrl": trailerMov.asset->url,
       "fullVideoWebmUrl": fullVideoWebm.asset->url,
-      "fullVideoMovUrl": fullVideoMov.asset->url,
-    }
+      "fullVideoMovUrl": fullVideoMov.asset->url
+    },
+    copyright,
+    email
   }`;
 
-  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(GROQ_QUERY)}`;
+  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(
+    GROQ_QUERY,
+  )}`;
 
-  //variables
-  
+  // variables
   let jumpHandler;
   const leftProjects = [];
   const rightProjects = [];
@@ -59,18 +62,23 @@ const Grid = () => {
   const [data, setData] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
   const [isMuted, setIsMuted] = useState(isMobile);
-  
+
+  // Intro flow: "card" -> "video" -> "off"
+  const [introStage, setIntroStage] = useState("card");
+  const startIntroVideo = () => setIntroStage("video");
+  const endIntroVideo = () => setIntroStage("off");
+
   const videoRef = useRef(null);
   const gridRef = useRef(null);
-  const activeProjectRef = useRef(null);  
-  
+  const activeProjectRef = useRef(null);
+
+  const about = data?.aboutMedia;
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { projectId } = useParams();  
-
+  const { projectId } = useParams();
 
   const isAboutActive = location.pathname === "/about";
-  // const projects = projectsData.sort((proj1, proj2) => proj1.order - proj2.order);
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
@@ -79,30 +87,29 @@ const Grid = () => {
     const middleX = rect.left + scrollX + rect.width / 2;
     const middleY = rect.top + scrollY + rect.height / 2;
     return { x: middleX, y: middleY };
-  }
+  };
 
-  const jump = (img, order, stylesId='') => {
-    console.log('jumpiiiing');
+  const jump = (img, order, stylesId = "") => {
     const areaNumber = 5;
     let min = +order - areaNumber;
     let max = +order + areaNumber;
-    min = (min < 1) ? 1 : min; 
-    max = (max >= projects.length) ? projects.length : max; 
+    min = min < 1 ? 1 : min;
+    max = max >= projects.length ? projects.length : max;
     let rangeNumber = Math.floor(Math.random() * (max - min) + min);
 
     while (rangeNumber === order) {
-      rangeNumber = Math.floor((Math.random() * max) + (min));
-    } 
-    
+      rangeNumber = Math.floor(Math.random() * max + min);
+    }
+
     let element = document.getElementById(rangeNumber);
     element = element.parentElement;
-    
+
     const coordinates = getMiddleCoordinates(element);
 
-    if (stylesId === 'overheated') {
-       img.style.left = coordinates.x + "px";
-       img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.70 + "px";
-    } else if (stylesId === 'cycling') {
+    if (stylesId === "overheated") {
+      img.style.left = coordinates.x + "px";
+      img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.7 + "px";
+    } else if (stylesId === "cycling") {
       img.style.left = coordinates.x - window.innerWidth * 0.05 * 0.7 + "px";
       img.style.top = coordinates.y + "px";
     } else {
@@ -112,144 +119,137 @@ const Grid = () => {
 
     img.removeEventListener("click", jumpHandler);
 
-      
     jumpHandler = () => jump(img, element.firstElementChild.id, stylesId);
-    
-    img.addEventListener('click', jumpHandler);
-  }
+    img.addEventListener("click", jumpHandler);
+  };
 
   const handleClick = (project, event) => {
-    if (Array.from(event.target.classList).includes('jumpingImage')) {
+    if (Array.from(event.target.classList).includes("jumpingImage")) {
       return;
     }
-    
-    if (project.jumping === true) {
 
+    if (project.jumping === true) {
       const image = document.getElementById(project.order);
-      if (image == null) {
-        return;
-      }
+      if (image == null) return;
+
       if (!emailActive) {
         const projectBlock = image.parentElement;
-        const mailLink = document.createElement('div');
-        mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`
-        mailLink.style.height = '80%';
-        mailLink.style.width = '100%';
-        mailLink.style.textAlign = 'center';
-        mailLink.style.margin = 'auto auto';
-        mailLink.style.display = 'flex';
+        const mailLink = document.createElement("div");
+        mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`;
+        mailLink.style.height = "80%";
+        mailLink.style.width = "100%";
+        mailLink.style.textAlign = "center";
+        mailLink.style.margin = "auto auto";
+        mailLink.style.display = "flex";
         mailLink.style.border = "1px solid black";
-        mailLink.style.alignItems = 'center';
-        mailLink.style.justifyContent = 'center';
-        mailLink.style.textTransform = 'uppercase';
+        mailLink.style.alignItems = "center";
+        mailLink.style.justifyContent = "center";
+        mailLink.style.textTransform = "uppercase";
 
         projectBlock.prepend(mailLink);
         setEmailActive(true);
-      } 
+      }
+
       if (!clickedOnce.includes(project.order)) {
         image.remove();
         const img = document.createElement("img");
         img.classList += "jumpingImage";
         img.src = image.src;
-        const startingBlock = document.getElementById(project.order).parentElement;
+
+        const startingBlock = document.getElementById(
+          project.order,
+        ).parentElement;
         const startingCoordinates = getMiddleCoordinates(startingBlock);
+
         gridRef.current.appendChild(img);
-        img.style.left = startingCoordinates.x - window.innerWidth * 0.17 * 0.45  + "px";
-        img.style.top = startingCoordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+        img.style.left =
+          startingCoordinates.x - window.innerWidth * 0.17 * 0.45 + "px";
+        img.style.top =
+          startingCoordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
 
-
-        setTimeout(
-          () =>{
-            img.style.height = 'calc(10vw * 0.9)';
-            jump(img, project.order, project.title.split(" ")[0].toLowerCase())},
-          100
-        );
+        setTimeout(() => {
+          img.style.height = "calc(10vw * 0.9)";
+          jump(img, project.order, project.title.split(" ")[0].toLowerCase());
+        }, 100);
 
         clickedOnce.push(project.order);
-      };
-      
-    } else if (project.toAbout === true) {
-      navigate('about');
-    }  else {
-      navigate(`${project.title}`);
-    } 
-  }
-
-   const closePage = (event) => {
-     if (!event.target.className.includes('dontClose')) {
-       setActiveProject(null)
-       navigate('/');
       }
-  }
+    } else if (project.toAbout === true) {
+      navigate("about");
+    } else {
+      navigate(`${project.title}`);
+    }
+  };
 
-  // Fetch the data and if there is an active project set it
+  const closePage = (event) => {
+    if (!event.target.className.includes("dontClose")) {
+      setActiveProject(null);
+      navigate("/");
+    }
+  };
 
+  // Fetch data
   useEffect(() => {
     fetch(URL)
       .then((res) => res.json())
       .then(({ result }) => {
-        console.log(result[0]);
         setData(result[0]);
-        setProjects(result[0].projects.map((project, i) => ({...project, order: i})))
+        setProjects(
+          result[0].projects.map((project, i) => ({ ...project, order: i })),
+        );
       })
       .catch((err) => console.error(err));
-  }, [URL])
+  }, [URL]);
 
   useEffect(() => {
-
     // CLOSE ON ESCAPE
     const handleKeyDown = (e) => {
-       if (e.key === "Escape") {
-         navigate("/");
-       }
+      if (e.key === "Escape") {
+        navigate("/");
+      }
     };
 
     // CHECK IF MOBILE
     const handleResize = () => {
       setIsMobile(window.innerWidth < 850);
-    }
+    };
 
     handleResize();
 
     // GET ACTIVE PROJECT FROM URL
-
-    const fetchedActiveProject = projects && (projects.find((project) => project.title.toLowerCase().replaceAll('\n', '') === decodeURIComponent(projectId).toLowerCase()));
-    setActiveProject(fetchedActiveProject)
+    const fetchedActiveProject =
+      projects &&
+      projects.find(
+        (project) =>
+          project.title.toLowerCase().replaceAll("\n", "") ===
+          decodeURIComponent(projectId || "").toLowerCase(),
+      );
+    setActiveProject(fetchedActiveProject);
 
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
-    let toScroll;
-    
+
     if (isMobile) {
       if (fetchedActiveProject) {
-        toScroll = window.scrollY; 
-        gridRef.current.style.position = 'fixed';
+        const toScroll = window.scrollY;
+        gridRef.current.style.position = "fixed";
         gridRef.current.style.top = `-${toScroll}px`;
       } else {
-      const windowScroll = -gridRef.current.style.top.replaceAll("px", "" );
-      console.log(windowScroll);
-      gridRef.current.style.position = "";
-      gridRef.current.style.top = "";
-      window.scrollTo(0, windowScroll);
-        // gridRef.current.style.position = "";
-        // (toScrollState) ? window.scrollTo(0, toScrollState) :window.scrollTo(0,0);
+        const windowScroll = -gridRef.current.style.top.replaceAll("px", "");
+        gridRef.current.style.position = "";
+        gridRef.current.style.top = "";
+        window.scrollTo(0, windowScroll);
       }
-    } 
-    
+    }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
-
   }, [projectId, projects, navigate, isMobile]);
 
-
-  // Distribute left column and right
-
+  // Distribute left/right
   const distributeProjects = (projectsArray) => {
-
-
     let leftHeight = 0;
     let rightHeight = 0;
 
@@ -257,56 +257,113 @@ const Grid = () => {
       if (!isMobile) {
         if (Math.floor(leftHeight) <= Math.floor(rightHeight)) {
           leftProjects.push(project);
-          if (project.size === 'small') {
-            leftHeight += 0.5;
-          } else {
-            leftHeight += 2;
-          }
+          leftHeight += project.size === "small" ? 0.5 : 2;
         } else {
           rightProjects.push(project);
-          if (project.size === 'small') {
-            rightHeight += 0.5;
-          } else {
-            rightHeight += 2;
-          }
+          rightHeight += project.size === "small" ? 0.5 : 2;
         }
       } else {
         mobileProjects.push(project);
       }
-    
-    })
-  }
+    });
+  };
 
   projects && distributeProjects(projects);
 
-  // DOM structure 
-
   return (
     <div ref={gridRef}>
-      {/* Grid */}
+      {/* INTRO CARD (starts first) */}
+      {/* {introStage === "card" && (
+        <div className={styles.welcomeOverlay}>
+          <div
+            className={styles.welcomeCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {!data ? (
+              <p>Loading…</p>
+            ) : (
+              <>
+                <h2>{data?.welcomeTitle || "Welcome"}</h2>
 
+                {data?.welcomeText ? (
+                  <PortableText
+                    value={data.welcomeText}
+                    components={{
+                      marks: {
+                        link: ({ value, children }) => {
+                          const href = value?.href || "#";
+                          const blank = value?.blank;
+                          return (
+                            <a
+                              href={href}
+                              target={blank ? "_blank" : undefined}
+                              rel={blank ? "noopener noreferrer" : undefined}
+                            >
+                              {children}
+                            </a>
+                          );
+                        },
+                      },
+                    }}
+                  />
+                ) : (
+                  <p>Click enter to start.</p>
+                )}
+
+                <button
+                  className={styles.welcomeButton}
+                  onClick={startIntroVideo}
+                  disabled={!data?.welcomeVideoUrl}
+                  title={
+                    !data?.welcomeVideoUrl
+                      ? "No welcome video set in Sanity"
+                      : ""
+                  }
+                >
+                  {data?.welcomeButtonText || "Enter"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* INTRO VIDEO (starts after Enter, ends then disappears) */}
+      {introStage === "video" && data?.welcomeVideoUrl && (
+        <div className={styles.welcomeVideoOverlay}>
+          <video
+            className={styles.welcomeVideo}
+            autoPlay
+            playsInline
+            muted
+            onEnded={endIntroVideo}
+          >
+            <source src={data.welcomeVideoUrl} />
+          </video>
+        </div>
+      )} */}
+
+      {/* Grid */}
       {projects && isMobile ? (
         <div className={styles.mobileGrid}>
-          {mobileProjects &&
-            mobileProjects.map((project, index) => (
-              <Project
-                clickFunction={(e) => {
-                  handleClick(project, e);
-                }}
-                key={index}
-                mediaSize={project.size}
-                mediaType={project.type}
-                imageUrl={project.imageFileUrl}
-                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
-                projectTitle={project.title}
-                mediaOrientation={project.orientation}
-                id={projects.indexOf(project)}
-                jumping={project.jumping ? true : false}
-              />
-            ))}
+          {mobileProjects.map((project, index) => (
+            <Project
+              clickFunction={(e) => handleClick(project, e)}
+              key={index}
+              mediaSize={project.size}
+              mediaType={project.type}
+              imageUrl={project.imageFileUrl}
+              trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+              projectTitle={project.title}
+              mediaOrientation={project.orientation}
+              id={projects.indexOf(project)}
+              jumping={project.jumping ? true : false}
+            />
+          ))}
           <div className={styles.footer}>
-            &copy; 2024 Serhii Serbin <br></br>
-            <a href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>
+            {data?.copyright}
+            <br />
+            <a href={`mailto:${data?.email}`}>{data?.email}</a>
           </div>
         </div>
       ) : (
@@ -314,9 +371,7 @@ const Grid = () => {
           <div className={styles.p50}>
             {leftProjects.map((project, index) => (
               <Project
-                clickFunction={(e) => {
-                  handleClick(project, e);
-                }}
+                clickFunction={(e) => handleClick(project, e)}
                 key={index}
                 mediaSize={project.size}
                 mediaType={project.type}
@@ -332,9 +387,7 @@ const Grid = () => {
           <div className={styles.p50}>
             {rightProjects.map((project, index) => (
               <Project
-                clickFunction={(e) => {
-                  handleClick(project, e);
-                }}
+                clickFunction={(e) => handleClick(project, e)}
                 key={index}
                 mediaSize={project.size}
                 mediaType={project.type}
@@ -348,12 +401,14 @@ const Grid = () => {
             ))}
           </div>
           <div className={styles.footer}>
-            &copy; 2024 Serhii Serbin <br></br>
-            <a href="mailto:nibressergo@gmail.com">nibressergo@gmail.com</a>
+            {data?.copyright}
+            <br />
+            <a href={`mailto:${data?.email}`}>{data?.email}</a>
           </div>
         </div>
       )}
 
+      {/* About */}
       {isAboutActive && (
         <div className={styles.posFixed} onClick={(event) => closePage(event)}>
           <div className={styles.blurredBackground}></div>
@@ -363,16 +418,23 @@ const Grid = () => {
               className={`${styles.copiedMedia} ${styles.aboutMedia}`}
               id="copiedMedia"
             >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className={`${styles.verticalCopy} dontClose`}
-              >
-                <source src={data && data.aboutVideoWebmUrl}></source>
-                <source src={data && data.aboutVideoMovUrl}></source>
-              </video>
+              {about?._type === "image" ? (
+                <img
+                  className={`${styles.verticalCopy} dontClose`}
+                  src={about.url}
+                  alt="About"
+                />
+              ) : about?.url ? (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className={`${styles.verticalCopy} dontClose`}
+                >
+                  <source src={about.url} type="video/quicktime" />
+                </video>
+              ) : null}
             </div>
             <p
               className={`${styles.projectDescription} dontClose`}
@@ -382,8 +444,7 @@ const Grid = () => {
         </div>
       )}
 
-      {/* If there is an active project */}
-
+      {/* Active project */}
       {activeProject && (
         <div
           className={styles.posFixed}
@@ -430,7 +491,7 @@ const Grid = () => {
                   muted={isMuted}
                   controls={isMobile}
                   onPlay={() => {
-                    videoRef.current.controls = videoRef.current && false;
+                    if (videoRef.current) videoRef.current.controls = false;
                   }}
                   className={
                     activeProject.orientation === "horizontal"
@@ -448,6 +509,7 @@ const Grid = () => {
                   ></source>
                 </video>
               )}
+
               <span
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
@@ -474,7 +536,7 @@ const Grid = () => {
                 <p
                   className="dontClose"
                   dangerouslySetInnerHTML={{ __html: activeProject.links }}
-                ></p>
+                />
               )}
             </div>
           </div>
@@ -482,6 +544,6 @@ const Grid = () => {
       )}
     </div>
   );
-}
+};
 
 export default Grid;
