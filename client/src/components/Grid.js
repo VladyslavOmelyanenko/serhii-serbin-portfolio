@@ -1,7 +1,6 @@
 // dependencies
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { PortableText } from "@portabletext/react";
 
 // imports
 import styles from "./Grid.module.css";
@@ -65,7 +64,6 @@ const Grid = () => {
 
   // Intro flow: "card" -> "video" -> "off"
   const [introStage, setIntroStage] = useState("card");
-  const startIntroVideo = () => setIntroStage("video");
   const endIntroVideo = () => setIntroStage("off");
 
   const videoRef = useRef(null);
@@ -341,7 +339,7 @@ const Grid = () => {
             <source src={data.welcomeVideoUrl} />
           </video>
         </div>
-      )} */}
+      )}
 
       {/* Grid */}
       {projects && isMobile ? (
