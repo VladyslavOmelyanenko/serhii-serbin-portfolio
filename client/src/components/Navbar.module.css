@@ -3,7 +3,7 @@
   display: flex;
   font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
   text-transform: capitalize;
-  height: 60px;
+  height: 5.4vw;
   position: fixed;
   width: 100%;
   top: 0;
@@ -27,14 +27,16 @@
   font-size: 14px;
   position: absolute;
   display: flex;
-  position: absolute;
+  flex-direction: column;
   right: 30px;
   top: 20px;
+  height: 36px;
+  justify-content: end;
 }
 
 .links a {
   text-decoration: none;
-  color: black;
+  color: #333333;
 }
 
 

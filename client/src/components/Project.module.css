@@ -8,6 +8,7 @@
   margin-bottom: 5.4vw;
   margin-left: 5.4vw;
   position: relative;
+  cursor: pointer;
 }
 
 .project img,
@@ -52,6 +53,7 @@
   width: 100%;
   margin-top: 8px;
   min-height: 2.4em;
+  color: #333333;
 }
 
 
