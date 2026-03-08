@@ -14,7 +14,8 @@
   width: 89.6vw;
   flex-wrap: wrap;
   font-family: 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1;
   padding-top: 100px;
   left: 2.7vw;
 }
@@ -114,7 +115,6 @@
 .projectTitle{
   font-size: 19px;
   font-weight: bold;
-  /* text-transform: uppercase; */
   margin-top: 0;
   margin-bottom: 20px;
 }
@@ -153,18 +153,16 @@
   align-items: center;
 }
 
-.horizontalCopy {
-  width: 70%;
-  margin: 0 auto;
-  transition: 1s all;
-}
-
+.horizontalCopy,
 .verticalCopy {
-  height: 70%;
-  margin: 0 auto;
-  transition: 1s all;
+  display: block;
+  max-width: 90%;
+  max-height: 70%;
+  width: auto;
+  height: auto;
+  margin: auto;
+  object-fit: contain;
 }
-
 .projectDescription{
   width: 30%;
   transition: 1s all;
