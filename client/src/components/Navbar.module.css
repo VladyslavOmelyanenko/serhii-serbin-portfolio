@@ -32,7 +32,7 @@
   right: 30px;
   top: 20px;
   height: 36px;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .links a {
