@@ -32,8 +32,8 @@ const Project = (props) => {
                 ? `${styles.horizontalMedia} ${styles.jumping}`
                 : `${styles.horizontalMedia}`
               : jumping
-              ? `${styles.verticalMedia} ${styles.jumping}`
-              : `${styles.verticalMedia}`
+                ? `${styles.verticalMedia} ${styles.jumping}`
+                : `${styles.verticalMedia}`
           }
           preload="auto"
         />
@@ -50,12 +50,14 @@ const Project = (props) => {
                 ? `${styles.horizontalMedia} ${styles.jumping}`
                 : `${styles.horizontalMedia}`
               : jumping
-              ? `${styles.verticalMedia} ${styles.jumping}`
-              : `${styles.verticalMedia}`
+                ? `${styles.verticalMedia} ${styles.jumping}`
+                : `${styles.verticalMedia}`
           }
           preload="auto"
         >
-          {trailerUrls.reverse().map((trailerUrl, i) => <source src={trailerUrl} key={i}></source>)}
+          {[...trailerUrls].reverse().map((trailerUrl, i) => (
+            <source src={trailerUrl} key={i} />
+          ))}
         </video>
       )}
       <span className="project__title">{projectTitle}</span>

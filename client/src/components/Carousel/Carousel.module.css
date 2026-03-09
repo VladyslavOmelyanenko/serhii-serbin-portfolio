@@ -1,59 +1,41 @@
 .carousel {
-  max-height: 70vh;
-  max-width: 90vw;
-  position: relative;
-  display: flex;
-}
-
-.carouselTrackContainer {
-  position: relative;
-}
-
-.carouselTrack {
   width: 100%;
   height: 100%;
-  list-style: none;
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  align-items: center;
+  justify-content: center;
 }
 
-.carouselTrack img, .carouselTrack video {
-  max-width: 90%;
-  max-height: 100%;
-  object-fit: contain;
+.mediaSwitch {
+  all: unset;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: e-resize;
 }
 
 .carouselSlide {
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.carouselButton {
-  border: none;
-  background: none;
   position: absolute;
-  z-index: 10;
-  height: 100%;
-  font-size: 26px;
-  width: 30px;
-  color: #333;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
 }
 
-.carouselButton:last-child {
-  right: 0px
+.isActive {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-@media (max-width: 850px) {
-  .carousel {
-    width: calc(100%);
-    height: 70vh;
-    margin-top: 80px;
-  }
+.carouselMedia {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 90%;
+  max-height: 100%;
+  object-fit: contain;
 }

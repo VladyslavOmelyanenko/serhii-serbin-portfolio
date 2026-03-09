@@ -1,189 +1,118 @@
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Carousel.module.css";
 
-const Carousel = ({ images, firstImage, isMuted, isMobile }) => {
+const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
+  const mediaItems = useMemo(() => {
+    return [firstImage, ...images].filter(Boolean);
+  }, [firstImage, images]);
 
-  const track = useRef(null);
-  const videoRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const videoRefs = useRef([]);
 
-  const getClosestImageToCenter = (side) => {
-    const slides = Array.from(track.current.children);
-
-    if (slides.length === 0) {
-      return null; // No images or videos found in the container
-    }
-
-    const containerRect = track.current.getBoundingClientRect();
-    const containerCenterX =
-      containerRect.width/2 + track.current.scrollLeft;
-
-    let closestImage = null;
-    let minDistance = Infinity;
-
-    slides.forEach((element) => {
-      const elementRect = element.getBoundingClientRect();
-      const elementCenterX = elementRect.left + elementRect.width / 2 - containerRect.left + track.current.scrollLeft;
-
-      // Calculate the distance from the element's center to the container's center
-      const distance = Math.abs(elementCenterX - containerCenterX);
-      // console.log(distance);
-      if (
-        (side === "right" && elementCenterX > containerCenterX) ||
-        (side === "left" && elementCenterX < containerCenterX) 
-      ) {
-        if ((distance < minDistance) && (distance >= 5)) {
-          closestImage = element;
-          minDistance = distance;
-        }
-      } else if (side === "") {
-          if (distance < minDistance) {
-            closestImage = element;
-            minDistance = distance;
-          }
-      }
-
-    });
-
-    return closestImage;
+  const isVideo = (item) => {
+    if (Array.isArray(item)) return true;
+    if (typeof item !== "string") return false;
+    return /\.(mp4|mov|webm)$/i.test(item);
   };
 
-  const moveImageToCenter = (side) => {
-    const closestImage = getClosestImageToCenter(side);
+  const isImage = (item) => {
+    if (typeof item !== "string") return false;
+    return /\.(png|jpe?g|webp|gif|avif)$/i.test(item);
+  };
 
-    
+  const firstImageKey = Array.isArray(firstImage)
+    ? firstImage.join("|")
+    : firstImage || "";
 
-    if (!closestImage) {
-      console.log("No suitable image found to move.");
-      return;
-    }
+  const imagesKey = images.join("|");
 
-    const containerRect = track.current.getBoundingClientRect();
-    const imageRect = closestImage.getBoundingClientRect();
-    let desiredScrollLeft = Math.round(
-      imageRect.left -
-      containerRect.left -
-      containerRect.width / 2 +
-      imageRect.width / 2);
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [firstImageKey, imagesKey]);
 
-      const startingScrollPos = track.current.scrollLeft;
+useEffect(() => {
+  if (onIndexChange) {
+    onIndexChange(activeIndex + 1, mediaItems.length);
+  }
+}, [activeIndex, mediaItems.length, onIndexChange]);
 
-    const scrollInterval = setInterval(() => {
-      let scroll = track.current.scrollLeft;
-      if (desiredScrollLeft <= 0) {
-        scroll -= 20;
-        if (+scroll - startingScrollPos <= desiredScrollLeft) {
-          clearInterval(scrollInterval);
-          track.current.scrollLeft = Math.round(startingScrollPos + desiredScrollLeft);
-        } else track.current.scrollLeft = scroll;
-      } else {
-        scroll += 20;
-        if (+scroll - startingScrollPos >= desiredScrollLeft){
-          clearInterval(scrollInterval);
-          track.current.scrollLeft = Math.round(startingScrollPos + desiredScrollLeft);
-        } else track.current.scrollLeft = scroll;
+  useEffect(() => {
+    mediaItems.forEach((item) => {
+      if (isImage(item)) {
+        const img = new Image();
+        img.src = item;
       }
+    });
+  }, [mediaItems]);
 
-    }, 5)
-  }
+  useEffect(() => {
+    videoRefs.current.forEach((video, index) => {
+      if (!video) return;
 
-  const handleScroll = () => {
-    const videos = track.current.querySelectorAll("video");
+      video.muted = isMuted;
 
-    const closestSlide = getClosestImageToCenter("");
-    const closestVideo = closestSlide.querySelector("video");
+      if (index === activeIndex) {
+        const playPromise = video.play();
+        if (playPromise?.catch) playPromise.catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeIndex, isMuted]);
 
-
-    if (closestVideo) {
-      videos.forEach((video) => {
-        if (video === closestVideo) {
-          video.controls = true;
-          video.addEventListener('play', () => {
-            video.controls = false;
-          });
-          video.play();
-          video.controls = false;
-          video.muted = isMuted;
-        } else {
-          video.pause();
-          video.muted = isMuted;
-
-        }
-      });
-    }
-
-
-  }
-
+  const goToNext = (e) => {
+    e.stopPropagation();
+    if (mediaItems.length <= 1) return;
+    setActiveIndex((prev) => (prev + 1) % mediaItems.length);
+  };
 
   return (
     <div className={styles.carousel}>
       <button
-        className={`${styles.carouselButton} dontClose`}
-        onClick={() => console.log(moveImageToCenter("left"))}
+        type="button"
+        className={`${styles.mediaSwitch} dontClose`}
+        onClick={goToNext}
+        aria-label="Next media"
       >
-        &lt;
-      </button>
-      <div className={styles.carouselTrackContainer}>
-        <ul
-          className={styles.carouselTrack}
-          ref={track}
-          onScroll={() => handleScroll()}
-        >
-          <li className={styles.carouselSlide}>
-            {firstImage.includes("webp") ||
-            firstImage.includes("png") ||
-            firstImage.includes("jpg") ||
-            firstImage.includes("jpeg") ? (
-              <img src={firstImage} alt={firstImage} />
-            ) : (
-              <video
-                autoPlay
-                ref={videoRef}
-                loop
-                playsInline
-                className="dontClose"
-                muted={isMuted}
-                controls={isMobile}
-                preload="auto"
-                onPlay={() => {
-                  videoRef.current.controls = videoRef.current && false;
-                }}
-              >
-                {firstImage.map((src) => (
-                  <source src={src}></source>
-                ))}
-              </video>
-            )}
-          </li>
-          {images.map((image, i) =>
-            image.includes("mp4") ||
-            image.includes("mov") ||
-            image.includes("webm") ? (
-              <li key={i} className={styles.carouselSlide}>
+        {mediaItems.map((item, index) => {
+          const key = Array.isArray(item) ? item.join("|") : item;
+          const isActive = index === activeIndex;
+
+          return (
+            <div
+              key={key}
+              className={`${styles.carouselSlide} ${
+                isActive ? styles.isActive : ""
+              } dontClose`}
+            >
+              {isImage(item) ? (
+                <img
+                  src={item}
+                  alt=""
+                  className={`${styles.carouselMedia} dontClose`}
+                  draggable="false"
+                />
+              ) : isVideo(item) ? (
                 <video
-                  muted={isMuted}
+                  ref={(el) => {
+                    videoRefs.current[index] = el;
+                  }}
                   loop
                   playsInline
-                  controls={true}
-                  className="dontClose"
+                  muted={isMuted}
                   preload="metadata"
+                  className={`${styles.carouselMedia} dontClose`}
                 >
-                  <source src={image}></source>
+                  {Array.isArray(item) ? (
+                    item.map((src) => <source src={src} key={src} />)
+                  ) : (
+                    <source src={item} />
+                  )}
                 </video>
-              </li>
-            ) : (
-              <li key={i} className={styles.carouselSlide}>
-                <img src={image} alt={image} className="dontClose"></img>
-              </li>
-            )
-          )}
-        </ul>
-      </div>
-      <button
-        className={`${styles.carouselButton} dontClose`}
-        onClick={() => console.log(moveImageToCenter("right"))}
-      >
-        &gt;
+              ) : null}
+            </div>
+          );
+        })}
       </button>
     </div>
   );

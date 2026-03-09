@@ -1,5 +1,5 @@
 // dependencies
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 // imports
@@ -61,6 +61,7 @@ const Grid = () => {
   const [data, setData] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
   const [isMuted, setIsMuted] = useState(isMobile);
+  const [carouselMeta, setCarouselMeta] = useState({ index: 1, total: 1 });
 
   // Intro flow: "card" -> "video" -> "off"
   const [introStage, setIntroStage] = useState("card");
@@ -120,6 +121,13 @@ const Grid = () => {
     jumpHandler = () => jump(img, element.firstElementChild.id, stylesId);
     img.addEventListener("click", jumpHandler);
   };
+
+  const handleCarouselIndexChange = useCallback((index, total) => {
+    setCarouselMeta((prev) => {
+      if (prev.index === index && prev.total === total) return prev;
+      return { index, total };
+    });
+  }, []);
 
   const handleClick = (project, event) => {
     if (Array.from(event.target.classList).includes("jumpingImage")) {
@@ -198,6 +206,18 @@ const Grid = () => {
       })
       .catch((err) => console.error(err));
   }, [URL]);
+useEffect(() => {
+  if (activeProject?.isCarousel) {
+    const total = 1 + (activeProject.slideFiles?.[0]?.slides?.length || 0);
+
+    setCarouselMeta({
+      index: 1,
+      total,
+    });
+  } else {
+    setCarouselMeta({ index: 1, total: 1 });
+  }
+}, [activeProject]);
 
   useEffect(() => {
     // CLOSE ON ESCAPE
@@ -347,7 +367,7 @@ const Grid = () => {
           {mobileProjects.map((project, index) => (
             <Project
               clickFunction={(e) => handleClick(project, e)}
-              key={index}
+              key={project.order}
               mediaSize={project.size}
               mediaType={project.type}
               imageUrl={project.imageFileUrl}
@@ -408,40 +428,44 @@ const Grid = () => {
 
       {/* About */}
       {isAboutActive && (
-        <div className={styles.posFixed} onClick={(event) => closePage(event)}>
+        <div className={styles.posFixed} onClick={closePage}>
           <div className={styles.blurredBackground}></div>
-          <h1 className={styles.projectTitle}>About</h1>
-          <div className={styles.detailedProject} id="projectDescription">
-            <div
-              className={`${styles.copiedMedia} ${styles.aboutMedia}`}
-              id="copiedMedia"
-            >
-              {about?._type === "image" ? (
-                <img
-                  className={`${styles.verticalCopy} dontClose`}
-                  src={about.url}
-                  alt="About"
-                />
-              ) : about?.url ? (
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className={`${styles.verticalCopy} dontClose`}
-                >
-                  <source src={about.url} type="video/quicktime" />
-                </video>
-              ) : null}
-            </div>
-            <p
-              className={`${styles.projectDescription} dontClose`}
-              dangerouslySetInnerHTML={{ __html: data && data.aboutText }}
-            ></p>
+
+          <div className={styles.projectOverlayContent}>
+            <section className={`${styles.projectMediaStage} dontClose`}>
+              <div className={`${styles.projectMediaFrame} dontClose`}>
+                {about?._type === "image" ? (
+                  <img
+                    src={about.url}
+                    className={`${styles.projectOpenMedia} dontClose`}
+                    alt="About"
+                  />
+                ) : about?.url ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className={`${styles.projectOpenMedia} dontClose`}
+                  >
+                    <source src={about.url} type="video/quicktime" />
+                  </video>
+                ) : null}
+              </div>
+
+              <h2 className={`${styles.projectTitleUnderMedia} dontClose`}>
+                <span>About</span>
+              </h2>
+            </section>
+
+            <section className={`${styles.projectText} dontClose`}>
+              <div className={styles.projectTextInner}>
+                <p dangerouslySetInnerHTML={{ __html: data?.aboutText }} />
+              </div>
+            </section>
           </div>
         </div>
       )}
-
       {/* Active project */}
       {activeProject && (
         <div
@@ -451,94 +475,111 @@ const Grid = () => {
           ref={activeProjectRef}
         >
           <div className={styles.blurredBackground}></div>
-          <div className={styles.detailedProject} id="projectDescription">
-            <div className={styles.copiedMedia} id="copiedMedia">
-              {activeProject.isCarousel ? (
-                <div className={styles.carousel}>
-                  <Carousel
-                    isMobile={isMobile}
-                    images={activeProject.slideFiles[0].slides}
-                    firstImage={
-                      activeProject.type !== "image"
-                        ? [
-                            activeProject.fullVideoMovUrl,
-                            activeProject.fullVideoWebmUrl,
-                          ]
-                        : activeProject.imageFileUrl
-                    }
-                    isMuted={isMuted}
-                  />
-                </div>
-              ) : activeProject.type === "image" ? (
-                <img
-                  src={activeProject.imageFileUrl}
-                  className={
-                    activeProject.orientation === "horizontal"
-                      ? `${styles.horizontalCopy} dontClose`
-                      : `${styles.verticalCopy} dontClose`
-                  }
-                  alt="active project"
-                />
-              ) : (
-                <video
-                  id="video"
-                  ref={videoRef}
-                  autoPlay
-                  loop
-                  playsInline
-                  muted={isMuted}
-                  controls={isMobile}
-                  onPlay={() => {
-                    if (videoRef.current) videoRef.current.controls = false;
-                  }}
-                  className={
-                    activeProject.orientation === "horizontal"
-                      ? `${styles.horizontalCopy} dontClose`
-                      : `${styles.verticalCopy} dontClose`
-                  }
-                >
-                  <source
-                    src={activeProject.fullVideoMovUrl}
-                    type='video/mp4; codecs="hvc1"'
-                  ></source>
-                  <source
-                    src={activeProject.fullVideoWebmUrl}
-                    type="video/webm"
-                  ></source>
-                </video>
-              )}
 
+          <div className={styles.projectOverlayContent}>
+            <section className={`${styles.projectMediaStage} dontClose`}>
+              <div className={`${styles.projectMediaFrame} dontClose`}>
+                {activeProject.isCarousel ? (
+                  <div className={styles.carousel}>
+                    <Carousel
+                      isMobile={isMobile}
+                      images={activeProject.slideFiles[0].slides}
+                      firstImage={
+                        activeProject.type !== "image"
+                          ? [
+                              activeProject.fullVideoMovUrl,
+                              activeProject.fullVideoWebmUrl,
+                            ]
+                          : activeProject.imageFileUrl
+                      }
+                      isMuted={isMuted}
+                      onIndexChange={handleCarouselIndexChange}
+                    />
+                  </div>
+                ) : activeProject.type === "image" ? (
+                  <img
+                    src={activeProject.imageFileUrl}
+                    className={`${styles.projectOpenMedia} dontClose`}
+                    alt={activeProject.title}
+                  />
+                ) : (
+                  <video
+                    id="video"
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    playsInline
+                    muted={isMuted}
+                    controls={isMobile}
+                    onPlay={() => {
+                      if (videoRef.current) videoRef.current.controls = false;
+                    }}
+                    className={`${styles.projectOpenMedia} dontClose`}
+                  >
+                    <source
+                      src={activeProject.fullVideoMovUrl}
+                      type='video/mp4; codecs="hvc1"'
+                    />
+                    <source
+                      src={activeProject.fullVideoWebmUrl}
+                      type="video/webm"
+                    />
+                  </video>
+                )}
+              </div>
+
+              <h2 className={`${styles.projectTitleUnderMedia} dontClose`}>
+                <span>{activeProject.title}</span>
+                {activeProject.isCarousel && carouselMeta.total > 1 && (
+                  <span className={styles.projectMediaCounter}>
+                    {carouselMeta.index}/{carouselMeta.total}
+                  </span>
+                )}
+              </h2>
               <span
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
               >
                 {JSON.stringify(activeProject).includes("webm") ||
                 JSON.stringify(activeProject).includes("mov") ||
-                activeProject.mediaType === "video"
+                activeProject.type === "video"
                   ? isMuted
                     ? "Unmute"
                     : "Mute"
                   : ""}
               </span>
-            </div>
+            </section>
 
-            <div className={styles.projectDescription}>
-              <h2 className={`${styles.projectTitle} dontClose`}>
-                {activeProject.title}
-              </h2>
-              <p
-                className="dontClose"
-                dangerouslySetInnerHTML={{ __html: activeProject.description }}
-              ></p>
-              {activeProject.links && activeProject.links !== "" && (
+            <section className={`${styles.projectText} dontClose`}>
+              <div className={styles.projectTextInner}>
                 <p
-                  className="dontClose"
-                  dangerouslySetInnerHTML={{ __html: activeProject.links }}
+                  dangerouslySetInnerHTML={{
+                    __html: activeProject.description,
+                  }}
                 />
-              )}
-            </div>
+                {activeProject.links && activeProject.links !== "" && (
+                  <p
+                    dangerouslySetInnerHTML={{ __html: activeProject.links }}
+                  />
+                )}
+              </div>
+            </section>
           </div>
         </div>
+      )}
+      {(activeProject || isAboutActive) && (
+        <button
+          type="button"
+          className={styles.newCloseButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveProject(null);
+            navigate("/");
+          }}
+          aria-label="Close project"
+        >
+          &#x2715;
+        </button>
       )}
     </div>
   );

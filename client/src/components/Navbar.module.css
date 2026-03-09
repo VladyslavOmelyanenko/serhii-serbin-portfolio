@@ -12,6 +12,7 @@
 
 .navbar a {
   text-decoration: none;
+  z-index: 99999;
 }
 
 .navbar h1{
