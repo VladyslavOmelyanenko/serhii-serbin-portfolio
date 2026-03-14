@@ -1,4 +1,3 @@
-// dependencies
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
@@ -8,9 +7,9 @@ import Project from "./Project";
 import Carousel from "./Carousel/Carousel";
 
 const Grid = () => {
-  let PROJECT_ID = "sv2kd5ay";
-  let DATASET = "production";
-  let GROQ_QUERY = `*[_type == "gridPage"]{
+  const PROJECT_ID = "sv2kd5ay";
+  const DATASET = "production";
+  const GROQ_QUERY = `*[_type == "gridPage"]{
     welcomeTitle,
     welcomeText,
     welcomeButtonText,
@@ -44,11 +43,10 @@ const Grid = () => {
     email
   }`;
 
-  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(
+  const URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(
     GROQ_QUERY,
   )}`;
 
-  // variables
   let jumpHandler;
   const leftProjects = [];
   const rightProjects = [];
@@ -63,61 +61,68 @@ const Grid = () => {
   const [isMuted, setIsMuted] = useState(isMobile);
   const [carouselMeta, setCarouselMeta] = useState({ index: 1, total: 1 });
 
-  // Intro flow: "card" -> "video" -> "off"
-  const [introStage, setIntroStage] = useState("card");
+  // Intro flow: "loading" -> "video" -> "off"
+  const [introStage, setIntroStage] = useState("loading");
   const endIntroVideo = () => setIntroStage("off");
 
   const videoRef = useRef(null);
   const gridRef = useRef(null);
-  const activeProjectRef = useRef(null);
-
-  const about = data?.aboutMedia;
 
   const location = useLocation();
   const navigate = useNavigate();
   const { projectId } = useParams();
 
+  const about = data?.aboutMedia;
   const isAboutActive = location.pathname === "/about";
+  const isHome = location.pathname === "/";
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
     const scrollX = window.scrollX || window.pageXOffset;
     const scrollY = window.scrollY || window.pageYOffset;
-    const middleX = rect.left + scrollX + rect.width / 2;
-    const middleY = rect.top + scrollY + rect.height / 2;
-    return { x: middleX, y: middleY };
+
+    return {
+      x: rect.left + scrollX + rect.width / 2,
+      y: rect.top + scrollY + rect.height / 2,
+    };
   };
 
   const jump = (img, order, stylesId = "") => {
+    if (!projects?.length) return;
+
     const areaNumber = 5;
     let min = +order - areaNumber;
     let max = +order + areaNumber;
+
     min = min < 1 ? 1 : min;
     max = max >= projects.length ? projects.length : max;
+
     let rangeNumber = Math.floor(Math.random() * (max - min) + min);
 
     while (rangeNumber === order) {
-      rangeNumber = Math.floor(Math.random() * max + min);
+      rangeNumber = Math.floor(Math.random() * (max - min) + min);
     }
 
     let element = document.getElementById(rangeNumber);
+    if (!element) return;
+
     element = element.parentElement;
+    if (!element) return;
 
     const coordinates = getMiddleCoordinates(element);
 
     if (stylesId === "overheated") {
-      img.style.left = coordinates.x + "px";
-      img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.7 + "px";
+      img.style.left = `${coordinates.x}px`;
+      img.style.top = `${coordinates.y - window.innerWidth * 0.17 * 0.7}px`;
     } else if (stylesId === "cycling") {
-      img.style.left = coordinates.x - window.innerWidth * 0.05 * 0.7 + "px";
-      img.style.top = coordinates.y + "px";
+      img.style.left = `${coordinates.x - window.innerWidth * 0.05 * 0.7}px`;
+      img.style.top = `${coordinates.y}px`;
     } else {
-      img.style.left = coordinates.x - window.innerWidth * 0.17 * 0.7 + "px";
-      img.style.top = coordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+      img.style.left = `${coordinates.x - window.innerWidth * 0.17 * 0.7}px`;
+      img.style.top = `${coordinates.y - window.innerWidth * 0.17 * 0.45}px`;
     }
 
     img.removeEventListener("click", jumpHandler);
-
     jumpHandler = () => jump(img, element.firstElementChild.id, stylesId);
     img.addEventListener("click", jumpHandler);
   };
@@ -136,11 +141,12 @@ const Grid = () => {
 
     if (project.jumping === true) {
       const image = document.getElementById(project.order);
-      if (image == null) return;
+      if (!image) return;
 
       if (!emailActive) {
         const projectBlock = image.parentElement;
         const mailLink = document.createElement("div");
+
         mailLink.innerHTML = `<a style="color:black;" href="mailto:nibressergo@gmail.com" id=${project.order}>nibressergo@gmail.com</a>`;
         mailLink.style.height = "80%";
         mailLink.style.width = "100%";
@@ -158,20 +164,21 @@ const Grid = () => {
 
       if (!clickedOnce.includes(project.order)) {
         image.remove();
+
         const img = document.createElement("img");
         img.classList += "jumpingImage";
         img.src = image.src;
 
         const startingBlock = document.getElementById(
           project.order,
-        ).parentElement;
+        )?.parentElement;
+        if (!startingBlock || !gridRef.current) return;
+
         const startingCoordinates = getMiddleCoordinates(startingBlock);
 
         gridRef.current.appendChild(img);
-        img.style.left =
-          startingCoordinates.x - window.innerWidth * 0.17 * 0.45 + "px";
-        img.style.top =
-          startingCoordinates.y - window.innerWidth * 0.17 * 0.45 + "px";
+        img.style.left = `${startingCoordinates.x - window.innerWidth * 0.17 * 0.45}px`;
+        img.style.top = `${startingCoordinates.y - window.innerWidth * 0.17 * 0.45}px`;
 
         setTimeout(() => {
           img.style.height = "calc(10vw * 0.9)";
@@ -180,17 +187,27 @@ const Grid = () => {
 
         clickedOnce.push(project.order);
       }
-    } else if (project.toAbout === true) {
-      navigate("about");
-    } else {
-      navigate(`${project.title}`);
+
+      return;
     }
+
+    if (project.toAbout === true) {
+      navigate("/about");
+      return;
+    }
+
+    navigate(`/${encodeURIComponent(project.title)}`);
+  };
+
+  const closeOverlay = (event) => {
+    event?.stopPropagation?.();
+    setActiveProject(null);
+    navigate("/");
   };
 
   const closePage = (event) => {
-    if (!event.target.className.includes("dontClose")) {
-      setActiveProject(null);
-      navigate("/");
+    if (!event.target.closest(".dontClose")) {
+      closeOverlay(event);
     }
   };
 
@@ -199,42 +216,79 @@ const Grid = () => {
     fetch(URL)
       .then((res) => res.json())
       .then(({ result }) => {
-        setData(result[0]);
+        const pageData = result?.[0];
+        if (!pageData) return;
+
+        setData(pageData);
         setProjects(
-          result[0].projects.map((project, i) => ({ ...project, order: i })),
+          pageData.projects.map((project, i) => ({ ...project, order: i })),
         );
+
+        if (
+          pageData?.welcomeVideoUrl &&
+          isHome &&
+          !projectId &&
+          !isAboutActive
+        ) {
+          setIntroStage("video");
+        } else {
+          setIntroStage("off");
+        }
       })
       .catch((err) => console.error(err));
-  }, [URL]);
-useEffect(() => {
-  if (activeProject?.isCarousel) {
-    const total = 1 + (activeProject.slideFiles?.[0]?.slides?.length || 0);
+  }, [URL, isHome, projectId, isAboutActive]);
 
-    setCarouselMeta({
-      index: 1,
-      total,
-    });
-  } else {
-    setCarouselMeta({ index: 1, total: 1 });
-  }
-}, [activeProject]);
+  // Lock background scroll when overlay is open
+  useEffect(() => {
+    const overlayOpen = activeProject || isAboutActive;
+    if (!overlayOpen) return;
+
+    const scrollY = window.scrollY;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      const savedScrollY = document.body.style.top;
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      window.scrollTo(0, Math.abs(parseInt(savedScrollY || "0", 10)));
+    };
+  }, [activeProject, isAboutActive]);
+
+  // Carousel counter
+  useEffect(() => {
+    if (activeProject?.isCarousel) {
+      const total = 1 + (activeProject.slideFiles?.[0]?.slides?.length || 0);
+      setCarouselMeta({ index: 1, total });
+    } else {
+      setCarouselMeta({ index: 1, total: 1 });
+    }
+  }, [activeProject]);
 
   useEffect(() => {
-    // CLOSE ON ESCAPE
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        navigate("/");
+        closeOverlay();
       }
     };
 
-    // CHECK IF MOBILE
     const handleResize = () => {
       setIsMobile(window.innerWidth < 850);
     };
 
     handleResize();
 
-    // GET ACTIVE PROJECT FROM URL
     const fetchedActiveProject =
       projects &&
       projects.find(
@@ -242,18 +296,22 @@ useEffect(() => {
           project.title.toLowerCase().replaceAll("\n", "") ===
           decodeURIComponent(projectId || "").toLowerCase(),
       );
-    setActiveProject(fetchedActiveProject);
+
+    setActiveProject(fetchedActiveProject || null);
 
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
 
-    if (isMobile) {
+    if (isMobile && gridRef.current) {
       if (fetchedActiveProject) {
         const toScroll = window.scrollY;
         gridRef.current.style.position = "fixed";
         gridRef.current.style.top = `-${toScroll}px`;
       } else {
-        const windowScroll = -gridRef.current.style.top.replaceAll("px", "");
+        const windowScroll = -(gridRef.current.style.top || "0px").replaceAll(
+          "px",
+          "",
+        );
         gridRef.current.style.position = "";
         gridRef.current.style.top = "";
         window.scrollTo(0, windowScroll);
@@ -266,7 +324,6 @@ useEffect(() => {
     };
   }, [projectId, projects, navigate, isMobile]);
 
-  // Distribute left/right
   const distributeProjects = (projectsArray) => {
     let leftHeight = 0;
     let rightHeight = 0;
@@ -286,67 +343,13 @@ useEffect(() => {
     });
   };
 
-  projects && distributeProjects(projects);
+  if (projects) {
+    distributeProjects(projects);
+  }
 
   return (
     <div ref={gridRef}>
-      {/* INTRO CARD (starts first) */}
-      {/* {introStage === "card" && (
-        <div className={styles.welcomeOverlay}>
-          <div
-            className={styles.welcomeCard}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {!data ? (
-              <p>Loading…</p>
-            ) : (
-              <>
-                <h2>{data?.welcomeTitle || "Welcome"}</h2>
-
-                {data?.welcomeText ? (
-                  <PortableText
-                    value={data.welcomeText}
-                    components={{
-                      marks: {
-                        link: ({ value, children }) => {
-                          const href = value?.href || "#";
-                          const blank = value?.blank;
-                          return (
-                            <a
-                              href={href}
-                              target={blank ? "_blank" : undefined}
-                              rel={blank ? "noopener noreferrer" : undefined}
-                            >
-                              {children}
-                            </a>
-                          );
-                        },
-                      },
-                    }}
-                  />
-                ) : (
-                  <p>Click enter to start.</p>
-                )}
-
-                <button
-                  className={styles.welcomeButton}
-                  onClick={startIntroVideo}
-                  disabled={!data?.welcomeVideoUrl}
-                  title={
-                    !data?.welcomeVideoUrl
-                      ? "No welcome video set in Sanity"
-                      : ""
-                  }
-                >
-                  {data?.welcomeButtonText || "Enter"}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* INTRO VIDEO (starts after Enter, ends then disappears) */}
+      {/* Intro video */}
       {introStage === "video" && data?.welcomeVideoUrl && (
         <div className={styles.welcomeVideoOverlay}>
           <video
@@ -354,6 +357,7 @@ useEffect(() => {
             autoPlay
             playsInline
             muted
+            preload="auto"
             onEnded={endIntroVideo}
           >
             <source src={data.welcomeVideoUrl} />
@@ -364,7 +368,7 @@ useEffect(() => {
       {/* Grid */}
       {projects && isMobile ? (
         <div className={styles.mobileGrid}>
-          {mobileProjects.map((project, index) => (
+          {mobileProjects.map((project) => (
             <Project
               clickFunction={(e) => handleClick(project, e)}
               key={project.order}
@@ -375,7 +379,7 @@ useEffect(() => {
               projectTitle={project.title}
               mediaOrientation={project.orientation}
               id={projects.indexOf(project)}
-              jumping={project.jumping ? true : false}
+              jumping={!!project.jumping}
             />
           ))}
           <div className={styles.footer}>
@@ -387,10 +391,10 @@ useEffect(() => {
       ) : (
         <div className={styles.grid}>
           <div className={styles.p50}>
-            {leftProjects.map((project, index) => (
+            {leftProjects.map((project) => (
               <Project
                 clickFunction={(e) => handleClick(project, e)}
-                key={index}
+                key={project.order}
                 mediaSize={project.size}
                 mediaType={project.type}
                 imageUrl={project.imageFileUrl}
@@ -398,15 +402,16 @@ useEffect(() => {
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
-                jumping={project.jumping ? true : false}
+                jumping={!!project.jumping}
               />
             ))}
           </div>
+
           <div className={styles.p50}>
-            {rightProjects.map((project, index) => (
+            {rightProjects.map((project) => (
               <Project
                 clickFunction={(e) => handleClick(project, e)}
-                key={index}
+                key={project.order}
                 mediaSize={project.size}
                 mediaType={project.type}
                 imageUrl={project.imageFileUrl}
@@ -414,10 +419,11 @@ useEffect(() => {
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
-                jumping={project.jumping ? true : false}
+                jumping={!!project.jumping}
               />
             ))}
           </div>
+
           <div className={styles.footer}>
             {data?.copyright}
             <br />
@@ -431,13 +437,13 @@ useEffect(() => {
         <div className={styles.posFixed} onClick={closePage}>
           <div className={styles.blurredBackground}></div>
 
-          <div className={styles.projectOverlayContent}>
-            <section className={`${styles.projectMediaStage} dontClose`}>
-              <div className={`${styles.projectMediaFrame} dontClose`}>
+          <div className={styles.aboutOverlayContent}>
+            <section className={`${styles.aboutIntro} dontClose`}>
+              <div className={`${styles.aboutMediaSmall} dontClose`}>
                 {about?._type === "image" ? (
                   <img
                     src={about.url}
-                    className={`${styles.projectOpenMedia} dontClose`}
+                    className={`${styles.aboutOpenMedia} dontClose`}
                     alt="About"
                   />
                 ) : about?.url ? (
@@ -446,34 +452,33 @@ useEffect(() => {
                     loop
                     muted
                     playsInline
-                    className={`${styles.projectOpenMedia} dontClose`}
+                    className={`${styles.aboutOpenMedia} dontClose`}
                   >
                     <source src={about.url} type="video/quicktime" />
                   </video>
                 ) : null}
               </div>
 
-              <h2 className={`${styles.projectTitleUnderMedia} dontClose`}>
-                <span>About</span>
-              </h2>
-            </section>
+              <div className={`${styles.aboutTextCompact} dontClose`}>
+                <div
+                  className={styles.aboutTextInner}
+                  dangerouslySetInnerHTML={{ __html: data?.aboutText }}
+                />
 
-            <section className={`${styles.projectText} dontClose`}>
-              <div className={styles.projectTextInner}>
-                <p dangerouslySetInnerHTML={{ __html: data?.aboutText }} />
+                <div className={styles.aboutFooter}>
+                  {data?.copyright}
+                  <br />
+                  <a href={`mailto:${data?.email}`}>{data?.email}</a>
+                </div>
               </div>
             </section>
           </div>
         </div>
       )}
+
       {/* Active project */}
       {activeProject && (
-        <div
-          className={styles.posFixed}
-          onClick={(event) => closePage(event)}
-          id="activePage"
-          ref={activeProjectRef}
-        >
+        <div className={styles.posFixed} onClick={closePage} id="activePage">
           <div className={styles.blurredBackground}></div>
 
           <div className={styles.projectOverlayContent}>
@@ -483,7 +488,7 @@ useEffect(() => {
                   <div className={styles.carousel}>
                     <Carousel
                       isMobile={isMobile}
-                      images={activeProject.slideFiles[0].slides}
+                      images={activeProject.slideFiles?.[0]?.slides || []}
                       firstImage={
                         activeProject.type !== "image"
                           ? [
@@ -529,13 +534,14 @@ useEffect(() => {
               </div>
 
               <h2 className={`${styles.projectTitleUnderMedia} dontClose`}>
-                <span>{activeProject.title}</span>
                 {activeProject.isCarousel && carouselMeta.total > 1 && (
                   <span className={styles.projectMediaCounter}>
                     {carouselMeta.index}/{carouselMeta.total}
                   </span>
                 )}
+                <span className="dontClose">{activeProject.title}</span>
               </h2>
+
               <span
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
@@ -551,8 +557,9 @@ useEffect(() => {
             </section>
 
             <section className={`${styles.projectText} dontClose`}>
-              <div className={styles.projectTextInner}>
+              <div className={`${styles.projectTextInner} dontClose`}>
                 <p
+                  className="dontClose"
                   dangerouslySetInnerHTML={{
                     __html: activeProject.description,
                   }}
@@ -564,18 +571,21 @@ useEffect(() => {
                 )}
               </div>
             </section>
+
+            <section className={`${styles.overlayFooter} dontClose`}>
+              {data?.copyright}
+              <br />
+              <a href={`mailto:${data?.email}`}>{data?.email}</a>
+            </section>
           </div>
         </div>
       )}
+
       {(activeProject || isAboutActive) && (
         <button
           type="button"
           className={styles.newCloseButton}
-          onClick={(e) => {
-            e.stopPropagation();
-            setActiveProject(null);
-            navigate("/");
-          }}
+          onClick={closeOverlay}
           aria-label="Close project"
         >
           &#x2715;

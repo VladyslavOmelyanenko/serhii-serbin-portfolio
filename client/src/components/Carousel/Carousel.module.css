@@ -12,6 +12,25 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.mediaSwitch::before,
+.mediaSwitch::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 5;
+}
+
+.mediaSwitch::before {
+  left: 0;
+  cursor: w-resize;
+}
+
+.mediaSwitch::after {
+  right: 0;
   cursor: e-resize;
 }
 
@@ -28,7 +47,7 @@
 
 .isActive {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .carouselMedia {
@@ -38,4 +57,15 @@
   max-width: 90%;
   max-height: 100%;
   object-fit: contain;
+  pointer-events: none;
+}
+
+@media (max-width: 850px) {
+  .carouselMedia {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
 }

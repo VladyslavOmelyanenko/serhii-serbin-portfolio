@@ -8,6 +8,7 @@ const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRefs = useRef([]);
+  const switchRef = useRef(null);
 
   const isVideo = (item) => {
     if (Array.isArray(item)) return true;
@@ -30,11 +31,11 @@ const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
     setActiveIndex(0);
   }, [firstImageKey, imagesKey]);
 
-useEffect(() => {
-  if (onIndexChange) {
-    onIndexChange(activeIndex + 1, mediaItems.length);
-  }
-}, [activeIndex, mediaItems.length, onIndexChange]);
+  useEffect(() => {
+    if (onIndexChange) {
+      onIndexChange(activeIndex + 1, mediaItems.length);
+    }
+  }, [activeIndex, mediaItems.length, onIndexChange]);
 
   useEffect(() => {
     mediaItems.forEach((item) => {
@@ -60,19 +61,47 @@ useEffect(() => {
     });
   }, [activeIndex, isMuted]);
 
-  const goToNext = (e) => {
-    e.stopPropagation();
+  const goToNext = () => {
     if (mediaItems.length <= 1) return;
     setActiveIndex((prev) => (prev + 1) % mediaItems.length);
   };
 
+  const goToPrevious = () => {
+    if (mediaItems.length <= 1) return;
+    setActiveIndex(
+      (prev) => (prev - 1 + mediaItems.length) % mediaItems.length,
+    );
+  };
+
+  const handleMediaClick = (e) => {
+    e.stopPropagation();
+
+    if (!switchRef.current || mediaItems.length <= 1) return;
+
+    const rect = switchRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const midpoint = rect.width / 2;
+
+    if (clickX < midpoint) {
+      goToPrevious();
+    } else {
+      goToNext();
+    }
+  };
+
   return (
     <div className={styles.carousel}>
-      <button
-        type="button"
+      <div
+        ref={switchRef}
         className={`${styles.mediaSwitch} dontClose`}
-        onClick={goToNext}
-        aria-label="Next media"
+        onClick={handleMediaClick}
+        role="button"
+        tabIndex={0}
+        aria-label="Browse media"
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft") goToPrevious();
+          if (e.key === "ArrowRight") goToNext();
+        }}
       >
         {mediaItems.map((item, index) => {
           const key = Array.isArray(item) ? item.join("|") : item;
@@ -113,7 +142,7 @@ useEffect(() => {
             </div>
           );
         })}
-      </button>
+      </div>
     </div>
   );
 };

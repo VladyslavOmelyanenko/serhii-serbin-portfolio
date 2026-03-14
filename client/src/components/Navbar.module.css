@@ -41,3 +41,16 @@
 }
 
 
+@media (max-width: 850px) {
+  .navbar {
+    height: 70px;
+    pointer-events: none;
+  }
+  
+    .navbar a,
+    .navbar h1,
+    .links,
+    .links a {
+      pointer-events: auto;
+    }
+}
