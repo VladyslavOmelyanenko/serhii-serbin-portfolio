@@ -599,7 +599,7 @@ useEffect(() => {
           </div>
         </div>
       )}
-      {(activeProject || isAboutActive) && (
+      {/* {(activeProject || isAboutActive) && (
         <button
           type="button"
           className={styles.newCloseButton}
@@ -612,7 +612,7 @@ useEffect(() => {
         >
           &#x2715;
         </button>
-      )}
+      )} */}
     </div>
   );
 };

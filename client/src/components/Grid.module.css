@@ -88,8 +88,10 @@
 .footer {
   flex: 0 0 100%;
   width: 100%;
-  margin-top: 50px;
-  margin-bottom: 20px;
+  height: 5.6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
 }
 
