@@ -244,14 +244,15 @@
   z-index: 2;
   width: 100%;
   max-width: var(--project-max-width);
-  min-height: calc(96svh - var(--nav-h));
+  /* min-height: calc(96svh - var(--nav-h)); */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 16px;
-  padding-top: 7.5vh;
-  padding-bottom: calc(var(--project-peek) + 18px);
+  /* padding-top: 7.5vh; */
+  /* padding-bottom: calc(var(--project-peek) + 18px); */
+  padding-bottom: 2rem;
   box-sizing: border-box;
 }
 
@@ -295,8 +296,8 @@
   position: relative;
   z-index: 4;
   max-width: min(90%, 30ch);
-  font-size: 19px;
-  line-height: 1.08;
+  font-size: 17px;
+  /* line-height: 1.08; */
   font-weight: normal;
   text-align: center;
   text-transform: capitalize;
@@ -305,7 +306,7 @@
   flex-direction: column-reverse;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .projectMediaCounter {
@@ -316,15 +317,16 @@
 .projectText {
   position: relative;
   z-index: 1;
-  width: 41vw;
+  width: 28vw;
+  text-align: justify;
   margin-top: calc(var(--project-peek) * -1);
   padding: calc(var(--project-peek) + 4px) 0 0;
   box-sizing: border-box;
 }
 
 .projectTextInner {
-  font-size: 19px;
-  line-height: 1.42;
+  font-size: 17px;
+  /* line-height: 1.42; */
   color: #333;
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -420,7 +422,7 @@
 
 .aboutTitle {
   margin: 0 0 10px;
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.1;
   font-weight: bold;
   text-transform: capitalize;

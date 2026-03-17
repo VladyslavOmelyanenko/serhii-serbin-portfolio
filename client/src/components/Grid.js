@@ -563,7 +563,7 @@ useEffect(() => {
                 <span className={`dontClose`}>{activeProject.title}</span>
                 {activeProject.isCarousel && carouselMeta.total > 1 && (
                   <span className={styles.projectMediaCounter}>
-                    {carouselMeta.index}/{carouselMeta.total}
+                    [{carouselMeta.index}/{carouselMeta.total}]
                   </span>
                 )}
               </h2>
@@ -595,11 +595,6 @@ useEffect(() => {
                   />
                 )}
               </div>
-            </section>
-            <section className={`${styles.overlayFooter} dontClose`}>
-              {data?.copyright}
-              <br />
-              <a href={`mailto:${data?.email}`}>{data?.email}</a>
             </section>
           </div>
         </div>
