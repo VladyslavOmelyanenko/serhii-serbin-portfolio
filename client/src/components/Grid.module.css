@@ -379,7 +379,8 @@
   display: flex;
   justify-content: center;
 
-  padding: calc(var(--nav-h) + 8px) var(--about-side) 28px;
+  padding: calc(var(--nav-h) + 8px) var(--about-side) 0;
+  min-height: calc(100vh - 5.4vw);
   box-sizing: border-box;
 }
 
@@ -390,7 +391,7 @@
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto 1fr auto;
+  /* grid-template-rows: 1fr auto 1fr auto; */
   justify-items: center;
   align-items: start;
 
@@ -420,6 +421,10 @@
   max-width: 560px;
   color: #333;
   text-align: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .aboutTitle {
@@ -472,11 +477,19 @@
 }
 
 .aboutFooter {
-  margin-top: 28px;
+  height: 5.6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  align-items: center;
   font-size: 14px;
-  line-height: 1.3;
+  line-height: 1;
   color: #333;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  /* position: absolute; */
 }
 
 .aboutFooter a {
@@ -593,25 +606,31 @@
 
   .footer {
     margin-left: 0;
+    height: 70px;
   }
   
   .aboutOverlayContent {
     --nav-h: 48px;
-    padding: calc(var(--nav-h) + 8px) 15px 24px;
+    padding: calc(var(--nav-h) + 8px) 15px 0;
+    min-height: calc(100vh - 70px); 
   }
 
-  .aboutIntro {
+  /* .aboutIntro {
     min-height: auto;
     grid-template-rows: auto 16px auto;
-  }
+  } */
 
   .aboutMediaSmall {
-    grid-row: 1;
+    grid-row: 2;
   }
 
   .aboutTextCompact {
     grid-row: 3;
     max-width: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .aboutOpenMedia {
@@ -636,9 +655,12 @@
     padding: 0 15px 20px;
     box-sizing: border-box;
   }
-
+  
   .aboutFooter {
     margin-top: 22px;
-    padding-bottom: 8px;
+    /* padding-bottom: 8px; */
+    height: 70px;
+    line-height: 1.15;
+    font-size: 13px;
   }
 }

@@ -12,9 +12,9 @@ const Navbar = ({active}) => {
       <h1>
         <Link to='/'>Serhii serbin</Link>
       </h1>
-      {/* <div className={styles.links}>
+      <div className={styles.links}>
         <Link to="/about">about</Link>
-      </div> */}
+      </div>
     </nav>
   );
 }
