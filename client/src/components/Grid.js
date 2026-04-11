@@ -1,4 +1,3 @@
-// dependencies
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
@@ -8,13 +7,15 @@ import Project from "./Project";
 import Carousel from "./Carousel/Carousel";
 
 const Grid = () => {
-  let PROJECT_ID = "sv2kd5ay";
-  let DATASET = "production";
-  let GROQ_QUERY = `*[_type == "gridPage"]{
-    welcomeTitle,
-    welcomeText,
-    welcomeButtonText,
-    "welcomeVideoUrl": welcomeVideo.asset->url,
+  const PROJECT_ID = "sv2kd5ay";
+  const DATASET = "production";
+
+  const GROQ_QUERY = `*[_type == "gridPage"]{
+    welcomeVideoEnabled,
+    welcomeVideoLoop,
+    welcomeVideoLayer,
+    "welcomeVideoWebmUrl": welcomeVideoWebm.asset->url,
+    "welcomeVideoMovUrl": welcomeVideoMov.asset->url,
     aboutText,
     aboutMedia[0]{
       _type,
@@ -32,7 +33,7 @@ const Grid = () => {
       isCarousel,
       slideFiles[]->{
         slides,
-        "slides": slides[].asset->.url
+        "slides": slides[].asset->url
       },
       "imageFileUrl": imageFile.asset->url,
       "trailerWebmUrl": trailerWebm.asset->url,
@@ -44,11 +45,10 @@ const Grid = () => {
     email
   }`;
 
-  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(
+  const URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${encodeURIComponent(
     GROQ_QUERY,
   )}`;
 
-  // variables
   let jumpHandler;
   const leftProjects = [];
   const rightProjects = [];
@@ -60,12 +60,9 @@ const Grid = () => {
   const [emailActive, setEmailActive] = useState(false);
   const [data, setData] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
-  const [isMuted, setIsMuted] = useState(isMobile);
+  const [isMuted, setIsMuted] = useState(window.innerWidth < 850);
   const [carouselMeta, setCarouselMeta] = useState({ index: 1, total: 1 });
-
-  // Intro flow: "card" -> "video" -> "off"
-  const [introStage, setIntroStage] = useState("card");
-  const endIntroVideo = () => setIntroStage("off");
+  const [welcomeVideoFinished, setWelcomeVideoFinished] = useState(false);
 
   const videoRef = useRef(null);
   const gridRef = useRef(null);
@@ -78,6 +75,13 @@ const Grid = () => {
   const { projectId } = useParams();
 
   const isAboutActive = location.pathname === "/about";
+  const isHome = location.pathname === "/";
+
+  const showWelcomeVideo =
+    isHome &&
+    !welcomeVideoFinished &&
+    data?.welcomeVideoEnabled &&
+    (data?.welcomeVideoWebmUrl || data?.welcomeVideoMovUrl);
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
@@ -188,24 +192,36 @@ const Grid = () => {
   };
 
   const closePage = (event) => {
-    if (!event.target.className.includes("dontClose")) {
+    if (!String(event.target.className).includes("dontClose")) {
       setActiveProject(null);
       navigate("/");
     }
   };
 
-  // Fetch data
   useEffect(() => {
     fetch(URL)
       .then((res) => res.json())
       .then(({ result }) => {
-        setData(result[0]);
+        const pageData = result?.[0] || null;
+        setData(pageData);
         setProjects(
-          result[0].projects.map((project, i) => ({ ...project, order: i })),
+          (pageData?.projects || []).map((project, i) => ({
+            ...project,
+            order: i,
+          })),
         );
       })
       .catch((err) => console.error(err));
   }, [URL]);
+
+  useEffect(() => {
+    setWelcomeVideoFinished(false);
+  }, [
+    data?.welcomeVideoEnabled,
+    data?.welcomeVideoLoop,
+    data?.welcomeVideoWebmUrl,
+    data?.welcomeVideoMovUrl,
+  ]);
 
   useEffect(() => {
     const overlayOpen = activeProject || isAboutActive;
@@ -234,35 +250,29 @@ const Grid = () => {
       window.scrollTo(0, Math.abs(parseInt(savedScrollY || "0", 10)));
     };
   }, [activeProject, isAboutActive]);
-useEffect(() => {
-  if (activeProject?.isCarousel) {
-    const total = 1 + (activeProject.slideFiles?.[0]?.slides?.length || 0);
-
-    setCarouselMeta({
-      index: 1,
-      total,
-    });
-  } else {
-    setCarouselMeta({ index: 1, total: 1 });
-  }
-}, [activeProject]);
 
   useEffect(() => {
-    // CLOSE ON ESCAPE
+    if (activeProject?.isCarousel) {
+      const total = 1 + (activeProject.slideFiles?.[0]?.slides?.length || 0);
+      setCarouselMeta({ index: 1, total });
+    } else {
+      setCarouselMeta({ index: 1, total: 1 });
+    }
+  }, [activeProject]);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         navigate("/");
       }
     };
 
-    // CHECK IF MOBILE
     const handleResize = () => {
       setIsMobile(window.innerWidth < 850);
     };
 
     handleResize();
 
-    // GET ACTIVE PROJECT FROM URL
     const fetchedActiveProject =
       projects &&
       projects.find(
@@ -270,12 +280,13 @@ useEffect(() => {
           project.title.toLowerCase().replaceAll("\n", "") ===
           decodeURIComponent(projectId || "").toLowerCase(),
       );
+
     setActiveProject(fetchedActiveProject);
 
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
 
-    if (isMobile) {
+    if (isMobile && gridRef.current) {
       if (fetchedActiveProject) {
         const toScroll = window.scrollY;
         gridRef.current.style.position = "fixed";
@@ -294,7 +305,6 @@ useEffect(() => {
     };
   }, [projectId, projects, navigate, isMobile]);
 
-  // Distribute left/right
   const distributeProjects = (projectsArray) => {
     let leftHeight = 0;
     let rightHeight = 0;
@@ -318,81 +328,41 @@ useEffect(() => {
 
   return (
     <div ref={gridRef}>
-      {/* INTRO CARD (starts first) */}
-      {/* {introStage === "card" && (
-        <div className={styles.welcomeOverlay}>
-          <div
-            className={styles.welcomeCard}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {!data ? (
-              <p>Loading…</p>
-            ) : (
-              <>
-                <h2>{data?.welcomeTitle || "Welcome"}</h2>
-
-                {data?.welcomeText ? (
-                  <PortableText
-                    value={data.welcomeText}
-                    components={{
-                      marks: {
-                        link: ({ value, children }) => {
-                          const href = value?.href || "#";
-                          const blank = value?.blank;
-                          return (
-                            <a
-                              href={href}
-                              target={blank ? "_blank" : undefined}
-                              rel={blank ? "noopener noreferrer" : undefined}
-                            >
-                              {children}
-                            </a>
-                          );
-                        },
-                      },
-                    }}
-                  />
-                ) : (
-                  <p>Click enter to start.</p>
-                )}
-
-                <button
-                  className={styles.welcomeButton}
-                  onClick={startIntroVideo}
-                  disabled={!data?.welcomeVideoUrl}
-                  title={
-                    !data?.welcomeVideoUrl
-                      ? "No welcome video set in Sanity"
-                      : ""
-                  }
-                >
-                  {data?.welcomeButtonText || "Enter"}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* INTRO VIDEO (starts after Enter, ends then disappears) */}
-      {introStage === "video" && data?.welcomeVideoUrl && (
-        <div className={styles.welcomeVideoOverlay}>
+      {showWelcomeVideo && (
+        <div
+          className={
+            data?.welcomeVideoLayer === "back"
+              ? styles.welcomeVideoBack
+              : styles.welcomeVideoFront
+          }
+          aria-hidden="true"
+        >
           <video
             className={styles.welcomeVideo}
             autoPlay
             playsInline
             muted
-            onEnded={endIntroVideo}
+            loop={!!data?.welcomeVideoLoop}
+            preload="auto"
+            onEnded={() => {
+              if (!data?.welcomeVideoLoop) {
+                setWelcomeVideoFinished(true);
+              }
+            }}
           >
-            <source src={data.welcomeVideoUrl} />
+            {data?.welcomeVideoWebmUrl && (
+              <source src={data.welcomeVideoWebmUrl} type="video/webm" />
+            )}
+            {data?.welcomeVideoMovUrl && (
+              <source src={data.welcomeVideoMovUrl} />
+            )}
           </video>
         </div>
       )}
 
-      {/* Grid */}
       {projects && isMobile ? (
         <div className={styles.mobileGrid}>
-          {mobileProjects.map((project, index) => (
+          {mobileProjects.map((project) => (
             <Project
               clickFunction={(e) => handleClick(project, e)}
               key={project.order}
@@ -403,7 +373,7 @@ useEffect(() => {
               projectTitle={project.title}
               mediaOrientation={project.orientation}
               id={projects.indexOf(project)}
-              jumping={project.jumping ? true : false}
+              jumping={project.jumping === true}
             />
           ))}
           <div className={styles.footer}>
@@ -415,7 +385,7 @@ useEffect(() => {
       ) : (
         <div className={styles.grid}>
           <div className={styles.p50}>
-            {leftProjects.map((project, index) => (
+            {leftProjects.map((project) => (
               <Project
                 clickFunction={(e) => handleClick(project, e)}
                 key={project.order}
@@ -426,12 +396,13 @@ useEffect(() => {
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
-                jumping={project.jumping ? true : false}
+                jumping={project.jumping === true}
               />
             ))}
           </div>
+
           <div className={styles.p50}>
-            {rightProjects.map((project, index) => (
+            {rightProjects.map((project) => (
               <Project
                 clickFunction={(e) => handleClick(project, e)}
                 key={project.order}
@@ -442,10 +413,11 @@ useEffect(() => {
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
-                jumping={project.jumping ? true : false}
+                jumping={project.jumping === true}
               />
             ))}
           </div>
+
           <div className={styles.footer}>
             {data?.copyright}
             <br />
@@ -454,7 +426,6 @@ useEffect(() => {
         </div>
       )}
 
-      {/* About */}
       {isAboutActive && (
         <div className={styles.posFixed} onClick={closePage}>
           <div className={styles.blurredBackground}></div>
@@ -497,7 +468,7 @@ useEffect(() => {
           </div>
         </div>
       )}
-      {/* Active project */}
+
       {activeProject && (
         <div
           className={styles.posFixed}
@@ -514,7 +485,7 @@ useEffect(() => {
                   <div className={styles.carousel}>
                     <Carousel
                       isMobile={isMobile}
-                      images={activeProject.slideFiles[0].slides}
+                      images={activeProject.slideFiles?.[0]?.slides || []}
                       firstImage={
                         activeProject.type !== "image"
                           ? [
@@ -543,30 +514,34 @@ useEffect(() => {
                     muted={isMuted}
                     controls={isMobile}
                     onPlay={() => {
-                      if (videoRef.current) videoRef.current.controls = false;
+                      if (videoRef.current) {
+                        videoRef.current.controls = false;
+                      }
                     }}
                     className={`${styles.projectOpenMedia} dontClose`}
                   >
-                    <source
-                      src={activeProject.fullVideoMovUrl}
-                      type='video/mp4; codecs="hvc1"'
-                    />
-                    <source
-                      src={activeProject.fullVideoWebmUrl}
-                      type="video/webm"
-                    />
+                    {activeProject.fullVideoWebmUrl && (
+                      <source
+                        src={activeProject.fullVideoWebmUrl}
+                        type="video/webm"
+                      />
+                    )}
+                    {activeProject.fullVideoMovUrl && (
+                      <source src={activeProject.fullVideoMovUrl} />
+                    )}
                   </video>
                 )}
               </div>
 
               <h2 className={`${styles.projectTitleUnderMedia} dontClose`}>
-                <span className={`dontClose`}>{activeProject.title}</span>
+                <span className="dontClose">{activeProject.title}</span>
                 {activeProject.isCarousel && carouselMeta.total > 1 && (
                   <span className={styles.projectMediaCounter}>
                     [{carouselMeta.index}/{carouselMeta.total}]
                   </span>
                 )}
               </h2>
+
               <span
                 className={`${styles.muteButton} dontClose`}
                 onClick={() => setIsMuted(!isMuted)}
@@ -591,6 +566,7 @@ useEffect(() => {
                 />
                 {activeProject.links && activeProject.links !== "" && (
                   <p
+                    className="dontClose"
                     dangerouslySetInnerHTML={{ __html: activeProject.links }}
                   />
                 )}
@@ -599,20 +575,6 @@ useEffect(() => {
           </div>
         </div>
       )}
-      {/* {(activeProject || isAboutActive) && (
-        <button
-          type="button"
-          className={styles.newCloseButton}
-          onClick={(e) => {
-            e.stopPropagation();
-            setActiveProject(null);
-            navigate("/");
-          }}
-          aria-label="Close project"
-        >
-          &#x2715;
-        </button>
-      )} */}
     </div>
   );
 };

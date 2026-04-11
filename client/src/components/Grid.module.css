@@ -23,51 +23,41 @@
   box-sizing: border-box;
 }
 
-.welcomeOverlay {
+.welcomeVideoBack,
+.welcomeVideoFront {
   position: fixed;
   inset: 0;
-  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(255, 255, 255);
-  backdrop-filter: blur(10px);
+  pointer-events: none;
 }
 
-.welcomeCard {
-  width: calc(100% - 40px);
-  max-width: 420px;
-  padding: 24px;
-  border: 1px solid black;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  box-sizing: border-box;
+.welcomeVideoBack {
+  z-index: 0;
 }
 
-.welcomeButton {
-  margin-top: 16px;
-  padding: 10px 16px;
-  border: 1px solid black;
-  background: transparent;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-.welcomeVideoOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.welcomeVideoFront {
+  z-index: 999;
 }
 
 .welcomeVideo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100vw;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+}
+
+/* make sure your actual site content sits above the back layer */
+.grid,
+.mobileGrid,
+.footer,
+.projectOverlayContent,
+.aboutOverlayContent {
+  position: relative;
+  z-index: 1;
 }
 
 .grid .footer {
