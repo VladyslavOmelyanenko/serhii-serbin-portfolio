@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-// imports
 import styles from "./Grid.module.css";
 import Project from "./Project";
 import Carousel from "./Carousel/Carousel";
@@ -14,6 +13,7 @@ const Grid = () => {
     welcomeVideoEnabled,
     welcomeVideoLoop,
     welcomeVideoLayer,
+    welcomeVideoFreezeOnEnd,
     "welcomeVideoWebmUrl": welcomeVideoWebm.asset->url,
     "welcomeVideoMovUrl": welcomeVideoMov.asset->url,
     aboutText,
@@ -32,7 +32,6 @@ const Grid = () => {
       toAbout,
       isCarousel,
       slideFiles[]->{
-        slides,
         "slides": slides[].asset->url
       },
       "imageFileUrl": imageFile.asset->url,
@@ -65,6 +64,7 @@ const Grid = () => {
   const [welcomeVideoFinished, setWelcomeVideoFinished] = useState(false);
 
   const videoRef = useRef(null);
+  const welcomeVideoRef = useRef(null);
   const gridRef = useRef(null);
   const activeProjectRef = useRef(null);
 
@@ -77,11 +77,52 @@ const Grid = () => {
   const isAboutActive = location.pathname === "/about";
   const isHome = location.pathname === "/";
 
+  const preferMovForTransparency = (() => {
+    if (typeof navigator === "undefined") return false;
+
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    const maxTouchPoints = navigator.maxTouchPoints || 0;
+
+    const isIOS = /iPhone|iPad|iPod/.test(ua);
+    const isIPadOS = platform === "MacIntel" && maxTouchPoints > 1;
+    const isSafariDesktop =
+      /Safari/.test(ua) &&
+      !/Chrome|CriOS|EdgiOS|Edg|OPR|Firefox|FxiOS/.test(ua);
+
+    return isIOS || isIPadOS || isSafariDesktop;
+  })();
+
   const showWelcomeVideo =
     isHome &&
     !welcomeVideoFinished &&
     data?.welcomeVideoEnabled &&
     (data?.welcomeVideoWebmUrl || data?.welcomeVideoMovUrl);
+
+  const getOrderedVideoUrls = (webmUrl, movUrl) => {
+    if (preferMovForTransparency) {
+      return [movUrl, webmUrl].filter(Boolean);
+    }
+    return [webmUrl, movUrl].filter(Boolean);
+  };
+
+  const renderVideoSources = (webmUrl, movUrl) => {
+    if (preferMovForTransparency) {
+      return (
+        <>
+          {movUrl && <source src={movUrl} />}
+          {!movUrl && webmUrl && <source src={webmUrl} type="video/webm" />}
+        </>
+      );
+    }
+
+    return (
+      <>
+        {webmUrl && <source src={webmUrl} type="video/webm" />}
+        {movUrl && <source src={movUrl} />}
+      </>
+    );
+  };
 
   const getMiddleCoordinates = (containerElement) => {
     const rect = containerElement.getBoundingClientRect();
@@ -219,6 +260,7 @@ const Grid = () => {
   }, [
     data?.welcomeVideoEnabled,
     data?.welcomeVideoLoop,
+    data?.welcomeVideoFreezeOnEnd,
     data?.welcomeVideoWebmUrl,
     data?.welcomeVideoMovUrl,
   ]);
@@ -292,7 +334,9 @@ const Grid = () => {
         gridRef.current.style.position = "fixed";
         gridRef.current.style.top = `-${toScroll}px`;
       } else {
-        const windowScroll = -gridRef.current.style.top.replaceAll("px", "");
+        const topValue = gridRef.current.style.top || "0px";
+        const windowScroll =
+          Math.abs(parseInt(topValue.replace("px", ""), 10)) || 0;
         gridRef.current.style.position = "";
         gridRef.current.style.top = "";
         window.scrollTo(0, windowScroll);
@@ -338,6 +382,7 @@ const Grid = () => {
           aria-hidden="true"
         >
           <video
+            ref={welcomeVideoRef}
             className={styles.welcomeVideo}
             autoPlay
             playsInline
@@ -345,16 +390,21 @@ const Grid = () => {
             loop={!!data?.welcomeVideoLoop}
             preload="auto"
             onEnded={() => {
-              if (!data?.welcomeVideoLoop) {
-                setWelcomeVideoFinished(true);
+              if (data?.welcomeVideoLoop) return;
+
+              if (data?.welcomeVideoFreezeOnEnd) {
+                if (welcomeVideoRef.current) {
+                  welcomeVideoRef.current.pause();
+                }
+                return;
               }
+
+              setWelcomeVideoFinished(true);
             }}
           >
-            {data?.welcomeVideoWebmUrl && (
-              <source src={data.welcomeVideoWebmUrl} type="video/webm" />
-            )}
-            {data?.welcomeVideoMovUrl && (
-              <source src={data.welcomeVideoMovUrl} />
+            {renderVideoSources(
+              data?.welcomeVideoWebmUrl,
+              data?.welcomeVideoMovUrl,
             )}
           </video>
         </div>
@@ -369,7 +419,10 @@ const Grid = () => {
               mediaSize={project.size}
               mediaType={project.type}
               imageUrl={project.imageFileUrl}
-              trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+              trailerUrls={getOrderedVideoUrls(
+                project.trailerWebmUrl,
+                project.trailerMovUrl,
+              )}
               projectTitle={project.title}
               mediaOrientation={project.orientation}
               id={projects.indexOf(project)}
@@ -392,7 +445,10 @@ const Grid = () => {
                 mediaSize={project.size}
                 mediaType={project.type}
                 imageUrl={project.imageFileUrl}
-                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+                trailerUrls={getOrderedVideoUrls(
+                  project.trailerWebmUrl,
+                  project.trailerMovUrl,
+                )}
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
@@ -409,7 +465,10 @@ const Grid = () => {
                 mediaSize={project.size}
                 mediaType={project.type}
                 imageUrl={project.imageFileUrl}
-                trailerUrls={[project.trailerWebmUrl, project.trailerMovUrl]}
+                trailerUrls={getOrderedVideoUrls(
+                  project.trailerWebmUrl,
+                  project.trailerMovUrl,
+                )}
                 projectTitle={project.title}
                 mediaOrientation={project.orientation}
                 id={projects.indexOf(project)}
@@ -447,7 +506,7 @@ const Grid = () => {
                     playsInline
                     className={`${styles.aboutOpenMedia} dontClose`}
                   >
-                    <source src={about.url} type="video/quicktime" />
+                    <source src={about.url} />
                   </video>
                 ) : null}
               </div>
@@ -488,10 +547,10 @@ const Grid = () => {
                       images={activeProject.slideFiles?.[0]?.slides || []}
                       firstImage={
                         activeProject.type !== "image"
-                          ? [
-                              activeProject.fullVideoMovUrl,
+                          ? getOrderedVideoUrls(
                               activeProject.fullVideoWebmUrl,
-                            ]
+                              activeProject.fullVideoMovUrl,
+                            )
                           : activeProject.imageFileUrl
                       }
                       isMuted={isMuted}
@@ -520,14 +579,9 @@ const Grid = () => {
                     }}
                     className={`${styles.projectOpenMedia} dontClose`}
                   >
-                    {activeProject.fullVideoWebmUrl && (
-                      <source
-                        src={activeProject.fullVideoWebmUrl}
-                        type="video/webm"
-                      />
-                    )}
-                    {activeProject.fullVideoMovUrl && (
-                      <source src={activeProject.fullVideoMovUrl} />
+                    {renderVideoSources(
+                      activeProject.fullVideoWebmUrl,
+                      activeProject.fullVideoMovUrl,
                     )}
                   </video>
                 )}
