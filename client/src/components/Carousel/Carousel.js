@@ -2,9 +2,43 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Carousel.module.css";
 
 const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
+  const prefersMovForTransparency = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    const maxTouchPoints = navigator.maxTouchPoints || 0;
+
+    const isIOS = /iPhone|iPad|iPod/.test(ua);
+    const isIPadOS = platform === "MacIntel" && maxTouchPoints > 1;
+    const isSafariDesktop =
+      /Safari/.test(ua) &&
+      !/Chrome|CriOS|EdgiOS|Edg|OPR|Firefox|FxiOS/.test(ua);
+
+    return isIOS || isIPadOS || isSafariDesktop;
+  }, []);
+
+  const normalizeVideoSources = (item) => {
+    if (!Array.isArray(item)) return item;
+
+    const urls = item.filter(Boolean);
+    const webm = urls.find((url) => /\.webm($|\?)/i.test(url));
+    const mov = urls.find((url) => /\.(mov|mp4)($|\?)/i.test(url));
+
+    if (prefersMovForTransparency) {
+      return [mov, webm].filter(Boolean);
+    }
+
+    return [webm, mov].filter(Boolean);
+  };
+
   const mediaItems = useMemo(() => {
-    return [firstImage, ...images].filter(Boolean);
-  }, [firstImage, images]);
+    const normalizedFirstImage = Array.isArray(firstImage)
+      ? normalizeVideoSources(firstImage)
+      : firstImage;
+
+    return [normalizedFirstImage, ...images].filter(Boolean);
+  }, [firstImage, images, prefersMovForTransparency]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRefs = useRef([]);
@@ -99,8 +133,14 @@ const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
         tabIndex={0}
         aria-label="Browse media"
         onKeyDown={(e) => {
-          if (e.key === "ArrowLeft") goToPrevious();
-          if (e.key === "ArrowRight") goToNext();
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            goToPrevious();
+          }
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            goToNext();
+          }
         }}
       >
         {mediaItems.map((item, index) => {
@@ -133,9 +173,20 @@ const Carousel = ({ images = [], firstImage, isMuted, onIndexChange }) => {
                   className={`${styles.carouselMedia} dontClose`}
                 >
                   {Array.isArray(item) ? (
-                    item.map((src) => <source src={src} key={src} />)
+                    item.map((src) =>
+                      /\.webm($|\?)/i.test(src) ? (
+                        <source src={src} key={src} type="video/webm" />
+                      ) : (
+                        <source src={src} key={src} />
+                      ),
+                    )
                   ) : (
-                    <source src={item} />
+                    <source
+                      src={item}
+                      {...(/\.webm($|\?)/i.test(item)
+                        ? { type: "video/webm" }
+                        : {})}
+                    />
                   )}
                 </video>
               ) : null}
